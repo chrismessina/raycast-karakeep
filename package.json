@@ -14,72 +14,9 @@
     "Web"
   ],
   "license": "MIT",
-  "commands": [
-    {
-      "name": "bookmarks",
-      "title": "Bookmarks",
-      "subtitle": "Karakeep",
-      "description": "List all your bookmarks",
-      "mode": "view"
-    },
-    {
-      "name": "lists",
-      "title": "Lists",
-      "subtitle": "Karakeep",
-      "description": "List all your lists",
-      "mode": "view"
-    },
-    {
-      "name": "tags",
-      "title": "Tags",
-      "subtitle": "Karakeep",
-      "description": "List all your tags",
-      "mode": "view"
-    },
-    {
-      "name": "createBookmark",
-      "title": "Create Bookmark",
-      "subtitle": "Karakeep",
-      "description": "Create a new bookmark",
-      "mode": "view"
-    },
-    {
-      "name": "createNote",
-      "title": "Create Note",
-      "subtitle": "Karakeep",
-      "description": "Create a new note",
-      "mode": "view"
-    },
-    {
-      "name": "quickBookmark",
-      "title": "Quick Bookmark",
-      "subtitle": "Karakeep",
-      "description": "Quickly bookmark the current browser tab",
-      "mode": "no-view"
-    }
+  "platforms": [
+    "macOS"
   ],
-  "dependencies": {
-    "@chrismessina/raycast-logger": "^1.0.0",
-    "@raycast/api": "^1.93.1",
-    "@raycast/utils": "^1.18.0"
-  },
-  "devDependencies": {
-    "@raycast/eslint-config": "^2.1.1",
-    "@types/node": "20.8.10",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "eslint": "^9.35.0",
-    "prettier": "^3.6.2",
-    "typescript": "^5.9.2"
-  },
-  "scripts": {
-    "build": "ray build -e dist -o dist",
-    "dev": "ray develop",
-    "fix-lint": "ray lint --fix",
-    "lint": "ray lint",
-    "prepublishOnly": "echo \"\\n\\nIt seems like you are trying to publish the Raycast extension to npm.\\n\\nIf you did intend to publish it to npm, remove the \\`prepublishOnly\\` script and rerun \\`npm publish\\` again.\\nIf you wanted to publish it to the Raycast Store instead, use \\`npm run publish\\` instead.\\n\\n\" && exit 1",
-    "publish": "npx @raycast/api@latest publish"
-  },
   "preferences": [
     {
       "name": "language",
@@ -237,7 +174,70 @@
       "required": false
     }
   ],
-  "platforms": [
-    "macOS"
-  ]
+  "commands": [
+    {
+      "name": "bookmarks",
+      "title": "Bookmarks",
+      "subtitle": "Karakeep",
+      "description": "List all your bookmarks",
+      "mode": "view"
+    },
+    {
+      "name": "lists",
+      "title": "Lists",
+      "subtitle": "Karakeep",
+      "description": "List all your lists",
+      "mode": "view"
+    },
+    {
+      "name": "tags",
+      "title": "Tags",
+      "subtitle": "Karakeep",
+      "description": "List all your tags",
+      "mode": "view"
+    },
+    {
+      "name": "createBookmark",
+      "title": "Create Bookmark",
+      "subtitle": "Karakeep",
+      "description": "Create a new bookmark",
+      "mode": "view"
+    },
+    {
+      "name": "createNote",
+      "title": "Create Note",
+      "subtitle": "Karakeep",
+      "description": "Create a new note",
+      "mode": "view"
+    },
+    {
+      "name": "quickBookmark",
+      "title": "Quick Bookmark",
+      "subtitle": "Karakeep",
+      "description": "Quickly bookmark the current browser tab",
+      "mode": "no-view"
+    }
+  ],
+  "dependencies": {
+    "@chrismessina/raycast-logger": "^1.2.2",
+    "@raycast/api": "^1.104.7",
+    "@raycast/utils": "^2.2.2"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "^2.1.1",
+    "@types/node": "^25.3.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.35.0",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.2"
+  },
+  "scripts": {
+    "build": "ray build -e dist -o dist",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "prepublishOnly": "echo \"\\n\\nIt seems like you are trying to publish the Raycast extension to npm.\\n\\nIf you did intend to publish it to npm, remove the \\`prepublishOnly\\` script and rerun \\`npm publish\\` again.\\nIf you wanted to publish it to the Raycast Store instead, use \\`npm run publish\\` instead.\\n\\n\" && exit 1",
+    "publish": "npx @raycast/api@latest publish"
+  }
 }

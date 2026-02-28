@@ -1,5 +1,10 @@
 # Karakeep Changelog
 
+## [2.1.2] - {PR_MERGE_DATE}
+
+- Reorganized package.json
+- Updated dependencies
+
 ## [2.1.1] - 2026-02-23
 
 ### Fixes
@@ -18,6 +23,7 @@
 - **Type safety improvements**: `List` type now includes `parentId` and `icon` fields used by the hierarchy view; `Asset.assetType` is now an optional property instead of a `| undefined` union member.
 - **Simplified `useTranslation` hook**: Removed unnecessary `isInitialMount` ref pattern; language sync is now handled by a single clean effect.
 - **Removed redundant imports and calls**: Cleaned up duplicate `Bookmark` import in `quickBookmark.tsx`, unnecessary `URL` polyfill import in `apis/index.ts`, and a redundant `showHUD` call that duplicated the success toast in `createNote.tsx`.
+
 ## [2.1.0] 2025-11-21
 
 ### Big changes
