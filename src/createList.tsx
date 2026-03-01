@@ -15,7 +15,7 @@ interface ListFormValues {
   icon: string;
   description: string;
   parentId: string;
-  type: "manual" | "smart";
+  type: string;
   query: string;
 }
 
@@ -39,7 +39,7 @@ export default function CreateListView() {
         icon: values.icon.trim() || undefined,
         description: values.description.trim() || undefined,
         parentId: values.parentId || undefined,
-        type: values.type,
+        type: values.type as "manual" | "smart",
         query: values.type === "smart" ? values.query.trim() : undefined,
       };
       log.debug("Sending create list request", payload);

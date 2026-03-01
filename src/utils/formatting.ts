@@ -4,8 +4,8 @@
  * Valid qualifiers: #tag, is:*, url:*, after:*, before:*, list:*, type:*
  * Logical operators (and, or, not) and parentheses are also allowed.
  */
-export function isValidSmartQuery(query: string): boolean {
-  if (!query.trim()) return false;
+export function isValidSmartQuery(query: string | undefined): boolean {
+  if (!query || !query.trim()) return false;
   // Strip logical operators, parentheses, quotes, and whitespace, then check
   // that every remaining token is a qualifier, not a bare keyword.
   const stripped = query.replace(/\band\b|\bor\b|\bnot\b/gi, " ").replace(/[()"-]/g, " ");

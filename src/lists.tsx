@@ -123,7 +123,7 @@ interface ListFormValues {
   icon: string;
   description: string;
   parentId: string;
-  type: "manual" | "smart";
+  type: string;
   query: string;
 }
 
@@ -150,7 +150,7 @@ function CreateListForm({ lists, onCreated }: { lists: ListWithCount[]; onCreate
             icon: values.icon.trim() || undefined,
             description: values.description.trim() || undefined,
             parentId: values.parentId || undefined,
-            type: values.type,
+            type: values.type as "manual" | "smart",
             query: values.type === "smart" ? values.query.trim() : undefined,
           };
           log.debug("Sending create list request", payload);
@@ -247,7 +247,7 @@ function EditListForm({
             icon: values.icon.trim() || undefined,
             description: values.description.trim() || undefined,
             parentId: values.parentId || null,
-            type: values.type,
+            type: values.type as "manual" | "smart",
             query: values.type === "smart" ? values.query.trim() : undefined,
           };
           log.debug("Sending update list request", { listId: list.id, ...payload });
