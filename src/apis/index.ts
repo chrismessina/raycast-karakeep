@@ -132,14 +132,31 @@ export async function fetchGetSingleListBookmarks(
   return fetchWithAuth<ApiResponse<Bookmark>>(`/api/v1/lists/${id}/bookmarks${queryString ? `?${queryString}` : ""}`);
 }
 
-export async function fetchCreateList(payload: { name: string; icon?: string }): Promise<List> {
+export async function fetchCreateList(payload: {
+  name: string;
+  icon?: string;
+  description?: string;
+  parentId?: string;
+  type?: "manual" | "smart";
+  query?: string;
+}): Promise<List> {
   return fetchWithAuth<List>("/api/v1/lists", {
     method: "POST",
     body: payload,
   });
 }
 
-export async function fetchUpdateList(id: string, payload: { name?: string; icon?: string }): Promise<List> {
+export async function fetchUpdateList(
+  id: string,
+  payload: {
+    name?: string;
+    icon?: string;
+    description?: string;
+    parentId?: string | null;
+    type?: "manual" | "smart";
+    query?: string;
+  },
+): Promise<List> {
   return fetchWithAuth<List>(`/api/v1/lists/${id}`, {
     method: "PATCH",
     body: payload,

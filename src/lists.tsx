@@ -9,7 +9,7 @@ import { useGetAllBookmarks } from "./hooks/useGetAllBookmarks";
 import { useGetAllLists } from "./hooks/useGetAllLists";
 import { useGetListsBookmarks } from "./hooks/useGetListsBookmarks";
 import { useTranslation } from "./hooks/useTranslation";
-import { LIST_ICON_EMOJI_OPTIONS, isEmoji } from "./utils/formatting";
+import { isEmoji } from "./utils/formatting";
 import { runWithToast } from "./utils/toast";
 
 const log = logger.child("[Lists]");
@@ -19,6 +19,9 @@ interface ListWithCount {
   name: string;
   icon: string;
   parentId: string | null;
+  type?: "manual" | "smart";
+  description?: string;
+  query?: string;
   count: number;
   children?: ListWithCount[];
 }
@@ -117,35 +120,39 @@ function FavoritedBookmarks() {
 interface ListFormValues {
   name: string;
   icon: string;
+  description: string;
+  parentId: string;
+  type: "manual" | "smart";
+  query: string;
 }
 
-function getIconOptions(currentIcon?: string) {
-  const normalizedIcon = currentIcon?.trim();
-  if (!normalizedIcon || LIST_ICON_EMOJI_OPTIONS.some((option) => option.value === normalizedIcon)) {
-    return LIST_ICON_EMOJI_OPTIONS;
-  }
-
-  return [{ value: normalizedIcon, title: `${normalizedIcon} (Current)` }, ...LIST_ICON_EMOJI_OPTIONS];
-}
-
-function CreateListForm({ onCreated }: { onCreated: () => void }) {
+function CreateListForm({ lists, onCreated }: { lists: ListWithCount[]; onCreated: () => void }) {
   const { pop } = useNavigation();
   const { t } = useTranslation();
 
-  const { handleSubmit, itemProps } = useForm<ListFormValues>({
-    initialValues: { name: "", icon: "" },
+  const { handleSubmit, itemProps, values } = useForm<ListFormValues>({
+    initialValues: { name: "", icon: "", description: "", parentId: "", type: "manual", query: "" },
     validation: {
       name: (value) => (!value?.trim() ? t("list.listName") + " is required" : undefined),
       icon: (value) => (!isEmoji(value || "") ? "Must be a valid emoji" : undefined),
+      query: (value, allValues) =>
+        allValues?.type === "smart" && !value?.trim() ? t("list.listQuery") + " is required" : undefined,
     },
     async onSubmit(values) {
-      log.info("Creating list", { name: values.name });
+      log.info("Creating list", { name: values.name, type: values.type });
       await runWithToast({
         loading: { title: t("list.toast.create.loading") },
         success: { title: t("list.toast.create.success") },
         failure: { title: t("list.toast.create.error") },
         action: async () => {
-          await fetchCreateList({ name: values.name.trim(), icon: values.icon.trim() || undefined });
+          await fetchCreateList({
+            name: values.name.trim(),
+            icon: values.icon.trim() || undefined,
+            description: values.description.trim() || undefined,
+            parentId: values.parentId || undefined,
+            type: values.type,
+            query: values.type === "smart" ? values.query.trim() : undefined,
+          });
           onCreated();
           log.info("List created", { name: values.name });
         },
@@ -169,25 +176,55 @@ function CreateListForm({ onCreated }: { onCreated: () => void }) {
         placeholder={t("list.listNamePlaceholder")}
         autoFocus
       />
-      <Form.Dropdown {...itemProps.icon} title={t("list.listIcon")}>
-        <Form.Dropdown.Item value="" title={t("list.noIcon")} />
-        {getIconOptions().map((option) => (
-          <Form.Dropdown.Item key={option.value} value={option.value} title={option.title} icon={option.value} />
+      <Form.TextField {...itemProps.icon} title={t("list.listIcon")} placeholder={t("list.listIconPlaceholder")} />
+      <Form.TextField
+        {...itemProps.description}
+        title={t("list.listDescription")}
+        placeholder={t("list.listDescriptionPlaceholder")}
+      />
+      <Form.Dropdown {...itemProps.parentId} title={t("list.listParent")}>
+        <Form.Dropdown.Item value="" title={t("list.listParentNone")} />
+        {lists.map((l) => (
+          <Form.Dropdown.Item key={l.id} value={l.id} title={l.icon ? `${l.icon} ${l.name}` : l.name} />
         ))}
       </Form.Dropdown>
+      <Form.Dropdown {...itemProps.type} title={t("list.listType")}>
+        <Form.Dropdown.Item value="manual" title={t("list.listTypeManual")} />
+        <Form.Dropdown.Item value="smart" title={t("list.listTypeSmart")} />
+      </Form.Dropdown>
+      {values.type === "smart" && (
+        <Form.TextField {...itemProps.query} title={t("list.listQuery")} placeholder={t("list.listQueryPlaceholder")} />
+      )}
     </Form>
   );
 }
 
-function EditListForm({ list, onUpdated }: { list: ListWithCount; onUpdated: () => void }) {
+function EditListForm({
+  list,
+  lists,
+  onUpdated,
+}: {
+  list: ListWithCount;
+  lists: ListWithCount[];
+  onUpdated: () => void;
+}) {
   const { pop } = useNavigation();
   const { t } = useTranslation();
 
-  const { handleSubmit, itemProps } = useForm<ListFormValues>({
-    initialValues: { name: list.name, icon: list.icon || "" },
+  const { handleSubmit, itemProps, values } = useForm<ListFormValues>({
+    initialValues: {
+      name: list.name,
+      icon: list.icon || "",
+      description: list.description || "",
+      parentId: list.parentId || "",
+      type: list.type || "manual",
+      query: list.query || "",
+    },
     validation: {
       name: (value) => (!value?.trim() ? t("list.listName") + " is required" : undefined),
       icon: (value) => (!isEmoji(value || "") ? "Must be a valid emoji" : undefined),
+      query: (value, allValues) =>
+        allValues?.type === "smart" && !value?.trim() ? t("list.listQuery") + " is required" : undefined,
     },
     async onSubmit(values) {
       log.info("Updating list", { listId: list.id, name: values.name });
@@ -196,7 +233,14 @@ function EditListForm({ list, onUpdated }: { list: ListWithCount; onUpdated: () 
         success: { title: t("list.toast.update.success") },
         failure: { title: t("list.toast.update.error") },
         action: async () => {
-          await fetchUpdateList(list.id, { name: values.name.trim(), icon: values.icon.trim() || undefined });
+          await fetchUpdateList(list.id, {
+            name: values.name.trim(),
+            icon: values.icon.trim() || undefined,
+            description: values.description.trim() || undefined,
+            parentId: values.parentId || null,
+            type: values.type,
+            query: values.type === "smart" ? values.query.trim() : undefined,
+          });
           onUpdated();
           log.info("List updated", { listId: list.id });
         },
@@ -204,6 +248,9 @@ function EditListForm({ list, onUpdated }: { list: ListWithCount; onUpdated: () 
       pop();
     },
   });
+
+  // Exclude the list being edited from parent options to prevent cycles
+  const parentOptions = lists.filter((l) => l.id !== list.id);
 
   return (
     <Form
@@ -220,12 +267,25 @@ function EditListForm({ list, onUpdated }: { list: ListWithCount; onUpdated: () 
         placeholder={t("list.listNamePlaceholder")}
         autoFocus
       />
-      <Form.Dropdown {...itemProps.icon} title={t("list.listIcon")}>
-        <Form.Dropdown.Item value="" title={t("list.noIcon")} />
-        {getIconOptions(list.icon).map((option) => (
-          <Form.Dropdown.Item key={option.value} value={option.value} title={option.title} icon={option.value} />
+      <Form.TextField {...itemProps.icon} title={t("list.listIcon")} placeholder={t("list.listIconPlaceholder")} />
+      <Form.TextField
+        {...itemProps.description}
+        title={t("list.listDescription")}
+        placeholder={t("list.listDescriptionPlaceholder")}
+      />
+      <Form.Dropdown {...itemProps.parentId} title={t("list.listParent")}>
+        <Form.Dropdown.Item value="" title={t("list.listParentNone")} />
+        {parentOptions.map((l) => (
+          <Form.Dropdown.Item key={l.id} value={l.id} title={l.icon ? `${l.icon} ${l.name}` : l.name} />
         ))}
       </Form.Dropdown>
+      <Form.Dropdown {...itemProps.type} title={t("list.listType")}>
+        <Form.Dropdown.Item value="manual" title={t("list.listTypeManual")} />
+        <Form.Dropdown.Item value="smart" title={t("list.listTypeSmart")} />
+      </Form.Dropdown>
+      {values.type === "smart" && (
+        <Form.TextField {...itemProps.query} title={t("list.listQuery")} placeholder={t("list.listQueryPlaceholder")} />
+      )}
     </Form>
   );
 }
@@ -347,8 +407,8 @@ export default function Lists() {
   }, [push]);
 
   const handleCreateList = useCallback(() => {
-    push(<CreateListForm onCreated={revalidate} />);
-  }, [push, revalidate]);
+    push(<CreateListForm lists={(lists as ListWithCount[]) || []} onCreated={revalidate} />);
+  }, [push, revalidate, lists]);
 
   const hierarchicalLists = useMemo(() => (lists ? buildHierarchy(lists as ListWithCount[]) : []), [lists]);
 
@@ -362,7 +422,9 @@ export default function Lists() {
             level={level}
             apiUrl={apiUrl}
             onOpen={(l) => push(<ListBookmarksView listId={l.id} listName={l.name} />)}
-            onEdit={(l) => push(<EditListForm list={l} onUpdated={revalidate} />)}
+            onEdit={(l) =>
+              push(<EditListForm list={l} lists={(lists as ListWithCount[]) || []} onUpdated={revalidate} />)
+            }
             onCreate={handleCreateList}
             onDelete={handleDeleteList}
             t={t}
@@ -374,7 +436,7 @@ export default function Lists() {
         return result;
       });
     },
-    [apiUrl, push, revalidate, handleCreateList, handleDeleteList, t],
+    [apiUrl, push, revalidate, handleCreateList, handleDeleteList, t, lists],
   );
 
   return (

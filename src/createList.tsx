@@ -1,34 +1,38 @@
-import { Action, ActionPanel, Form, Icon, useNavigation, closeMainWindow } from "@raycast/api";
+import { Action, ActionPanel, Form, Icon, closeMainWindow, useNavigation } from "@raycast/api";
 import { useForm } from "@raycast/utils";
 import { logger } from "@chrismessina/raycast-logger";
+import { fetchCreateList } from "./apis";
+import { useGetAllLists } from "./hooks/useGetAllLists";
+import { useTranslation } from "./hooks/useTranslation";
+import { isEmoji } from "./utils/formatting";
+import { runWithToast } from "./utils/toast";
 
 const log = logger.child("[CreateList]");
-import { fetchCreateList } from "./apis";
-import { useTranslation } from "./hooks/useTranslation";
-import { runWithToast } from "./utils/toast";
-import { LIST_ICON_EMOJI_OPTIONS, isEmoji } from "./utils/formatting";
 
 interface ListFormValues {
   name: string;
   icon: string;
-}
-
-function getIconOptions() {
-  return LIST_ICON_EMOJI_OPTIONS;
+  description: string;
+  parentId: string;
+  type: "manual" | "smart";
+  query: string;
 }
 
 export default function CreateListView() {
   const { pop } = useNavigation();
   const { t } = useTranslation();
+  const { lists } = useGetAllLists();
 
-  const { handleSubmit, itemProps } = useForm<ListFormValues>({
-    initialValues: { name: "", icon: "📁" },
+  const { handleSubmit, itemProps, values } = useForm<ListFormValues>({
+    initialValues: { name: "", icon: "", description: "", parentId: "", type: "manual", query: "" },
     validation: {
       name: (value) => (!value?.trim() ? t("list.listName") + " is required" : undefined),
       icon: (value) => (!isEmoji(value || "") ? "Must be a valid emoji" : undefined),
+      query: (value, allValues) =>
+        allValues?.type === "smart" && !value?.trim() ? t("list.listQuery") + " is required" : undefined,
     },
     async onSubmit(values) {
-      log.info("Creating list", { name: values.name });
+      log.info("Creating list", { name: values.name, type: values.type });
 
       try {
         await runWithToast({
@@ -38,7 +42,11 @@ export default function CreateListView() {
           action: async () => {
             await fetchCreateList({
               name: values.name.trim(),
-              icon: values.icon.trim(),
+              icon: values.icon.trim() || undefined,
+              description: values.description.trim() || undefined,
+              parentId: values.parentId || undefined,
+              type: values.type,
+              query: values.type === "smart" ? values.query.trim() : undefined,
             });
             log.info("List created", { name: values.name });
           },
@@ -67,11 +75,25 @@ export default function CreateListView() {
         placeholder={t("list.listNamePlaceholder")}
         autoFocus
       />
-      <Form.Dropdown {...itemProps.icon} title={t("list.listIcon")}>
-        {getIconOptions().map((option) => (
-          <Form.Dropdown.Item key={option.value} value={option.value} title={option.title} icon={option.value} />
+      <Form.TextField {...itemProps.icon} title={t("list.listIcon")} placeholder={t("list.listIconPlaceholder")} />
+      <Form.TextField
+        {...itemProps.description}
+        title={t("list.listDescription")}
+        placeholder={t("list.listDescriptionPlaceholder")}
+      />
+      <Form.Dropdown {...itemProps.parentId} title={t("list.listParent")}>
+        <Form.Dropdown.Item value="" title={t("list.listParentNone")} />
+        {(lists || []).map((l) => (
+          <Form.Dropdown.Item key={l.id} value={l.id} title={l.icon ? `${l.icon} ${l.name}` : l.name} />
         ))}
       </Form.Dropdown>
+      <Form.Dropdown {...itemProps.type} title={t("list.listType")}>
+        <Form.Dropdown.Item value="manual" title={t("list.listTypeManual")} />
+        <Form.Dropdown.Item value="smart" title={t("list.listTypeSmart")} />
+      </Form.Dropdown>
+      {values.type === "smart" && (
+        <Form.TextField {...itemProps.query} title={t("list.listQuery")} placeholder={t("list.listQueryPlaceholder")} />
+      )}
     </Form>
   );
 }

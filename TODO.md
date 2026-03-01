@@ -20,6 +20,10 @@
   - [x] Add list creation — API: [`POST /api/v1/lists`](https://docs.karakeep.app/api/karakeep-api/create-list)
   - [x] Add list deletion — API: [`DELETE /api/v1/lists/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-list)
   - [x] Add list updating — API: [`PATCH /api/v1/lists/{id}`](https://docs.karakeep.app/api/karakeep-api/update-list)
+  - [x] Add Parent List field to create/edit list forms
+  - [x] Add List Type field (manual/smart) to create/edit list forms
+  - [x] Add Search Query field to create/edit list forms (smart lists only)
+  - [x] Switch list icon field from dropdown to text field (allows any emoji via system picker)
 
 ### Tag Management
 

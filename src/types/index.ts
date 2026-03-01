@@ -88,11 +88,16 @@ export interface Bookmark {
   tags: Tag[];
 }
 
+export type ListType = "manual" | "smart";
+
 export interface List {
   id: string;
   name: string;
   icon?: string;
   parentId?: string | null;
+  type?: ListType;
+  description?: string;
+  query?: string;
 }
 
 export interface ListDetails {
