@@ -2,6 +2,27 @@
 
 ## [2.2.0] - {PR_MERGE_DATE}
 
+### New Features
+
+- **Smart List Builder**: When creating or editing a Smart List, an action panel section ("Smart List Builder") is now available via `⌘K`. It provides one-click insertion of valid qualifiers — `is:` filters (fav, archived, read, unread), `url:`, `#tag`, `after:`/`before:` dates pre-filled with today, and `type:` filters (link, text, image, video, pdf) — with submenus for grouped options. Qualifiers are appended to any existing query rather than replacing it.
+- **List management CRUD**: Create, edit, and delete lists directly from the Lists command. The Create List form now includes Description, Parent List, List Type (manual/smart), and Search Query fields.
+- **Tag management CRUD**: Create, rename, and delete tags directly from the Tags command.
+- **Note management**: Create, edit, and delete notes (text bookmarks) from within the extension.
+- **Highlights CRUD**: Create, edit, view detail, and delete highlights via a new Highlights command.
+- **Smart list icon**: Smart lists display a ✨ icon when no custom icon is set.
+
+### Improvements
+
+- **Human-readable API errors**: Error toasts now show the human-readable message extracted from Karakeep's JSON error responses (e.g. "Smart lists cannot have unqualified terms") instead of the raw HTTP body.
+- **Copy Error action on all failure toasts**: Every failure toast now includes a "Copy Error" primary action for easy bug reporting.
+- **Smart list query validation**: The Search Query field validates that all terms use valid qualifiers (`#tag`, `is:*`, `url:*`, `after:*`, `before:*`, `list:*`, `type:*`) and blocks bare keywords before submission, with a descriptive inline error and tooltip.
+- **Form error handling**: All forms (lists, tags, highlights) now stay open on API failure so the error toast remains visible, rather than dismissing immediately after submit.
+- **HUD feedback for standalone commands**: The Create List command shows a HUD confirmation after closing the window so the result is visible even after the form disappears.
+- **Destructive action styling**: Delete actions use `Action.Style.Destructive` throughout.
+- **Verbose logging preference**: New opt-in preference to enable debug-level logging.
+
+### Chores
+
 - Reorganized `package.json`, added keywords and Windows platform support
 - Updated dependencies
 
