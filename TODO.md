@@ -95,3 +95,4 @@
 - [ ] Add support for Raycast AI Tools
 - [ ] Add cross-extension integration with Reader Mode or [Send to Kindle](https://www.raycast.com/lemikeone/send-to-kindle) extension
 - [ ] Implement optimistic updates for better UX
+- [ ] Update README and CHANGELOG with proper documentation
