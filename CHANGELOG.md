@@ -1,8 +1,8 @@
 # Karakeep Changelog
 
-## [2.1.2] - {PR_MERGE_DATE}
+## [2.2.0] - {PR_MERGE_DATE}
 
-- Reorganized package.json
+- Reorganized `package.json, added keywords and Windows platform support
 - Updated dependencies
 
 ## [2.1.1] - 2026-02-23
