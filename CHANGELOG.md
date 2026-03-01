@@ -2,7 +2,7 @@
 
 ## [2.2.0] - {PR_MERGE_DATE}
 
-- Reorganized `package.json, added keywords and Windows platform support
+- Reorganized `package.json`, added keywords and Windows platform support
 - Updated dependencies
 
 ## [2.1.1] - 2026-02-23
