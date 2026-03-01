@@ -13,9 +13,19 @@
   "categories": [
     "Web"
   ],
+  "keywords": [
+    "bookmark",
+    "link",
+    "note",
+    "image",
+    "ai",
+    "tag",
+    "search"
+  ],
   "license": "MIT",
   "platforms": [
-    "macOS"
+    "macOS",
+    "Windows"
   ],
   "preferences": [
     {
