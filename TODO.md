@@ -17,31 +17,31 @@
 ### List Management
 
 - [ ] Add ability to manage lists
-  - [ ] Add list creation
-  - [ ] Add list deletion
-  - [ ] Add list updating
+  - [ ] Add list creation — API: [`POST /api/v1/lists`](https://docs.karakeep.app/api/karakeep-api/create-list)
+  - [ ] Add list deletion — API: [`DELETE /api/v1/lists/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-list)
+  - [ ] Add list updating — API: [`PATCH /api/v1/lists/{id}`](https://docs.karakeep.app/api/karakeep-api/update-list)
 
 ### Tag Management
 
 - [ ] Add ability to manage tags
-  - [ ] Add tag creation
-  - [ ] Add tag deletion
-  - [ ] Add tag renaming
+  - [ ] Add tag creation — API: [`POST /api/v1/tags`](https://docs.karakeep.app/api/karakeep-api/create-tag)
+  - [ ] Add tag deletion — API: [`DELETE /api/v1/tags/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-tag)
+  - [ ] Add tag renaming — API: [`PATCH /api/v1/tags/{id}`](https://docs.karakeep.app/api/karakeep-api/update-tag)
 
 ### Note Management
 
 - [ ] Add ability to manage notes
-  - [ ] Add Notes list (show only `type: "text"` bookmarks)
-  - [ ] Add note deletion
-  - [ ] Add note updating
+  - [ ] Add Notes list (show only `type: "text"` bookmarks) — API: [`GET /api/v1/bookmarks`](https://docs.karakeep.app/api/karakeep-api/list-bookmarks) with `?type=text` filter
+  - [ ] Add note deletion — API: [`DELETE /api/v1/bookmarks/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-bookmark)
+  - [ ] Add note updating — API: [`PATCH /api/v1/bookmarks/{id}`](https://docs.karakeep.app/api/karakeep-api/update-bookmark)
   - [ ] Clarify: Notes are bookmarks with `type: "text"`, not a separate entity
 
 ### Highlights
 
 - [ ] Add ability to highlights
-  - [ ] Add highlight creation
-  - [ ] Add highlight deletion
-  - [ ] Add highlight updating
+  - [ ] Add highlight creation — API: [`POST /api/v1/highlights`](https://docs.karakeep.app/api/karakeep-api/create-highlight)
+  - [ ] Add highlight deletion — API: [`DELETE /api/v1/highlights/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-highlight)
+  - [ ] Add highlight updating — API: [`PATCH /api/v1/highlights/{id}`](https://docs.karakeep.app/api/karakeep-api/update-highlight)
 
 ### Bookmarks View Enhancements
 
@@ -67,15 +67,15 @@
 ### Backups
 
 - [ ] Add ability to manage backups
-  - [ ] Add backup view
-  - [ ] Trigger backup
-  - [ ] Download backup
-  - [ ] Delete backup from list
+  - [ ] Add backup view — API: [`GET /api/v1/backups`](https://docs.karakeep.app/api/karakeep-api/list-backups)
+  - [ ] Trigger backup — API: [`POST /api/v1/backups`](https://docs.karakeep.app/api/karakeep-api/create-backup)
+  - [ ] Download backup — API: `GET /api/v1/backups/{id}/download`
+  - [ ] Delete backup from list — API: [`DELETE /api/v1/backups/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-backup)
 
 ### Analytics
 
 - [ ] Add user stats Command:
-  - [ ] Add stats view (including bookmark counts by type, top domains, tag usage, bookmarking activity patterns, and storage usage)
+  - [ ] Add stats view — API: [`GET /api/v1/users/me/stats`](https://docs.karakeep.app/api/karakeep-api/get-current-user-stats) (includes bookmark counts by type, top domains, tag usage, bookmarking activity patterns, and storage usage)
 
 ### Browser Extensions
 
