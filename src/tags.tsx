@@ -44,7 +44,7 @@ function CreateTagForm({ onCreated }: { onCreated: () => void }) {
     },
     async onSubmit(values) {
       log.info("Creating tag", { name: values.name });
-      await runWithToast({
+      const result = await runWithToast({
         loading: { title: t("tags.toast.create.loading") },
         success: { title: t("tags.toast.create.success") },
         failure: { title: t("tags.toast.create.error") },
@@ -54,7 +54,7 @@ function CreateTagForm({ onCreated }: { onCreated: () => void }) {
           log.info("Tag created", { name: values.name });
         },
       });
-      pop();
+      if (result !== undefined) pop();
     },
   });
 
@@ -88,7 +88,7 @@ function RenameTagForm({ tag, onRenamed }: { tag: Tag; onRenamed: () => void }) 
     },
     async onSubmit(values) {
       log.info("Renaming tag", { tagId: tag.id, name: values.name });
-      await runWithToast({
+      const result = await runWithToast({
         loading: { title: t("tags.toast.rename.loading") },
         success: { title: t("tags.toast.rename.success") },
         failure: { title: t("tags.toast.rename.error") },
@@ -98,7 +98,7 @@ function RenameTagForm({ tag, onRenamed }: { tag: Tag; onRenamed: () => void }) 
           log.info("Tag renamed", { tagId: tag.id, name: values.name });
         },
       });
-      pop();
+      if (result !== undefined) pop();
     },
   });
 

@@ -31,8 +31,22 @@ export async function fetchWithAuth<T = unknown>(path: string, options: FetchOpt
   const data = await response.text();
 
   if (!response.ok) {
-    log.error(`${method} ${path} failed`, { status: response.status });
-    throw new Error(`HTTP error! status: ${response.status}, body: ${data}`);
+    log.error(`${method} ${path} failed`, { status: response.status, body: data });
+    let message = `HTTP ${response.status}`;
+    try {
+      const parsed = JSON.parse(data);
+      const issue = parsed?.error?.issues?.[0]?.message;
+      if (issue) {
+        message = issue;
+      } else if (parsed?.message) {
+        message = parsed.message;
+      } else if (parsed?.error && typeof parsed.error === "string") {
+        message = parsed.error;
+      }
+    } catch {
+      // body is not JSON, use status only
+    }
+    throw new Error(message);
   }
 
   done({ status: response.status });

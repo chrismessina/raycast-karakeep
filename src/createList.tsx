@@ -1,10 +1,11 @@
-import { Action, ActionPanel, Form, Icon, closeMainWindow, useNavigation } from "@raycast/api";
+import { Action, ActionPanel, Form, Icon, closeMainWindow, showHUD, useNavigation } from "@raycast/api";
 import { useForm } from "@raycast/utils";
 import { logger } from "@chrismessina/raycast-logger";
 import { fetchCreateList } from "./apis";
+import { QueryBuilderActions } from "./components/QueryBuilderActions";
 import { useGetAllLists } from "./hooks/useGetAllLists";
 import { useTranslation } from "./hooks/useTranslation";
-import { isEmoji } from "./utils/formatting";
+import { isEmoji, makeSmartQueryValidator } from "./utils/formatting";
 import { runWithToast } from "./utils/toast";
 
 const log = logger.child("[CreateList]");
@@ -23,39 +24,40 @@ export default function CreateListView() {
   const { t } = useTranslation();
   const { lists } = useGetAllLists();
 
-  const { handleSubmit, itemProps, values } = useForm<ListFormValues>({
+  const { handleSubmit, itemProps, setValue, values } = useForm<ListFormValues>({
     initialValues: { name: "", icon: "", description: "", parentId: "", type: "manual", query: "" },
     validation: {
       name: (value) => (!value?.trim() ? t("list.listName") + " is required" : undefined),
       icon: (value) => (!isEmoji(value || "") ? "Must be a valid emoji" : undefined),
-      query: (value, allValues) =>
-        allValues?.type === "smart" && !value?.trim() ? t("list.listQuery") + " is required" : undefined,
+      query: makeSmartQueryValidator(t),
     },
     async onSubmit(values) {
-      log.info("Creating list", { name: values.name, type: values.type });
+      log.info("Creating list", { name: values.name, type: values.type, query: values.query || undefined });
 
-      try {
-        await runWithToast({
-          loading: { title: t("list.toast.create.loading") },
-          success: { title: t("list.toast.create.success") },
-          failure: { title: t("list.toast.create.error") },
-          action: async () => {
-            await fetchCreateList({
-              name: values.name.trim(),
-              icon: values.icon.trim() || undefined,
-              description: values.description.trim() || undefined,
-              parentId: values.parentId || undefined,
-              type: values.type,
-              query: values.type === "smart" ? values.query.trim() : undefined,
-            });
-            log.info("List created", { name: values.name });
-          },
-        });
+      const payload = {
+        name: values.name.trim(),
+        icon: values.icon.trim() || undefined,
+        description: values.description.trim() || undefined,
+        parentId: values.parentId || undefined,
+        type: values.type,
+        query: values.type === "smart" ? values.query.trim() : undefined,
+      };
+      log.debug("Sending create list request", payload);
 
+      const result = await runWithToast({
+        loading: { title: t("list.toast.create.loading") },
+        success: { title: t("list.toast.create.success") },
+        failure: { title: t("list.toast.create.error") },
+        action: async () => {
+          await fetchCreateList(payload);
+          log.info("List created successfully", { name: values.name });
+        },
+      });
+
+      if (result !== undefined) {
         pop();
         await closeMainWindow({ clearRootSearch: true });
-      } catch (error) {
-        log.error("Failed to create list", { name: values.name, error });
+        await showHUD(t("list.toast.create.success"));
       }
     },
   });
@@ -66,6 +68,9 @@ export default function CreateListView() {
       actions={
         <ActionPanel>
           <Action.SubmitForm title={t("list.createList")} onSubmit={handleSubmit} icon={Icon.Plus} />
+          {values.type === "smart" && (
+            <QueryBuilderActions query={values.query} onInsert={(q) => setValue("query", q)} />
+          )}
         </ActionPanel>
       }
     >
@@ -92,7 +97,12 @@ export default function CreateListView() {
         <Form.Dropdown.Item value="smart" title={t("list.listTypeSmart")} />
       </Form.Dropdown>
       {values.type === "smart" && (
-        <Form.TextField {...itemProps.query} title={t("list.listQuery")} placeholder={t("list.listQueryPlaceholder")} />
+        <Form.TextField
+          {...itemProps.query}
+          title={t("list.listQuery")}
+          placeholder={t("list.listQueryPlaceholder")}
+          info={t("list.listQueryDescription")}
+        />
       )}
     </Form>
   );

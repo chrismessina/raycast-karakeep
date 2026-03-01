@@ -4,12 +4,13 @@ import React, { useCallback, useMemo } from "react";
 import { logger } from "@chrismessina/raycast-logger";
 import { fetchCreateList, fetchDeleteList, fetchUpdateList } from "./apis";
 import { BookmarkList } from "./components/BookmarkList";
+import { QueryBuilderActions } from "./components/QueryBuilderActions";
 import { useConfig } from "./hooks/useConfig";
 import { useGetAllBookmarks } from "./hooks/useGetAllBookmarks";
 import { useGetAllLists } from "./hooks/useGetAllLists";
 import { useGetListsBookmarks } from "./hooks/useGetListsBookmarks";
 import { useTranslation } from "./hooks/useTranslation";
-import { isEmoji } from "./utils/formatting";
+import { isEmoji, makeSmartQueryValidator } from "./utils/formatting";
 import { runWithToast } from "./utils/toast";
 
 const log = logger.child("[Lists]");
@@ -130,34 +131,35 @@ function CreateListForm({ lists, onCreated }: { lists: ListWithCount[]; onCreate
   const { pop } = useNavigation();
   const { t } = useTranslation();
 
-  const { handleSubmit, itemProps, values } = useForm<ListFormValues>({
+  const { handleSubmit, itemProps, setValue, values } = useForm<ListFormValues>({
     initialValues: { name: "", icon: "", description: "", parentId: "", type: "manual", query: "" },
     validation: {
       name: (value) => (!value?.trim() ? t("list.listName") + " is required" : undefined),
       icon: (value) => (!isEmoji(value || "") ? "Must be a valid emoji" : undefined),
-      query: (value, allValues) =>
-        allValues?.type === "smart" && !value?.trim() ? t("list.listQuery") + " is required" : undefined,
+      query: makeSmartQueryValidator(t),
     },
     async onSubmit(values) {
-      log.info("Creating list", { name: values.name, type: values.type });
-      await runWithToast({
+      log.info("Creating list", { name: values.name, type: values.type, query: values.query || undefined });
+      const result = await runWithToast({
         loading: { title: t("list.toast.create.loading") },
         success: { title: t("list.toast.create.success") },
         failure: { title: t("list.toast.create.error") },
         action: async () => {
-          await fetchCreateList({
+          const payload = {
             name: values.name.trim(),
             icon: values.icon.trim() || undefined,
             description: values.description.trim() || undefined,
             parentId: values.parentId || undefined,
             type: values.type,
             query: values.type === "smart" ? values.query.trim() : undefined,
-          });
+          };
+          log.debug("Sending create list request", payload);
+          await fetchCreateList(payload);
+          log.info("List created successfully", { name: values.name });
           onCreated();
-          log.info("List created", { name: values.name });
         },
       });
-      pop();
+      if (result !== undefined) pop();
     },
   });
 
@@ -167,6 +169,9 @@ function CreateListForm({ lists, onCreated }: { lists: ListWithCount[]; onCreate
       actions={
         <ActionPanel>
           <Action.SubmitForm title={t("list.createList")} onSubmit={handleSubmit} icon={Icon.Plus} />
+          {values.type === "smart" && (
+            <QueryBuilderActions query={values.query} onInsert={(q) => setValue("query", q)} />
+          )}
         </ActionPanel>
       }
     >
@@ -193,7 +198,12 @@ function CreateListForm({ lists, onCreated }: { lists: ListWithCount[]; onCreate
         <Form.Dropdown.Item value="smart" title={t("list.listTypeSmart")} />
       </Form.Dropdown>
       {values.type === "smart" && (
-        <Form.TextField {...itemProps.query} title={t("list.listQuery")} placeholder={t("list.listQueryPlaceholder")} />
+        <Form.TextField
+          {...itemProps.query}
+          title={t("list.listQuery")}
+          placeholder={t("list.listQueryPlaceholder")}
+          info={t("list.listQueryDescription")}
+        />
       )}
     </Form>
   );
@@ -211,7 +221,7 @@ function EditListForm({
   const { pop } = useNavigation();
   const { t } = useTranslation();
 
-  const { handleSubmit, itemProps, values } = useForm<ListFormValues>({
+  const { handleSubmit, itemProps, setValue, values } = useForm<ListFormValues>({
     initialValues: {
       name: list.name,
       icon: list.icon || "",
@@ -223,29 +233,30 @@ function EditListForm({
     validation: {
       name: (value) => (!value?.trim() ? t("list.listName") + " is required" : undefined),
       icon: (value) => (!isEmoji(value || "") ? "Must be a valid emoji" : undefined),
-      query: (value, allValues) =>
-        allValues?.type === "smart" && !value?.trim() ? t("list.listQuery") + " is required" : undefined,
+      query: makeSmartQueryValidator(t),
     },
     async onSubmit(values) {
-      log.info("Updating list", { listId: list.id, name: values.name });
-      await runWithToast({
+      log.info("Updating list", { listId: list.id, name: values.name, type: values.type });
+      const result = await runWithToast({
         loading: { title: t("list.toast.update.loading") },
         success: { title: t("list.toast.update.success") },
         failure: { title: t("list.toast.update.error") },
         action: async () => {
-          await fetchUpdateList(list.id, {
+          const payload = {
             name: values.name.trim(),
             icon: values.icon.trim() || undefined,
             description: values.description.trim() || undefined,
             parentId: values.parentId || null,
             type: values.type,
             query: values.type === "smart" ? values.query.trim() : undefined,
-          });
+          };
+          log.debug("Sending update list request", { listId: list.id, ...payload });
+          await fetchUpdateList(list.id, payload);
+          log.info("List updated successfully", { listId: list.id });
           onUpdated();
-          log.info("List updated", { listId: list.id });
         },
       });
-      pop();
+      if (result !== undefined) pop();
     },
   });
 
@@ -258,6 +269,9 @@ function EditListForm({
       actions={
         <ActionPanel>
           <Action.SubmitForm title={t("list.editList")} onSubmit={handleSubmit} icon={Icon.Pencil} />
+          {values.type === "smart" && (
+            <QueryBuilderActions query={values.query} onInsert={(q) => setValue("query", q)} />
+          )}
         </ActionPanel>
       }
     >
@@ -284,7 +298,12 @@ function EditListForm({
         <Form.Dropdown.Item value="smart" title={t("list.listTypeSmart")} />
       </Form.Dropdown>
       {values.type === "smart" && (
-        <Form.TextField {...itemProps.query} title={t("list.listQuery")} placeholder={t("list.listQueryPlaceholder")} />
+        <Form.TextField
+          {...itemProps.query}
+          title={t("list.listQuery")}
+          placeholder={t("list.listQueryPlaceholder")}
+          info={t("list.listQueryDescription")}
+        />
       )}
     </Form>
   );
@@ -304,10 +323,11 @@ interface ListItemProps {
 }
 
 function ListItem({ list, level, apiUrl, onOpen, onEdit, onCreate, onDelete, t }: ListItemProps) {
+  const icon = list.icon || (list.type === "smart" ? "✨" : undefined);
   return (
     <List.Item
       key={list.id}
-      icon={list.icon}
+      icon={icon}
       title={`${"  ".repeat(level)}${list.name} (${list.count})`}
       actions={
         <ActionPanel>

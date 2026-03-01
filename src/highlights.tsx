@@ -61,7 +61,7 @@ function CreateHighlightForm({ onCreated }: { onCreated: () => void }) {
     },
     async onSubmit(values) {
       log.info("Creating highlight", { bookmarkId: values.bookmarkId });
-      await runWithToast({
+      const result = await runWithToast({
         loading: { title: t("highlights.toast.create.loading") },
         success: { title: t("highlights.toast.create.success") },
         failure: { title: t("highlights.toast.create.error") },
@@ -78,7 +78,7 @@ function CreateHighlightForm({ onCreated }: { onCreated: () => void }) {
           log.info("Highlight created");
         },
       });
-      pop();
+      if (result !== undefined) pop();
     },
   });
 
@@ -125,7 +125,7 @@ function EditHighlightForm({ highlight, onUpdated }: { highlight: Highlight; onU
     },
     async onSubmit(values) {
       log.info("Updating highlight", { highlightId: highlight.id });
-      await runWithToast({
+      const result = await runWithToast({
         loading: { title: t("highlights.toast.update.loading") },
         success: { title: t("highlights.toast.update.success") },
         failure: { title: t("highlights.toast.update.error") },
@@ -139,7 +139,7 @@ function EditHighlightForm({ highlight, onUpdated }: { highlight: Highlight; onU
           log.info("Highlight updated", { highlightId: highlight.id });
         },
       });
-      pop();
+      if (result !== undefined) pop();
     },
   });
 

@@ -1,4 +1,33 @@
 /**
+ * Validates that a smart list search query contains only qualified terms.
+ * Karakeep disallows bare full-text search terms in smart list queries.
+ * Valid qualifiers: #tag, is:*, url:*, after:*, before:*, list:*, type:*
+ * Logical operators (and, or, not) and parentheses are also allowed.
+ */
+export function isValidSmartQuery(query: string): boolean {
+  if (!query.trim()) return false;
+  // Strip logical operators, parentheses, quotes, and whitespace, then check
+  // that every remaining token is a qualifier, not a bare keyword.
+  const stripped = query.replace(/\band\b|\bor\b|\bnot\b/gi, " ").replace(/[()"-]/g, " ");
+  const tokens = stripped.split(/\s+/).filter(Boolean);
+  const qualifierPattern = /^(-?(#\S+|is:\S+|url:\S+|after:\S+|before:\S+|list:\S+|type:\S+))$/i;
+  return tokens.length > 0 && tokens.every((token) => qualifierPattern.test(token));
+}
+
+/**
+ * Returns a useForm-compatible validator for the smart list query field.
+ * Pass the `t` function from useTranslation to get localized error messages.
+ */
+export function makeSmartQueryValidator(t: (key: string) => string) {
+  return (value: string | undefined, allValues?: { type?: string }) => {
+    if (allValues?.type !== "smart") return undefined;
+    if (!value?.trim()) return t("list.listQuery") + " is required";
+    if (!isValidSmartQuery(value)) return t("list.listQueryInvalid");
+    return undefined;
+  };
+}
+
+/**
  * Validates if a string contains only emoji characters.
  * Empty strings are considered valid (for optional fields).
  */
