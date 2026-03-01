@@ -1,5 +1,7 @@
 import { Action, ActionPanel, Icon, List, useNavigation } from "@raycast/api";
 import { logger } from "@chrismessina/raycast-logger";
+
+const log = logger.child("[Tags]");
 import { fetchDeleteTag } from "./apis";
 import { BookmarkList } from "./components/BookmarkList";
 import { useConfig } from "./hooks/useConfig";
@@ -51,12 +53,14 @@ export default function Tags() {
         success: { title: t("tags.actions.deleteTag"), message: t("tags.toast.delete.success") },
         failure: { title: t("tags.actions.deleteTag"), message: t("tags.toast.delete.error") },
         action: async () => {
+          log.info("Deleting tag", { tagId });
           await fetchDeleteTag(tagId);
           await revalidate();
+          log.info("Tag deleted", { tagId });
         },
       });
     } catch (error) {
-      logger.error("Failed to delete tag", { tagId, error });
+      log.error("Failed to delete tag", { tagId, error });
     }
   };
 
@@ -89,6 +93,7 @@ export default function Tags() {
                 <Action
                   title={t("tags.actions.deleteTag")}
                   icon={Icon.Trash}
+                  style={Action.Style.Destructive}
                   onAction={() => handleDeleteTag(tag.id)}
                 />
               </ActionPanel.Section>

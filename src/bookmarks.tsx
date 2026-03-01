@@ -1,6 +1,8 @@
 import { Icon, List } from "@raycast/api";
 import { useCallback } from "react";
 import { logger } from "@chrismessina/raycast-logger";
+
+const log = logger.child("[Bookmarks]");
 import { BookmarkList } from "./components/BookmarkList";
 import { useGetAllBookmarks } from "./hooks/useGetAllBookmarks";
 import { useTranslation } from "./hooks/useTranslation";
@@ -17,9 +19,11 @@ export default function BookmarksList() {
       failure: { title: t("refreshError") },
       action: async () => {
         try {
+          log.log("Refreshing bookmarks");
           await revalidate();
+          log.info("Bookmarks refreshed");
         } catch (error) {
-          logger.error("Failed to refresh bookmarks", { error });
+          log.error("Failed to refresh bookmarks", { error });
           throw error;
         }
       },

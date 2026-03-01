@@ -1,6 +1,8 @@
 import { Action, ActionPanel, confirmAlert, Icon, List, showToast, Toast, useNavigation } from "@raycast/api";
 import { useCallback, useMemo } from "react";
 import { logger } from "@chrismessina/raycast-logger";
+
+const log = logger.child("[Lists]");
 import { fetchDeleteList } from "./apis";
 import { BookmarkList } from "./components/BookmarkList";
 import { useConfig } from "./hooks/useConfig";
@@ -49,9 +51,11 @@ function ListBookmarksView({ listId, listName }: { listId: string; listName: str
       failure: { title: t("refreshError") },
       action: async () => {
         try {
+          log.log("Refreshing list bookmarks", { listId, listName });
           await revalidate();
+          log.info("List bookmarks refreshed", { listId });
         } catch (error) {
-          logger.error("Failed to refresh list bookmarks", { listId, listName, error });
+          log.error("Failed to refresh list bookmarks", { listId, listName, error });
           throw error;
         }
       },
@@ -134,10 +138,12 @@ export default function Lists() {
           failure: { title: t("common.deleteFailed") },
           action: async () => {
             try {
+              log.info("Deleting list", { listId: id, listName });
               await fetchDeleteList(id);
               await revalidate();
+              log.info("List deleted", { listId: id });
             } catch (error) {
-              logger.error("Failed to delete list", { listId: id, listName, error });
+              log.error("Failed to delete list", { listId: id, listName, error });
               throw error;
             }
           },
@@ -181,7 +187,12 @@ export default function Lists() {
                 shortcut={{ modifiers: ["cmd"], key: "." }}
               />
               <ActionPanel.Section>
-                <Action title={t("list.deleteList")} icon={Icon.Trash} onAction={() => handleDeleteList(list.id)} />
+                <Action
+                  title={t("list.deleteList")}
+                  icon={Icon.Trash}
+                  style={Action.Style.Destructive}
+                  onAction={() => handleDeleteList(list.id)}
+                />
               </ActionPanel.Section>
             </ActionPanel>
           }

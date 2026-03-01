@@ -2,13 +2,13 @@
 
 ## P0 - Critical Fixes (Must Have)
 
-- [ ] When creating a Note, action should be "Create Note" not "Create Bookmark"
-- [ ] Improve UI text in Preferences; use Note vs Text consistently
-- [ ] Make Delete actions appear as destructive actions (`Action.Style.Destructive` in `ActionPanel`):
-  - [ ] Delete Bookmark
-  - [ ] Delete Note
-  - [ ] Delete List
-  - [ ] Delete Tag
+- [x] When creating a Note, action should be "Create Note" not "Create Bookmark"
+- [x] Improve UI text in Preferences; use Note vs Text consistently
+- [x] Make Delete actions appear as destructive actions (`Action.Style.Destructive` in `ActionPanel`):
+  - [x] Delete Bookmark
+  - [x] Delete Note
+  - [x] Delete List
+  - [x] Delete Tag
   - [ ] Delete Highlight
   - [ ] Delete Backup
 
@@ -84,11 +84,11 @@
 
 ### Logging
 
-- [ ] Add extensive logging using @chrismessina/raycast-logger
-  - [ ] Log all API calls
-  - [ ] Log all errors
-  - [ ] Log all successes
-  - [ ] Add preference for verbose logging
+- [x] Add extensive logging using @chrismessina/raycast-logger
+  - [x] Log all API calls
+  - [x] Log all errors
+  - [x] Log all successes
+  - [x] Add preference for verbose logging
 
 ## P3 - Polish & Advanced Features (Lower Priority)
 

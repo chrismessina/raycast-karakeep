@@ -2,6 +2,8 @@ import { Action, ActionPanel, Form, useNavigation } from "@raycast/api";
 import { useForm } from "@raycast/utils";
 import { useEffect, useState } from "react";
 import { logger } from "@chrismessina/raycast-logger";
+
+const log = logger.child("[CreateBookmark]");
 import { fetchAddBookmarkToList, fetchCreateBookmark } from "./apis";
 import { useGetAllLists } from "./hooks/useGetAllLists";
 import { useTranslation } from "./hooks/useTranslation";
@@ -34,6 +36,7 @@ export default function CreateBookmarkView() {
       },
     },
     async onSubmit(values) {
+      log.info("Submitting bookmark", { url: values.url, hasList: Boolean(values.list) });
       try {
         const bookmark = await runWithToast({
           loading: { title: t("bookmark.creating") },
@@ -56,10 +59,11 @@ export default function CreateBookmarkView() {
         });
 
         if (bookmark) {
+          log.info("Bookmark created", { bookmarkId: bookmark.id });
           pop();
         }
       } catch (error) {
-        logger.error("Failed to create bookmark", { url: values.url, error });
+        log.error("Failed to create bookmark", { url: values.url, error });
       }
     },
   });
@@ -72,11 +76,12 @@ export default function CreateBookmarkView() {
       try {
         const url = await getBrowserLink();
         if (url) {
+          log.log("Prefilled URL from browser tab", { url });
           setValue("url", url);
         }
       } catch (error) {
         // Browser extension not available or no permission
-        logger.log("Failed to prefill URL from browser", error);
+        log.log("Failed to prefill URL from browser", error);
       } finally {
         setIsLoadingTab(false);
       }

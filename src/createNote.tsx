@@ -2,6 +2,8 @@ import { Action, ActionPanel, Form, useNavigation, closeMainWindow } from "@rayc
 import { useCachedState } from "@raycast/utils";
 import { useState } from "react";
 import { logger } from "@chrismessina/raycast-logger";
+
+const log = logger.child("[CreateNote]");
 import { fetchAddBookmarkToList, fetchCreateBookmark } from "./apis";
 import { BookmarkDetail } from "./components/BookmarkDetail";
 import { useGetAllLists } from "./hooks/useGetAllLists";
@@ -45,11 +47,13 @@ export default function CreateNoteView() {
       return;
     }
 
+    log.info("Submitting note", { contentLength: values.content.length, hasList: Boolean(values.list) });
+
     try {
       const bookmark = await runWithToast({
-        loading: { title: t("bookmark.creating") },
-        success: { title: t("bookmark.createSuccess") },
-        failure: { title: t("bookmark.createFailed") },
+        loading: { title: t("note.creating") },
+        success: { title: t("note.createSuccess") },
+        failure: { title: t("note.createFailed") },
         action: async () => {
           const payload = {
             type: "text",
@@ -68,11 +72,12 @@ export default function CreateNoteView() {
 
       if (!bookmark) return;
 
+      log.info("Note created", { bookmarkId: bookmark.id });
       setContent("");
       push(<BookmarkDetail bookmark={bookmark} />);
       await closeMainWindow({ clearRootSearch: true });
     } catch (error) {
-      logger.error("Failed to create note", { contentLength: values.content.length, error });
+      log.error("Failed to create note", { contentLength: values.content.length, error });
     }
   };
 
@@ -83,7 +88,7 @@ export default function CreateNoteView() {
       navigationTitle={`${contentLength} of ${MAX_NOTE_LENGTH}`}
       actions={
         <ActionPanel>
-          <Action.SubmitForm title={t("bookmark.create")} onSubmit={onSubmit} />
+          <Action.SubmitForm title={t("note.create")} onSubmit={onSubmit} />
         </ActionPanel>
       }
     >

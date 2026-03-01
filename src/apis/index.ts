@@ -1,5 +1,8 @@
+import { logger } from "@chrismessina/raycast-logger";
 import { ApiResponse, Bookmark, GetBookmarksParams, List, Tag } from "../types";
 import { getApiConfig } from "../utils/config";
+
+const log = logger.child("[API]");
 
 interface FetchOptions {
   method?: string;
@@ -10,8 +13,12 @@ interface FetchOptions {
 export async function fetchWithAuth<T = unknown>(path: string, options: FetchOptions = {}): Promise<T> {
   const { apiUrl, apiKey } = await getApiConfig();
   const url = new URL(path, apiUrl);
+  const method = options.method || "GET";
+  log.log(`${method} ${path}`);
+  const done = log.time(`${method} ${path}`);
+
   const response = await fetch(url.toString(), {
-    method: options.method || "GET",
+    method,
     headers: {
       "Content-Type": "application/json",
       "User-Agent": "Raycast Extension",
@@ -24,8 +31,11 @@ export async function fetchWithAuth<T = unknown>(path: string, options: FetchOpt
   const data = await response.text();
 
   if (!response.ok) {
+    log.error(`${method} ${path} failed`, { status: response.status });
     throw new Error(`HTTP error! status: ${response.status}, body: ${data}`);
   }
+
+  done({ status: response.status });
 
   try {
     return JSON.parse(data) as T;

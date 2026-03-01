@@ -1,6 +1,8 @@
 import { Action, ActionPanel, Icon, Image, List, showToast, Toast, useNavigation } from "@raycast/api";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { logger } from "@chrismessina/raycast-logger";
+
+const log = logger.child("[BookmarkItem]");
 import { fetchDeleteBookmark, fetchGetSingleBookmark, fetchSummarizeBookmark, fetchUpdateBookmark } from "../apis";
 import {
   ARCHIVED_COLOR,
@@ -56,7 +58,7 @@ function useAuthenticatedAssetUrl(assetId: string | undefined, enabled: boolean)
           setUrl(imageUrl);
         }
       } catch (error) {
-        logger.error("Failed to get authenticated image", { assetId, error });
+        log.error("Failed to get authenticated image", { assetId, error });
       }
     })();
 
@@ -95,7 +97,7 @@ function useBookmarkHandlers({
         setBookmark(latest as Bookmark);
       }
     } catch (error) {
-      logger.error("Failed to fetch latest bookmark", { bookmarkId: bookmark.id, error });
+      log.error("Failed to fetch latest bookmark", { bookmarkId: bookmark.id, error });
     }
   }, [bookmark.id, setBookmark]);
 
@@ -114,7 +116,7 @@ function useBookmarkHandlers({
           await fetchLatestBookmark();
         }
       } catch (error) {
-        logger.error(`Bookmark action '${action}' failed`, error);
+        log.error(`Bookmark action '${action}' failed`, error);
         toast.style = Toast.Style.Failure;
         toast.message = String(error);
         if (action !== "delete") {
@@ -127,6 +129,7 @@ function useBookmarkHandlers({
   );
 
   const handleDeleteBookmark = useCallback(async () => {
+    log.info("Deleting bookmark", { bookmarkId: bookmark.id });
     await handleToast("delete", async () => {
       await fetchDeleteBookmark(bookmark.id);
       onRefresh();
@@ -475,6 +478,7 @@ function BookmarkActions({
         <Action
           icon={Icon.Trash}
           title={t("bookmarkItem.actions.delete")}
+          style={Action.Style.Destructive}
           onAction={handlers.handleDeleteBookmark}
           shortcut={{ modifiers: ["ctrl"], key: "x" }}
         />

@@ -29,6 +29,15 @@
   ],
   "preferences": [
     {
+      "name": "verboseLogging",
+      "type": "checkbox",
+      "required": false,
+      "title": "Verbose Logging",
+      "label": "Enable detailed logging",
+      "description": "Show detailed logs in the Raycast console for debugging",
+      "default": false
+    },
+    {
       "name": "language",
       "title": "Language",
       "description": "Select your preferred language",
@@ -67,10 +76,10 @@
     {
       "name": "linkMainAction",
       "type": "dropdown",
-      "label": "default link action",
+      "label": "Default Link Action",
       "title": "Default Link Action",
       "required": false,
-      "description": "Select the default action when you click on a link",
+      "description": "Select the default action when opening a bookmark link",
       "data": [
         {
           "title": "Open in Browser",
@@ -89,10 +98,10 @@
     {
       "name": "textMainAction",
       "type": "dropdown",
-      "label": "default text action",
-      "title": "Default Text Action",
+      "label": "Default Note Action",
+      "title": "Default Note Action",
       "required": false,
-      "description": "Select the default action when you click on a text",
+      "description": "Select the default action when opening a note",
       "data": [
         {
           "title": "View Details",

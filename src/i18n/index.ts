@@ -29,6 +29,14 @@ export const translations = {
       },
     },
 
+    // Note Related
+    note: {
+      create: "Create Note",
+      creating: "Creating note...",
+      createSuccess: "Note created successfully",
+      createFailed: "Note creation failed",
+    },
+
     // Bookmark Related
     bookmark: {
       // Creation
@@ -285,6 +293,14 @@ export const translations = {
         title: "暂无内容",
         description: "列表为空",
       },
+    },
+
+    // 笔记相关
+    note: {
+      create: "创建笔记",
+      creating: "创建笔记中...",
+      createSuccess: "笔记创建成功",
+      createFailed: "笔记创建失败",
     },
 
     // 书签相关
