@@ -353,9 +353,9 @@ export default function Lists() {
   const hierarchicalLists = useMemo(() => (lists ? buildHierarchy(lists as ListWithCount[]) : []), [lists]);
 
   const renderListItems = useCallback(
-    (items: ListWithCount[], level = 0): React.ReactElement[] => {
+    (items: ListWithCount[], level = 0) => {
       return items.flatMap((list) => {
-        const result: React.ReactElement[] = [
+        const result = [
           <ListItem
             key={list.id}
             list={list}
