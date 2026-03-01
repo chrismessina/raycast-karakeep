@@ -99,10 +99,11 @@ export interface ListDetails {
   bookmarks: Bookmark[];
 }
 
-export interface ApiResponse<T extends List | Tag | Bookmark = List | Tag | Bookmark> {
+export interface ApiResponse<T extends List | Tag | Bookmark | Highlight = List | Tag | Bookmark | Highlight> {
   lists?: T[];
   tags?: T[];
   bookmarks?: Bookmark[];
+  highlights?: Highlight[];
   nextCursor?: string | null;
 }
 
@@ -110,5 +111,17 @@ export interface GetBookmarksParams {
   cursor?: string;
   favourited?: boolean;
   archived?: boolean;
+  type?: "link" | "text" | "asset";
   limit?: number;
+}
+
+export interface Highlight {
+  id: string;
+  bookmarkId: string;
+  text: string;
+  startOffset: number;
+  endOffset: number;
+  note?: string;
+  color?: string;
+  createdAt?: string;
 }

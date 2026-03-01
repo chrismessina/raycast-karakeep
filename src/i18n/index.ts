@@ -82,12 +82,14 @@ export const translations = {
         copyLink: "Copy Link",
         copyContent: "Copy Content",
         aiSummary: "AI Summary",
+        regenerateThumbnail: "Regenerate Thumbnail",
         favorite: "Favorite",
         unfavorite: "Unfavorite",
         archive: "Archive",
         unarchive: "Unarchive",
         delete: "Delete",
         edit: "Edit",
+        viewImage: "View Image",
       },
 
       // Metadata
@@ -118,6 +120,11 @@ export const translations = {
           title: "Summarize Bookmark",
           loading: "Summarizing bookmark...",
           success: "Summarized successfully",
+        },
+        regenerateThumbnail: {
+          title: "Regenerate Thumbnail",
+          loading: "Regenerating thumbnail...",
+          success: "Thumbnail regeneration started",
         },
         update: {
           title: "Update Bookmark",
@@ -151,6 +158,13 @@ export const translations = {
       openArchived: "Open Archived",
       searchInArchived: "Search in Archived...",
       openList: "Open List",
+      createList: "Create List",
+      editList: "Edit List",
+      listName: "Name",
+      listNamePlaceholder: "Enter list name",
+      listIcon: "Icon",
+      listIconPlaceholder: "Emoji",
+      noIcon: "No Icon",
       deleteList: "Delete List",
       deleteConfirm: "Are you sure you want to delete list {{name}}?",
       searchInList: "Search in {{name}}...",
@@ -162,17 +176,41 @@ export const translations = {
         title: "No archived bookmarks",
         description: "No archived bookmarks found",
       },
+      empty: {
+        title: "No lists yet",
+        description: "Create your first list to get started",
+      },
+      toast: {
+        create: {
+          loading: "Creating list...",
+          success: "List created",
+          error: "List creation failed",
+        },
+        update: {
+          loading: "Updating list...",
+          success: "List updated",
+          error: "List update failed",
+        },
+      },
     },
 
     // Tags Related
     tags: {
       searchPlaceholder: "Search tags",
+      createTag: "Create Tag",
+      renameTag: "Rename Tag",
+      tagName: "Name",
+      tagNamePlaceholder: "Enter tag name",
       bookmarks: {
         searchInTag: "Search in {{name}} tag...",
         empty: {
           title: "No bookmarks found",
           description: "No bookmarks in this tag yet",
         },
+      },
+      empty: {
+        title: "No tags yet",
+        description: "Tags will appear here once you create or assign them",
       },
       detail: {
         name: "Tag name",
@@ -186,12 +224,87 @@ export const translations = {
         copyTagName: "Copy tag name",
         copyTagId: "Copy tag ID",
         deleteTag: "Delete tag",
+        createTag: "Create Tag",
+        renameTag: "Rename Tag",
       },
       toast: {
+        create: {
+          loading: "Creating tag...",
+          success: "Tag created",
+          error: "Tag creation failed",
+        },
+        rename: {
+          loading: "Renaming tag...",
+          success: "Tag renamed",
+          error: "Tag rename failed",
+        },
         delete: {
           loading: "Deleting tag...",
           success: "Tag deleted successfully",
           error: "Tag deletion failed",
+        },
+      },
+    },
+
+    // Notes Related
+    notes: {
+      title: "Notes",
+      searchPlaceholder: "Search notes...",
+      empty: {
+        title: "No notes yet",
+        description: "Create your first note with the Create Note command",
+      },
+    },
+
+    // Highlights Related
+    highlights: {
+      title: "Highlights",
+      searchPlaceholder: "Search highlights...",
+      createHighlight: "Create Highlight",
+      editHighlight: "Edit Highlight",
+      deleteHighlight: "Delete Highlight",
+      deleteConfirm: "Are you sure you want to delete this highlight?",
+      highlightText: "Highlighted Text",
+      highlightTextPlaceholder: "The highlighted text",
+      note: "Note",
+      notePlaceholder: "Add a note (optional)",
+      color: "Color",
+      colorPlaceholder: "Color (optional, e.g. yellow)",
+      bookmarkId: "Bookmark ID",
+      bookmarkIdPlaceholder: "Enter the bookmark ID",
+      startOffset: "Start Offset",
+      endOffset: "End Offset",
+      empty: {
+        title: "No highlights yet",
+        description: "Highlights let you save excerpts from your bookmarks",
+      },
+      metadata: {
+        bookmarkId: "Bookmark",
+        note: "Note",
+        color: "Color",
+        createdAt: "Created At",
+      },
+      actions: {
+        edit: "Edit Highlight",
+        delete: "Delete Highlight",
+        copyText: "Copy Text",
+        copyNote: "Copy Note",
+      },
+      toast: {
+        create: {
+          loading: "Creating highlight...",
+          success: "Highlight created",
+          error: "Highlight creation failed",
+        },
+        update: {
+          loading: "Updating highlight...",
+          success: "Highlight updated",
+          error: "Highlight update failed",
+        },
+        delete: {
+          loading: "Deleting highlight...",
+          success: "Highlight deleted",
+          error: "Highlight deletion failed",
         },
       },
     },
@@ -350,12 +463,14 @@ export const translations = {
         copyLink: "复制链接",
         copyContent: "复制内容",
         aiSummary: "AI 摘要",
+        regenerateThumbnail: "重新生成缩略图",
         favorite: "收藏",
         unfavorite: "取消收藏",
         archive: "归档",
         unarchive: "取消归档",
         delete: "删除",
         edit: "编辑",
+        viewImage: "查看图片",
       },
 
       // 元数据
@@ -386,6 +501,11 @@ export const translations = {
           title: "生成摘要",
           loading: "正在生成摘要...",
           success: "摘要生成成功",
+        },
+        regenerateThumbnail: {
+          title: "重新生成缩略图",
+          loading: "正在重新生成缩略图...",
+          success: "缩略图重新生成已启动",
         },
         update: {
           title: "更新书签",
@@ -419,6 +539,13 @@ export const translations = {
       openArchived: "打开已归档",
       searchInArchived: "在已归档中搜索...",
       openList: "打开列表",
+      createList: "创建列表",
+      editList: "编辑列表",
+      listName: "名称",
+      listNamePlaceholder: "输入列表名称",
+      listIcon: "图标",
+      listIconPlaceholder: "Emoji 图标（可选）",
+      noIcon: "无图标",
       deleteList: "删除列表",
       deleteConfirm: "确定要删除列表 {{name}} 吗？",
       searchInList: "在 {{name}} 中搜索...",
@@ -430,17 +557,41 @@ export const translations = {
         title: "暂无归档",
         description: "暂无已归档的书签",
       },
+      empty: {
+        title: "暂无列表",
+        description: "创建第一个列表开始使用",
+      },
+      toast: {
+        create: {
+          loading: "创建列表中...",
+          success: "列表已创建",
+          error: "列表创建失败",
+        },
+        update: {
+          loading: "更新列表中...",
+          success: "列表已更新",
+          error: "列表更新失败",
+        },
+      },
     },
 
     // 标签相关
     tags: {
       searchPlaceholder: "搜索标签",
+      createTag: "创建标签",
+      renameTag: "重命名标签",
+      tagName: "名称",
+      tagNamePlaceholder: "输入标签名称",
       bookmarks: {
         searchInTag: "在标签 {{name}} 中搜索...",
         empty: {
           title: "暂无书签",
           description: "该标签下暂无书签",
         },
+      },
+      empty: {
+        title: "暂无标签",
+        description: "创建或分配标签后将显示在此处",
       },
       detail: {
         name: "标签名称",
@@ -454,12 +605,87 @@ export const translations = {
         copyTagName: "复制标签名称",
         copyTagId: "复制标签 ID",
         deleteTag: "删除标签",
+        createTag: "创建标签",
+        renameTag: "重命名标签",
       },
       toast: {
+        create: {
+          loading: "创建标签中...",
+          success: "标签已创建",
+          error: "标签创建失败",
+        },
+        rename: {
+          loading: "重命名标签中...",
+          success: "标签已重命名",
+          error: "标签重命名失败",
+        },
         delete: {
           loading: "删除中...",
           success: "删除成功",
           error: "删除失败",
+        },
+      },
+    },
+
+    // 笔记列表相关
+    notes: {
+      title: "笔记",
+      searchPlaceholder: "搜索笔记...",
+      empty: {
+        title: "暂无笔记",
+        description: "使用「创建笔记」命令创建第一条笔记",
+      },
+    },
+
+    // 高亮相关
+    highlights: {
+      title: "高亮",
+      searchPlaceholder: "搜索高亮...",
+      createHighlight: "创建高亮",
+      editHighlight: "编辑高亮",
+      deleteHighlight: "删除高亮",
+      deleteConfirm: "确定要删除此高亮吗？",
+      highlightText: "高亮文本",
+      highlightTextPlaceholder: "高亮的文本内容",
+      note: "备注",
+      notePlaceholder: "添加备注（可选）",
+      color: "颜色",
+      colorPlaceholder: "颜色（可选，如 yellow）",
+      bookmarkId: "书签 ID",
+      bookmarkIdPlaceholder: "输入书签 ID",
+      startOffset: "起始偏移",
+      endOffset: "结束偏移",
+      empty: {
+        title: "暂无高亮",
+        description: "高亮可以保存书签中的精彩片段",
+      },
+      metadata: {
+        bookmarkId: "书签",
+        note: "备注",
+        color: "颜色",
+        createdAt: "创建时间",
+      },
+      actions: {
+        edit: "编辑高亮",
+        delete: "删除高亮",
+        copyText: "复制文本",
+        copyNote: "复制备注",
+      },
+      toast: {
+        create: {
+          loading: "创建高亮中...",
+          success: "高亮已创建",
+          error: "高亮创建失败",
+        },
+        update: {
+          loading: "更新高亮中...",
+          success: "高亮已更新",
+          error: "高亮更新失败",
+        },
+        delete: {
+          loading: "删除高亮中...",
+          success: "高亮已删除",
+          error: "高亮删除失败",
         },
       },
     },

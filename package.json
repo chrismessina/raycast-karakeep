@@ -230,6 +230,27 @@
       "mode": "view"
     },
     {
+      "name": "createList",
+      "title": "Create List",
+      "subtitle": "Karakeep",
+      "description": "Create a new list",
+      "mode": "view"
+    },
+    {
+      "name": "notes",
+      "title": "Notes",
+      "subtitle": "Karakeep",
+      "description": "List all your notes",
+      "mode": "view"
+    },
+    {
+      "name": "highlights",
+      "title": "Highlights",
+      "subtitle": "Karakeep",
+      "description": "List and manage your highlights",
+      "mode": "view"
+    },
+    {
       "name": "quickBookmark",
       "title": "Quick Bookmark",
       "subtitle": "Karakeep",

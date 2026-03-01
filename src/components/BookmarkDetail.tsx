@@ -339,6 +339,7 @@ export function BookmarkDetail({ bookmark: initialBookmark, onRefresh }: Bookmar
               key={tag.id}
               text={tag.name}
               color={tag.attachedBy === "ai" ? TAG_AI_COLOR : TAG_HUMAN_COLOR}
+              icon={tag.attachedBy === "ai" ? Icon.Wand : undefined}
             />
           ))}
         </Detail.Metadata.TagList>

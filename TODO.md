@@ -16,51 +16,51 @@
 
 ### List Management
 
-- [ ] Add ability to manage lists
-  - [ ] Add list creation — API: [`POST /api/v1/lists`](https://docs.karakeep.app/api/karakeep-api/create-list)
-  - [ ] Add list deletion — API: [`DELETE /api/v1/lists/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-list)
-  - [ ] Add list updating — API: [`PATCH /api/v1/lists/{id}`](https://docs.karakeep.app/api/karakeep-api/update-list)
+- [x] Add ability to manage lists
+  - [x] Add list creation — API: [`POST /api/v1/lists`](https://docs.karakeep.app/api/karakeep-api/create-list)
+  - [x] Add list deletion — API: [`DELETE /api/v1/lists/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-list)
+  - [x] Add list updating — API: [`PATCH /api/v1/lists/{id}`](https://docs.karakeep.app/api/karakeep-api/update-list)
 
 ### Tag Management
 
-- [ ] Add ability to manage tags
-  - [ ] Add tag creation — API: [`POST /api/v1/tags`](https://docs.karakeep.app/api/karakeep-api/create-tag)
-  - [ ] Add tag deletion — API: [`DELETE /api/v1/tags/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-tag)
-  - [ ] Add tag renaming — API: [`PATCH /api/v1/tags/{id}`](https://docs.karakeep.app/api/karakeep-api/update-tag)
+- [x] Add ability to manage tags
+  - [x] Add tag creation — API: [`POST /api/v1/tags`](https://docs.karakeep.app/api/karakeep-api/create-tag)
+  - [x] Add tag deletion — API: [`DELETE /api/v1/tags/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-tag)
+  - [x] Add tag renaming — API: [`PATCH /api/v1/tags/{id}`](https://docs.karakeep.app/api/karakeep-api/update-tag)
 
 ### Note Management
 
-- [ ] Add ability to manage notes
-  - [ ] Add Notes list (show only `type: "text"` bookmarks) — API: [`GET /api/v1/bookmarks`](https://docs.karakeep.app/api/karakeep-api/list-bookmarks) with `?type=text` filter
-  - [ ] Add note deletion — API: [`DELETE /api/v1/bookmarks/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-bookmark)
-  - [ ] Add note updating — API: [`PATCH /api/v1/bookmarks/{id}`](https://docs.karakeep.app/api/karakeep-api/update-bookmark)
-  - [ ] Clarify: Notes are bookmarks with `type: "text"`, not a separate entity
+- [x] Add ability to manage notes
+  - [x] Add Notes list (show only `type: "text"` bookmarks) — API: [`GET /api/v1/bookmarks`](https://docs.karakeep.app/api/karakeep-api/list-bookmarks) with `?type=text` filter
+  - [x] Add note deletion — API: [`DELETE /api/v1/bookmarks/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-bookmark)
+  - [x] Add note updating — API: [`PATCH /api/v1/bookmarks/{id}`](https://docs.karakeep.app/api/karakeep-api/update-bookmark)
+  - [x] Clarify: Notes are bookmarks with `type: "text"`, not a separate entity
 
 ### Highlights
 
-- [ ] Add ability to highlights
-  - [ ] Add highlight creation — API: [`POST /api/v1/highlights`](https://docs.karakeep.app/api/karakeep-api/create-highlight)
-  - [ ] Add highlight deletion — API: [`DELETE /api/v1/highlights/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-highlight)
-  - [ ] Add highlight updating — API: [`PATCH /api/v1/highlights/{id}`](https://docs.karakeep.app/api/karakeep-api/update-highlight)
+- [x] Add ability to highlights
+  - [x] Add highlight creation — API: [`POST /api/v1/highlights`](https://docs.karakeep.app/api/karakeep-api/create-highlight)
+  - [x] Add highlight deletion — API: [`DELETE /api/v1/highlights/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-highlight)
+  - [x] Add highlight updating — API: [`PATCH /api/v1/highlights/{id}`](https://docs.karakeep.app/api/karakeep-api/update-highlight)
 
 ### Bookmarks View Enhancements
 
 - [ ] To Bookmarks view, add Lists SearchBar accessory filter
-- [ ] To Bookmarks detail view, add icon to AI-generated tags
-- [ ] Add action to bookmark to regenerate thumbnail
+- [x] To Bookmarks detail view, add icon to AI-generated tags
+- [x] Add action to bookmark to regenerate thumbnail
 - [ ] When adding a bookmark, allow adding tags; support retreiving Karakeep's AI-suggested tags (`attachedBy: ai`)
 - [ ] When adding a note, allow adding tags; support retreiving Karakeep's AI-suggested tags (`attachedBy: ai`)
 
 ### Technical Foundation
 
-- [ ] Confirm pagination is using native Raycast pagination
-- [ ] Add `Action` keyboard shortcuts (e.g., `⌘↵` for primary, `⌘⇧↵` for secondary)
-- [ ] Make sure we're using common Raycast keyboard shortcuts
-- [ ] Handle API errors gracefully with user-friendly messages
-- [ ] Add loading states for all async operations
-- [ ] Ensure all `Form` views have proper validation and error handling
-- [ ] Add `Toast` feedback for async operations (create/delete/update)
-- [ ] Add `List.EmptyView` for empty states in all list views
+- [x] Confirm pagination is using native Raycast pagination
+- [x] Add `Action` keyboard shortcuts (e.g., `⌘↵` for primary, `⌘⇧↵` for secondary)
+- [x] Make sure we're using common Raycast keyboard shortcuts
+- [x] Handle API errors gracefully with user-friendly messages
+- [x] Add loading states for all async operations
+- [x] Ensure all `Form` views have proper validation and error handling
+- [x] Add `Toast` feedback for async operations (create/delete/update)
+- [x] Add `List.EmptyView` for empty states in all list views
 
 ## P2 - Enhancements (Medium Priority)
 

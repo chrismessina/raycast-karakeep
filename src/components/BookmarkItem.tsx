@@ -1,9 +1,15 @@
 import { Action, ActionPanel, Icon, Image, List, showToast, Toast, useNavigation } from "@raycast/api";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { logger } from "@chrismessina/raycast-logger";
+import {
+  fetchDeleteBookmark,
+  fetchGetSingleBookmark,
+  fetchRegenerateThumbnail,
+  fetchSummarizeBookmark,
+  fetchUpdateBookmark,
+} from "../apis";
 
 const log = logger.child("[BookmarkItem]");
-import { fetchDeleteBookmark, fetchGetSingleBookmark, fetchSummarizeBookmark, fetchUpdateBookmark } from "../apis";
 import {
   ARCHIVED_COLOR,
   DEFAULT_COLOR,
@@ -148,7 +154,13 @@ function useBookmarkHandlers({
     await handleToast("summarize", async () => {
       await fetchSummarizeBookmark(bookmark.id);
     });
-  }, [bookmark.id, handleToast, setBookmark, t]);
+  }, [bookmark.id, handleToast]);
+
+  const handleRegenerateThumbnail = useCallback(async () => {
+    await handleToast("regenerateThumbnail", async () => {
+      await fetchRegenerateThumbnail(bookmark.id);
+    });
+  }, [bookmark.id, handleToast]);
 
   const handleUpdate = useCallback(
     async (options: { archived?: boolean; favourited?: boolean }) => {
@@ -156,13 +168,14 @@ function useBookmarkHandlers({
         await fetchUpdateBookmark(bookmark.id, options);
       });
     },
-    [bookmark.id, handleToast, setBookmark],
+    [bookmark.id, handleToast],
   );
 
   return {
     handleDeleteBookmark,
     handleEdit,
     handleSummarize,
+    handleRegenerateThumbnail,
     handleUpdate,
   };
 }
@@ -211,6 +224,7 @@ function BookmarkMetadata({ bookmark, config, t }: { bookmark: Bookmark; config:
                 key={tag.id}
                 text={tag.name}
                 color={tag.attachedBy === "ai" ? TAG_AI_COLOR : TAG_HUMAN_COLOR}
+                icon={tag.attachedBy === "ai" ? Icon.Wand : undefined}
               />
             ))}
           </Metadata.TagList>
@@ -440,12 +454,20 @@ function BookmarkActions({
       </ActionPanel.Section>
       <ActionPanel.Section>
         {bookmark.content.type === "link" && bookmark.content.url && (
-          <Action
-            title={t("bookmark.actions.aiSummary")}
-            onAction={handlers.handleSummarize}
-            icon={Icon.Wand}
-            shortcut={{ modifiers: ["ctrl"], key: "s" }}
-          />
+          <>
+            <Action
+              title={t("bookmark.actions.aiSummary")}
+              onAction={handlers.handleSummarize}
+              icon={Icon.Wand}
+              shortcut={{ modifiers: ["ctrl"], key: "s" }}
+            />
+            <Action
+              title={t("bookmark.actions.regenerateThumbnail")}
+              onAction={handlers.handleRegenerateThumbnail}
+              icon={Icon.Image}
+              shortcut={{ modifiers: ["ctrl"], key: "t" }}
+            />
+          </>
         )}
         <Action
           title={bookmark.favourited ? t("bookmark.actions.unfavorite") : t("bookmark.actions.favorite")}

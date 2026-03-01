@@ -1,9 +1,9 @@
 import { Icon, List } from "@raycast/api";
 import { useCallback } from "react";
 import { logger } from "@chrismessina/raycast-logger";
+import { BookmarkList } from "./components/BookmarkList";
 
 const log = logger.child("[Bookmarks]");
-import { BookmarkList } from "./components/BookmarkList";
 import { useGetAllBookmarks } from "./hooks/useGetAllBookmarks";
 import { useTranslation } from "./hooks/useTranslation";
 import { runWithToast } from "./utils/toast";
@@ -33,7 +33,7 @@ export default function BookmarksList() {
   if (isLoading && bookmarks.length === 0) {
     return (
       <List>
-        <List.EmptyView title={t("loading")} icon={Icon.Airplane} description={t("pleaseWait")} />
+        <List.EmptyView title={t("loading")} icon={Icon.Bookmark} description={t("pleaseWait")} />
       </List>
     );
   }
@@ -45,6 +45,8 @@ export default function BookmarksList() {
       onRefresh={handleRefresh}
       pagination={pagination}
       searchBarPlaceholder={t("searchBookmarks")}
+      emptyViewTitle={t("bookmarkList.emptySearch.title")}
+      emptyViewDescription={t("bookmarkList.emptySearch.description")}
     />
   );
 }

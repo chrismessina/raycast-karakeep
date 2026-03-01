@@ -1,5 +1,5 @@
 import { logger } from "@chrismessina/raycast-logger";
-import { ApiResponse, Bookmark, GetBookmarksParams, List, Tag } from "../types";
+import { ApiResponse, Bookmark, GetBookmarksParams, Highlight, List, Tag } from "../types";
 import { getApiConfig } from "../utils/config";
 
 const log = logger.child("[API]");
@@ -68,12 +68,14 @@ export async function fetchGetAllBookmarks({
   cursor,
   favourited,
   archived,
+  type,
   limit = 10,
 }: GetBookmarksParams = {}): Promise<ApiResponse<Bookmark>> {
   const params = new URLSearchParams();
   if (cursor != null) params.append("cursor", cursor);
   if (favourited) params.append("favourited", favourited.toString());
   if (archived) params.append("archived", archived.toString());
+  if (type) params.append("type", type);
   if (limit) params.append("limit", limit.toString());
 
   const queryString = params.toString();
@@ -130,6 +132,20 @@ export async function fetchGetSingleListBookmarks(
   return fetchWithAuth<ApiResponse<Bookmark>>(`/api/v1/lists/${id}/bookmarks${queryString ? `?${queryString}` : ""}`);
 }
 
+export async function fetchCreateList(payload: { name: string; icon?: string }): Promise<List> {
+  return fetchWithAuth<List>("/api/v1/lists", {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export async function fetchUpdateList(id: string, payload: { name?: string; icon?: string }): Promise<List> {
+  return fetchWithAuth<List>(`/api/v1/lists/${id}`, {
+    method: "PATCH",
+    body: payload,
+  });
+}
+
 export async function fetchDeleteList(id: string): Promise<unknown> {
   return fetchWithAuth(`/api/v1/lists/${id}`, {
     method: "DELETE",
@@ -152,8 +168,63 @@ export async function fetchGetSingleTagBookmarks(
   return fetchWithAuth<ApiResponse<Bookmark>>(`/api/v1/tags/${id}/bookmarks${queryString ? `?${queryString}` : ""}`);
 }
 
+export async function fetchCreateTag(payload: { name: string }): Promise<Tag> {
+  return fetchWithAuth<Tag>("/api/v1/tags", {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export async function fetchUpdateTag(id: string, payload: { name: string }): Promise<Tag> {
+  return fetchWithAuth<Tag>(`/api/v1/tags/${id}`, {
+    method: "PATCH",
+    body: payload,
+  });
+}
+
 export async function fetchDeleteTag(id: string): Promise<unknown> {
   return fetchWithAuth(`/api/v1/tags/${id}`, {
     method: "DELETE",
+  });
+}
+
+export async function fetchGetAllHighlights(): Promise<ApiResponse<Highlight>> {
+  return fetchWithAuth<ApiResponse<Highlight>>("/api/v1/highlights");
+}
+
+export async function fetchCreateHighlight(payload: {
+  bookmarkId: string;
+  startOffset: number;
+  endOffset: number;
+  text: string;
+  note?: string;
+  color?: string;
+}): Promise<Highlight> {
+  return fetchWithAuth<Highlight>("/api/v1/highlights", {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export async function fetchUpdateHighlight(
+  id: string,
+  payload: { text?: string; note?: string; color?: string },
+): Promise<Highlight> {
+  return fetchWithAuth<Highlight>(`/api/v1/highlights/${id}`, {
+    method: "PATCH",
+    body: payload,
+  });
+}
+
+export async function fetchDeleteHighlight(id: string): Promise<unknown> {
+  return fetchWithAuth(`/api/v1/highlights/${id}`, {
+    method: "DELETE",
+  });
+}
+
+export async function fetchRegenerateThumbnail(bookmarkId: string): Promise<unknown> {
+  return fetchWithAuth(`/api/v1/bookmarks/${bookmarkId}/assets`, {
+    method: "POST",
+    body: { type: "screenshot" },
   });
 }

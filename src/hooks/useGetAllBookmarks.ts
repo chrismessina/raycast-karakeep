@@ -4,19 +4,22 @@ import { logger } from "@chrismessina/raycast-logger";
 import { fetchGetAllBookmarks } from "../apis";
 import { GetBookmarksParams } from "../types";
 
+const log = logger.child("[GetAllBookmarks]");
+
 /**
  * Hook to fetch all bookmarks with native Raycast pagination support.
  * Eliminates manual state management and cursor tracking.
  */
-export function useGetAllBookmarks({ favourited, archived }: GetBookmarksParams = {}) {
+export function useGetAllBookmarks({ favourited, archived, type }: GetBookmarksParams = {}) {
   const abortable = useRef<AbortController | null>(null);
 
   const { isLoading, data, error, revalidate, pagination } = useCachedPromise(
-    (favourited, archived) => async (options) => {
+    (favourited, archived, type) => async (options) => {
       const result = await fetchGetAllBookmarks({
         cursor: options.cursor,
         favourited,
         archived,
+        type,
       });
 
       return {
@@ -25,7 +28,7 @@ export function useGetAllBookmarks({ favourited, archived }: GetBookmarksParams 
         cursor: result.nextCursor ?? undefined,
       };
     },
-    [favourited, archived],
+    [favourited, archived, type],
     {
       initialData: [],
       abortable,
@@ -36,7 +39,7 @@ export function useGetAllBookmarks({ favourited, archived }: GetBookmarksParams 
 
   useEffect(() => {
     if (error) {
-      logger.error("Failed to fetch bookmarks", { favourited, archived, error });
+      log.error("Failed to fetch bookmarks", { favourited, archived, error });
     }
   }, [error]);
 
