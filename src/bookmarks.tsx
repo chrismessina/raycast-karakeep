@@ -1,14 +1,34 @@
 import { Icon, List } from "@raycast/api";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { logger } from "@chrismessina/raycast-logger";
 import { BookmarkList } from "./components/BookmarkList";
 
 const log = logger.child("[Bookmarks]");
 import { useGetAllBookmarks } from "./hooks/useGetAllBookmarks";
+import { useGetAllLists } from "./hooks/useGetAllLists";
+import { useGetListsBookmarks } from "./hooks/useGetListsBookmarks";
 import { useTranslation } from "./hooks/useTranslation";
 import { runWithToast } from "./utils/toast";
 
-export default function BookmarksList() {
+function ListFilterDropdown({ onChange }: { onChange: (listId: string) => void }) {
+  const { t } = useTranslation();
+  const { lists } = useGetAllLists();
+
+  return (
+    <List.Dropdown tooltip="Filter by List" onChange={onChange}>
+      <List.Dropdown.Item title={t("bookmark.defaultListPlaceholder")} value="" />
+      {lists.map((list) => (
+        <List.Dropdown.Item key={list.id} title={list.name} value={list.id} />
+      ))}
+    </List.Dropdown>
+  );
+}
+
+function AllBookmarksView({
+  searchBarAccessory,
+}: {
+  searchBarAccessory: Parameters<typeof List>[0]["searchBarAccessory"];
+}) {
   const { t } = useTranslation();
   const { isLoading, bookmarks, revalidate, pagination } = useGetAllBookmarks();
 
@@ -32,7 +52,7 @@ export default function BookmarksList() {
 
   if (isLoading && bookmarks.length === 0) {
     return (
-      <List>
+      <List searchBarAccessory={searchBarAccessory}>
         <List.EmptyView title={t("loading")} icon={Icon.Bookmark} description={t("pleaseWait")} />
       </List>
     );
@@ -47,6 +67,59 @@ export default function BookmarksList() {
       searchBarPlaceholder={t("searchBookmarks")}
       emptyViewTitle={t("bookmarkList.emptySearch.title")}
       emptyViewDescription={t("bookmarkList.emptySearch.description")}
+      searchBarAccessory={searchBarAccessory}
     />
   );
+}
+
+function ListBookmarksView({
+  listId,
+  listName,
+  searchBarAccessory,
+}: {
+  listId: string;
+  listName: string;
+  searchBarAccessory: Parameters<typeof List>[0]["searchBarAccessory"];
+}) {
+  const { t } = useTranslation();
+  const { isLoading, bookmarks, revalidate, pagination } = useGetListsBookmarks(listId);
+
+  if (isLoading && bookmarks.length === 0) {
+    return (
+      <List searchBarAccessory={searchBarAccessory}>
+        <List.EmptyView title={t("loading")} icon={Icon.Bookmark} description={t("pleaseWait")} />
+      </List>
+    );
+  }
+
+  return (
+    <BookmarkList
+      bookmarks={bookmarks}
+      isLoading={isLoading}
+      onRefresh={revalidate}
+      pagination={pagination}
+      searchBarPlaceholder={t("searchBookmarks")}
+      emptyViewTitle={t("bookmarkList.emptySearch.title")}
+      emptyViewDescription={t("bookmarkList.emptySearch.description")}
+      itemLabel={listName}
+      searchBarAccessory={searchBarAccessory}
+    />
+  );
+}
+
+export default function BookmarksList() {
+  const { lists } = useGetAllLists();
+  const [selectedListId, setSelectedListId] = useState("");
+
+  const searchBarAccessory = <ListFilterDropdown onChange={setSelectedListId} />;
+
+  const selectedList = lists.find((l) => l.id === selectedListId);
+
+  if (selectedListId && selectedList) {
+    return (
+      <ListBookmarksView listId={selectedListId} listName={selectedList.name} searchBarAccessory={searchBarAccessory} />
+    );
+  }
+
+  return <AllBookmarksView searchBarAccessory={searchBarAccessory} />;
 }

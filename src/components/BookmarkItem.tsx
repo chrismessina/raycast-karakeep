@@ -1,12 +1,7 @@
 import { Action, ActionPanel, Icon, Image, List, showToast, Toast, useNavigation } from "@raycast/api";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { logger } from "@chrismessina/raycast-logger";
-import {
-  fetchDeleteBookmark,
-  fetchGetSingleBookmark,
-  fetchSummarizeBookmark,
-  fetchUpdateBookmark,
-} from "../apis";
+import { fetchDeleteBookmark, fetchGetSingleBookmark, fetchSummarizeBookmark, fetchUpdateBookmark } from "../apis";
 
 const log = logger.child("[BookmarkItem]");
 import {

@@ -11,6 +11,7 @@
 - **Highlights CRUD**: Create, edit, view detail, and delete highlights via a new Highlights command.
 - **Smart list icon**: Smart lists display a ✨ icon when no custom icon is set.
 - **Tag picker in Create Bookmark and Create Note**: Both forms now include a Tags picker for selecting existing tags and an "Add Tag" field for creating new ones. Type a name and press ↵ or comma to commit it as a pill; it is immediately added to the Tags picker above. Tags are attached to the bookmark via `POST /api/v1/bookmarks/{id}/tags` after creation.
+- **List filter in Bookmarks view**: A dropdown in the search bar lets you filter bookmarks by list. Selecting a list switches to paginated list-scoped results; selecting "Default" returns to all bookmarks.
 
 ### Improvements
 
@@ -28,6 +29,7 @@
 ### Removed
 
 - Removed the "Regenerate Thumbnail" action from the Bookmark Item context menu.
+- Removed "Create Highlight" — creating highlights requires DOM character offsets only available via the browser extension. The Highlights command remains for viewing, editing, and deleting highlights.
 
 ### Chores
 

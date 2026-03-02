@@ -9,7 +9,7 @@
   - [x] Delete Note
   - [x] Delete List
   - [x] Delete Tag
-  - [ ] Delete Highlight
+  - [x] Delete Highlight
   - [ ] Delete Backup
 
 ## P1 - Core Features (High Priority)
@@ -43,14 +43,14 @@
 
 ### Highlights
 
-- [x] Add ability to highlights
-  - [x] Add highlight creation — API: [`POST /api/v1/highlights`](https://docs.karakeep.app/api/karakeep-api/create-highlight)
+- [x] Add ability to manage highlights
+  - [~] Add highlight creation — **Removed**: Requires DOM character offsets; not feasible without the browser extension
   - [x] Add highlight deletion — API: [`DELETE /api/v1/highlights/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-highlight)
   - [x] Add highlight updating — API: [`PATCH /api/v1/highlights/{id}`](https://docs.karakeep.app/api/karakeep-api/update-highlight)
 
 ### Bookmarks View Enhancements
 
-- [ ] To Bookmarks view, add Lists SearchBar accessory filter
+- [x] To Bookmarks view, add Lists SearchBar accessory filter
 - [x] To Bookmarks detail view, add icon to AI-generated tags
 - [~] Add action to bookmark to regenerate thumbnail — **Removed**: Karakeep API does not expose screenshot regeneration endpoint
 - [x] When adding a bookmark, allow adding tags; support retreiving Karakeep's AI-suggested tags (`attachedBy: ai`)

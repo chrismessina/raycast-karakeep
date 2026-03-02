@@ -24,6 +24,8 @@ interface BookmarkListProps {
   onBookmarkVisit?: (bookmark: Bookmark) => void;
   /** Override the item label used in the section title and navigation title (e.g. "Notes" instead of "Bookmarks") */
   itemLabel?: string;
+  /** Optional accessory element rendered in the search bar (e.g. a List.Dropdown for filtering) */
+  searchBarAccessory?: Parameters<typeof List>[0]["searchBarAccessory"];
 }
 function SearchBookmarkList({ searchText }: { searchText: string }) {
   const { t } = useTranslation();
@@ -52,6 +54,7 @@ export function BookmarkList({
   onSearch,
   onBookmarkVisit,
   itemLabel,
+  searchBarAccessory,
 }: BookmarkListProps) {
   const { t } = useTranslation();
   const { push } = useNavigation();
@@ -144,6 +147,7 @@ export function BookmarkList({
       isLoading={isLoading}
       isShowingDetail={displayInfo.displayBookmarks.length > 0}
       searchBarPlaceholder={searchBarPlaceholder || defaultValues.searchBarPlaceholder}
+      searchBarAccessory={searchBarAccessory}
       searchText={searchText}
       onSearchTextChange={handleSearchTextChange}
       onSelectionChange={(id) => setSelectedItemId(id ?? undefined)}

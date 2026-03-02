@@ -223,20 +223,6 @@ export async function fetchGetAllHighlights(): Promise<ApiResponse<Highlight>> {
   return fetchWithAuth<ApiResponse<Highlight>>("/api/v1/highlights");
 }
 
-export async function fetchCreateHighlight(payload: {
-  bookmarkId: string;
-  startOffset: number;
-  endOffset: number;
-  text: string;
-  note?: string;
-  color?: string;
-}): Promise<Highlight> {
-  return fetchWithAuth<Highlight>("/api/v1/highlights", {
-    method: "POST",
-    body: payload,
-  });
-}
-
 export async function fetchUpdateHighlight(
   id: string,
   payload: { text?: string; note?: string; color?: string },

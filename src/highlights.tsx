@@ -1,7 +1,7 @@
 import { Action, ActionPanel, confirmAlert, Detail, Form, Icon, List, useNavigation } from "@raycast/api";
 import { useCachedPromise, useForm } from "@raycast/utils";
 import { logger } from "@chrismessina/raycast-logger";
-import { fetchCreateHighlight, fetchDeleteHighlight, fetchGetAllHighlights, fetchUpdateHighlight } from "./apis";
+import { fetchDeleteHighlight, fetchGetAllHighlights, fetchUpdateHighlight } from "./apis";
 import { useTranslation } from "./hooks/useTranslation";
 import { Highlight } from "./types";
 import { runWithToast } from "./utils/toast";
@@ -38,87 +38,13 @@ function useGetAllHighlights() {
   return { isLoading, highlights: data || [], error, revalidate };
 }
 
-interface HighlightFormValues {
-  bookmarkId: string;
-  text: string;
-  startOffset: string;
-  endOffset: string;
-  note: string;
-  color: string;
-}
-
-function CreateHighlightForm({ onCreated }: { onCreated: () => void }) {
-  const { pop } = useNavigation();
-  const { t } = useTranslation();
-
-  const { handleSubmit, itemProps } = useForm<HighlightFormValues>({
-    initialValues: { bookmarkId: "", text: "", startOffset: "0", endOffset: "0", note: "", color: "" },
-    validation: {
-      bookmarkId: (v) => (!v?.trim() ? t("highlights.bookmarkId") + " is required" : undefined),
-      text: (v) => (!v?.trim() ? t("highlights.highlightText") + " is required" : undefined),
-      startOffset: (v) => (isNaN(Number(v)) ? "Must be a number" : undefined),
-      endOffset: (v) => (isNaN(Number(v)) ? "Must be a number" : undefined),
-    },
-    async onSubmit(values) {
-      log.info("Creating highlight", { bookmarkId: values.bookmarkId });
-      const result = await runWithToast({
-        loading: { title: t("highlights.toast.create.loading") },
-        success: { title: t("highlights.toast.create.success") },
-        failure: { title: t("highlights.toast.create.error") },
-        action: async () => {
-          await fetchCreateHighlight({
-            bookmarkId: values.bookmarkId.trim(),
-            text: values.text.trim(),
-            startOffset: Number(values.startOffset),
-            endOffset: Number(values.endOffset),
-            note: values.note.trim() || undefined,
-            color: values.color.trim() || undefined,
-          });
-          onCreated();
-          log.info("Highlight created");
-        },
-      });
-      if (result !== undefined) pop();
-    },
-  });
-
-  return (
-    <Form
-      navigationTitle={t("highlights.createHighlight")}
-      actions={
-        <ActionPanel>
-          <Action.SubmitForm title={t("highlights.createHighlight")} onSubmit={handleSubmit} icon={Icon.Plus} />
-        </ActionPanel>
-      }
-    >
-      <Form.TextField
-        {...itemProps.bookmarkId}
-        title={t("highlights.bookmarkId")}
-        placeholder={t("highlights.bookmarkIdPlaceholder")}
-        autoFocus
-      />
-      <Form.TextArea
-        {...itemProps.text}
-        title={t("highlights.highlightText")}
-        placeholder={t("highlights.highlightTextPlaceholder")}
-      />
-      <Form.TextField {...itemProps.startOffset} title={t("highlights.startOffset")} placeholder="0" />
-      <Form.TextField {...itemProps.endOffset} title={t("highlights.endOffset")} placeholder="0" />
-      <Form.TextField {...itemProps.note} title={t("highlights.note")} placeholder={t("highlights.notePlaceholder")} />
-      <Form.TextField
-        {...itemProps.color}
-        title={t("highlights.color")}
-        placeholder={t("highlights.colorPlaceholder")}
-      />
-    </Form>
-  );
-}
-
 function EditHighlightForm({ highlight, onUpdated }: { highlight: Highlight; onUpdated: () => void }) {
   const { pop } = useNavigation();
   const { t } = useTranslation();
 
-  const { handleSubmit, itemProps } = useForm<Pick<HighlightFormValues, "text" | "note" | "color">>({
+  const { handleSubmit, itemProps } = useForm<
+    Pick<{ text: string; note: string; color: string }, "text" | "note" | "color">
+  >({
     initialValues: { text: highlight.text, note: highlight.note || "", color: highlight.color || "" },
     validation: {
       text: (v) => (!v?.trim() ? t("highlights.highlightText") + " is required" : undefined),
@@ -256,40 +182,13 @@ export default function Highlights() {
   const { t } = useTranslation();
   const { isLoading, highlights, revalidate } = useGetAllHighlights();
 
-  const handleCreateHighlight = () => {
-    push(<CreateHighlightForm onCreated={revalidate} />);
-  };
-
   return (
-    <List
-      isLoading={isLoading}
-      searchBarPlaceholder={t("highlights.searchPlaceholder")}
-      actions={
-        <ActionPanel>
-          <Action
-            title={t("highlights.createHighlight")}
-            onAction={handleCreateHighlight}
-            icon={Icon.Plus}
-            shortcut={{ modifiers: ["cmd"], key: "n" }}
-          />
-        </ActionPanel>
-      }
-    >
+    <List isLoading={isLoading} searchBarPlaceholder={t("highlights.searchPlaceholder")}>
       {!isLoading && highlights.length === 0 && (
         <List.EmptyView
           title={t("highlights.empty.title")}
           description={t("highlights.empty.description")}
           icon={Icon.Highlight}
-          actions={
-            <ActionPanel>
-              <Action
-                title={t("highlights.createHighlight")}
-                onAction={handleCreateHighlight}
-                icon={Icon.Plus}
-                shortcut={{ modifiers: ["cmd"], key: "n" }}
-              />
-            </ActionPanel>
-          }
         />
       )}
       {highlights.map((highlight) => (
@@ -313,12 +212,6 @@ export default function Highlights() {
                   icon={Icon.Pencil}
                   onAction={() => push(<EditHighlightForm highlight={highlight} onUpdated={revalidate} />)}
                   shortcut={{ modifiers: ["cmd"], key: "e" }}
-                />
-                <Action
-                  title={t("highlights.createHighlight")}
-                  onAction={handleCreateHighlight}
-                  icon={Icon.Plus}
-                  shortcut={{ modifiers: ["cmd"], key: "n" }}
                 />
               </ActionPanel.Section>
               <ActionPanel.Section>
