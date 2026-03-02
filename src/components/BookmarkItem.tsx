@@ -4,7 +4,6 @@ import { logger } from "@chrismessina/raycast-logger";
 import {
   fetchDeleteBookmark,
   fetchGetSingleBookmark,
-  fetchRegenerateThumbnail,
   fetchSummarizeBookmark,
   fetchUpdateBookmark,
 } from "../apis";
@@ -156,12 +155,6 @@ function useBookmarkHandlers({
     });
   }, [bookmark.id, handleToast]);
 
-  const handleRegenerateThumbnail = useCallback(async () => {
-    await handleToast("regenerateThumbnail", async () => {
-      await fetchRegenerateThumbnail(bookmark.id);
-    });
-  }, [bookmark.id, handleToast]);
-
   const handleUpdate = useCallback(
     async (options: { archived?: boolean; favourited?: boolean }) => {
       await handleToast("update", async () => {
@@ -175,7 +168,6 @@ function useBookmarkHandlers({
     handleDeleteBookmark,
     handleEdit,
     handleSummarize,
-    handleRegenerateThumbnail,
     handleUpdate,
   };
 }
@@ -464,12 +456,6 @@ function BookmarkActions({
               onAction={handlers.handleSummarize}
               icon={Icon.Wand}
               shortcut={{ modifiers: ["ctrl"], key: "s" }}
-            />
-            <Action
-              title={t("bookmark.actions.regenerateThumbnail")}
-              onAction={handlers.handleRegenerateThumbnail}
-              icon={Icon.Image}
-              shortcut={{ modifiers: ["ctrl"], key: "t" }}
             />
           </>
         )}

@@ -252,10 +252,3 @@ export async function fetchDeleteHighlight(id: string): Promise<unknown> {
     method: "DELETE",
   });
 }
-
-export async function fetchRegenerateThumbnail(bookmarkId: string): Promise<unknown> {
-  return fetchWithAuth(`/api/v1/bookmarks/${bookmarkId}/assets`, {
-    method: "POST",
-    body: { type: "screenshot" },
-  });
-}

@@ -21,6 +21,10 @@
 - **Destructive action styling**: Delete actions use `Action.Style.Destructive` throughout.
 - **Verbose logging preference**: New opt-in preference to enable debug-level logging.
 
+### Removed
+
+- Removed the "Regenerate Thumbnail" action from the Bookmark Item context menu.
+
 ### Chores
 
 - Reorganized `package.json`, added keywords and Windows platform support

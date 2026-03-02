@@ -82,7 +82,6 @@ export const translations = {
         copyLink: "Copy Link",
         copyContent: "Copy Content",
         aiSummary: "AI Summary",
-        regenerateThumbnail: "Regenerate Thumbnail",
         favorite: "Favorite",
         unfavorite: "Unfavorite",
         archive: "Archive",
@@ -120,11 +119,6 @@ export const translations = {
           title: "Summarize Bookmark",
           loading: "Summarizing bookmark...",
           success: "Summarized successfully",
-        },
-        regenerateThumbnail: {
-          title: "Regenerate Thumbnail",
-          loading: "Regenerating thumbnail...",
-          success: "Thumbnail regeneration started",
         },
         update: {
           title: "Update Bookmark",
@@ -500,7 +494,6 @@ export const translations = {
         copyLink: "复制链接",
         copyContent: "复制内容",
         aiSummary: "AI 摘要",
-        regenerateThumbnail: "重新生成缩略图",
         favorite: "收藏",
         unfavorite: "取消收藏",
         archive: "归档",
@@ -538,11 +531,6 @@ export const translations = {
           title: "生成摘要",
           loading: "正在生成摘要...",
           success: "摘要生成成功",
-        },
-        regenerateThumbnail: {
-          title: "重新生成缩略图",
-          loading: "正在重新生成缩略图...",
-          success: "缩略图重新生成已启动",
         },
         update: {
           title: "更新书签",
