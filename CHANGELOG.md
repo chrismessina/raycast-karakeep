@@ -10,6 +10,7 @@
 - **Note management**: Create, edit, and delete notes (text bookmarks) from within the extension.
 - **Highlights CRUD**: Create, edit, view detail, and delete highlights via a new Highlights command.
 - **Smart list icon**: Smart lists display a ✨ icon when no custom icon is set.
+- **Tag picker in Create Bookmark and Create Note**: Both forms now include a Tags picker for selecting existing tags and an "Add Tag" field for creating new ones. Type a name and press ↵ or comma to commit it as a pill; it is immediately added to the Tags picker above. Tags are attached to the bookmark via `POST /api/v1/bookmarks/{id}/tags` after creation.
 
 ### Improvements
 
@@ -20,6 +21,9 @@
 - **HUD feedback for standalone commands**: The Create List command shows a HUD confirmation after closing the window so the result is visible even after the form disappears.
 - **Destructive action styling**: Delete actions use `Action.Style.Destructive` throughout.
 - **Verbose logging preference**: New opt-in preference to enable debug-level logging.
+- **Notes-aware UI copy**: The Notes command now shows "Notes (N)" as the section title and navigation title, and all actions are labelled accordingly (Edit Note, Delete Note, View Note Detail, Copy Note).
+- **Lists sorted alphabetically**: Lists are now sorted by name before the hierarchy is built.
+- **Notes view stale cache fix**: A client-side filter ensures only `type: "text"` bookmarks are shown in the Notes view, preventing link bookmarks from appearing while the type-filtered fetch is in flight.
 
 ### Removed
 
