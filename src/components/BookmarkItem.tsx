@@ -481,6 +481,23 @@ function BookmarkActions({
           />
         )}
       </ActionPanel.Section>
+      <ActionPanel.Section title={t("bookmarkItem.actions.getBrowserExtension")}>
+        <Action.OpenInBrowser
+          title={t("bookmarkItem.actions.installChromeExtension")}
+          url="https://chromewebstore.google.com/detail/karakeep/kgcjekpmcjjogibpjebkhaanilehneje"
+          icon={Icon.Globe}
+        />
+        <Action.OpenInBrowser
+          title={t("bookmarkItem.actions.installFirefoxAddon")}
+          url="https://addons.mozilla.org/en-US/firefox/addon/karakeep/"
+          icon={Icon.Globe}
+        />
+        <Action.OpenInBrowser
+          title={t("bookmarkItem.actions.installSafariExtension")}
+          url="https://apps.apple.com/us/app/karakeeper-bookmarker/id6746722790"
+          icon={Icon.Globe}
+        />
+      </ActionPanel.Section>
       <ActionPanel.Section>
         <Action
           icon={Icon.Trash}

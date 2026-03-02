@@ -367,6 +367,10 @@ export const translations = {
         viewImage: "View Image",
         openLink: "Open Link",
         copyLink: "Copy Link",
+        installChromeExtension: "Get Chrome Extension",
+        installFirefoxAddon: "Get Firefox Add-on",
+        installSafariExtension: "Get Safari Extension",
+        getBrowserExtension: "Get Browser Extension",
       },
       toast: {
         delete: {
@@ -862,6 +866,10 @@ export const translations = {
         viewImage: "查看图片",
         openLink: "打开链接",
         copyLink: "复制链接",
+        installChromeExtension: "得到 Chrome 扩展",
+        installFirefoxAddon: "得到 Firefox 插件",
+        installSafariExtension: "得到 Safari 扩展",
+        getBrowserExtension: "获取浏览器扩展",
       },
       toast: {
         delete: {

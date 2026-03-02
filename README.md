@@ -1,16 +1,14 @@
-# 🚀 Raycast Karakeep
+# Raycast Karakeep
 
 ![Raycast](https://shields.io/badge/Raycast-black?logo=raycast&style=style=flat)
 ![React](https://shields.io/badge/react-black?logo=react&style=style=flat)
 ![TypeScript](https://shields.io/badge/typescript-black?logo=typescript&style=style=flat)
 
-A user-friendly Raycast extension that seamlessly integrates with [Karakeep (previously Hoarder)](https://github.com/karakeep-app/karakeep), bringing powerful bookmark management to your fingertips. Quickly save, search, and organize your bookmarks, texts, and images—all through Raycast's intuitive interface.
-
-This extension leverages Karakeep's API to provide a streamlined experience for managing your digital collection, complete with AI-powered tagging and search capabilities.
+A Raycast extension for [Karakeep](https://github.com/karakeep-app/karakeep), a self-hostable bookmark manager with AI-powered tagging. Save, search, and manage your bookmarks, notes, and highlights without leaving Raycast.
 
 ![Raycast Karakeep Intro](./docs/images/raycast-karakeep-intro.png)
 
-## 📥 Installation
+## Installation
 
 ### Option 1: Raycast Store
 
@@ -22,105 +20,64 @@ This extension leverages Karakeep's API to provide a streamlined experience for 
 git clone https://github.com/foru17/raycast-karakeep.git
 cd raycast-karakeep
 npm install && npm run dev
-# Enjoy it
 ```
 
-## ✨ Features
+## Features
 
-### Core Features
+### Commands
 
-- **Quick Access to Bookmarks**: Instantly view and access your saved bookmarks, screenshots, and content
-- **List Management**: Browse and organize bookmarks through customized lists
-- **Tag Organization**: Efficiently manage and filter content using tags
-- **Fast Bookmark Creation**: Create new bookmarks directly from Raycast with just a few keystrokes
-- **Quick Bookmark**: Instantly bookmark the current browser tab with a hotkey
+- **Bookmarks** — Browse, search, and manage your full bookmark collection. Filter by list, favorite, archive, summarize with AI, and copy links.
+- **Lists** — Create, edit, and delete lists including smart lists with query-based filtering.
+- **Tags** — Create, rename, and delete tags.
+- **Notes** — View and manage text notes (bookmarks of type "text").
+- **Highlights** — View, edit, and delete highlights saved from web pages.
+- **Backups** — Create, download, and delete account backups. Backup status updates automatically — the list polls while a backup is in progress.
+- **My Stats** — Overview of your library: bookmark counts by type, top domains, top tags, activity over time, and storage usage with charts.
+- **Create Bookmark** — Add a new URL bookmark, optionally prefilled from your active browser tab.
+- **Create Note** — Add a new text note.
+- **Quick Bookmark** — Instantly bookmark the current browser tab with a single hotkey.
 
-### Additional Conveniences
+### Browser Extensions
 
-- **Intuitive Search**: Quickly locate any bookmark or content using the online search feature of Karakeep and the powerful search capabilities of Raycast.
-- **One-Click Actions**: Open bookmarks in your browser, copy links, or delete instantly.
-- **Preview Support**: View bookmark details and screenshots without leaving Raycast
-- **Keyboard Navigation**: Fully keyboard-accessible for maximum efficiency
-- **Customizable Display**:Set up your preferred information display for bookmarks
+Install the Karakeep browser extension to save pages directly from your browser and create highlights. Links to Chrome, Firefox, and Safari extensions are available from the Actions panel on any bookmark.
 
-All powered by Karakeep's robust API, bringing your bookmark management right into Raycast's streamlined interface.
+- [Chrome Extension](https://chromewebstore.google.com/detail/karakeep/kgcjekpmcjjogibpjebkhaanilehneje)
+- [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/karakeep/)
+- [Safari Extension](https://apps.apple.com/us/app/karakeeper-bookmarker/id6746722790)
 
-## 📑 Prerequisites
+## Prerequisites
 
-Before you begin, ensure you have the following:
+- A running [Karakeep](https://docs.karakeep.app/Installation/docker) instance
+- A Karakeep API key — create one at `https://your-karakeep-instance.com/settings/api-keys`
+- Raycast installed on macOS
 
-- A deployed Karakeep instance (follow the [Karakeep installation guide](https://docs.karakeep.app/Installation/docker))
-- Karakeep API credentials
-- Raycast installed on your macOS system
+## Configuration
 
-I strongly recommend setting up Karakeep with Docker for easy deployment and management.
+1. Open Raycast Preferences → Extensions → Karakeep
+2. Enter your Karakeep API URL and API key
 
-Create an API key by visiting `https://your-karakeep-instance.com/settings/api-keys` and clicking the 'New API Key' button.
+You can also customize default actions for link and text bookmarks, and choose which bookmark details to display (tags, description, note, summary, creation date, preview image).
 
-## 🚦 Configuration
+## Troubleshooting
 
-After installation, set up the extension with your Karakeep instance details:
-
-1. Open Raycast Preferences
-2. Navigate to the Extensions tab
-3. Find "Karakeep" in the list of installed extensions
-4. Enter your Karakeep API URL and authentication credentials
-
-![Raycast Karakeep Configuration](./docs/images/raycast-karakeep-configuration.png)
-
-You can also customize the default main operations and the bookmark details you want to display.
-
-## 🎯 Usage
-
-Here's how to make the most of the Raycast Karakeep extension:
-
-- **View All Bookmarks**: Access your complete bookmark collection
-- **Search Content**: Utilize full-text search across all bookmarked content
-- **AI Tagging**: Automatically categorize bookmarks using AI
-- **Create New Bookmarks**: Add new bookmarks with ease
-- **Quick Bookmark**: Assign a hotkey to instantly bookmark the current browser tab
-- **Edit Bookmarks**: Edit bookmark title and notes
-- **Browser Integration**: Automatically prefill URLs from your active browser tab (can be disabled in preferences)
-
-## 🔧 Troubleshooting
-
-If you encounter any issues:
-
-1. Verify your Karakeep API credentials are correct
+1. Verify your API URL and key are correct
 2. Ensure your Karakeep instance is running and accessible
 3. Check the Raycast console for error messages
-4. Verify your AI service configuration if using automatic tagging
 
-If problems persist, please [open an issue](https://github.com/foru17/raycast-karakeep/issues) on the GitHub repository.
+If problems persist, [open an issue](https://github.com/chrismessina/raycast-karakeep/issues) on GitHub.
 
-## 👥 Contributing
-
-Contributions are welcome and appreciated! Here's how you can contribute:
+## Contributing
 
 1. Fork the repository
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request
+2. Create a feature branch: `git checkout -b my-new-feature`
+3. Commit your changes and open a pull request
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+## Credits
 
-## 🙏 Credits
+Built on top of the [Karakeep](https://github.com/karakeep-app/karakeep) project.
 
-This extension is built on top of the [Karakeep](https://github.com/karakeep-app/karakeep) project. We're grateful for their work in creating such a powerful and flexible bookmarking solution.
+Thanks to [@kdurek](https://github.com/kdurek) for the original Raycast Karakeep extension, and to [@foru17](https://github.com/foru17) for the enhanced version this is based on.
 
-Special thanks to [@kdurek](https://github.com/kdurek) for creating the original Raycast Karakeep extension, which laid the foundation for this enhanced version.
+## License
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## ⭐ Support
-
-If you find this extension helpful, consider:
-
-- Starring the [GitHub repository](https://github.com/foru17/raycast-karakeep)
-- Sharing it with others who might find it useful
-- Contributing to the project's development
-
-Your support helps keep this project active and improving!
+MIT — see [LICENSE](LICENSE) for details.

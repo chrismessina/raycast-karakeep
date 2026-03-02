@@ -4,39 +4,30 @@
 
 ### New Features
 
-- **Smart List Builder**: When creating or editing a Smart List, an action panel section ("Smart List Builder") is now available via `⌘K`. It provides one-click insertion of valid qualifiers — `is:` filters (fav, archived, read, unread), `url:`, `#tag`, `after:`/`before:` dates pre-filled with today, and `type:` filters (link, text, image, video, pdf) — with submenus for grouped options. Qualifiers are appended to any existing query rather than replacing it.
-- **List management CRUD**: Create, edit, and delete lists directly from the Lists command. The Create List form now includes Description, Parent List, List Type (manual/smart), and Search Query fields.
-- **Tag management CRUD**: Create, rename, and delete tags directly from the Tags command.
-- **Note management**: Create, edit, and delete notes (text bookmarks) from within the extension.
-- **Highlights CRUD**: Create, edit, view detail, and delete highlights via a new Highlights command.
-- **Smart list icon**: Smart lists display a ✨ icon when no custom icon is set.
-- **My Stats command**: New command showing bookmark counts by type, activity (this week/month/year), top domains, top tags, and storage usage via `GET /api/v1/users/me/stats`. Stats appear in both a markdown detail view and a sidebar metadata panel.
-- **Backups command**: New command for creating, downloading, and deleting account backups. Create triggers `POST /api/v1/backups`; Download opens the backup file URL in the browser; Delete uses `DELETE /api/v1/backups/{id}` with a confirmation prompt.
-- **Tag picker in Create Bookmark and Create Note**: Both forms now include a Tags picker for selecting existing tags and an "Add Tag" field for creating new ones. Type a name and press ↵ or comma to commit it as a pill; it is immediately added to the Tags picker above. Tags are attached to the bookmark via `POST /api/v1/bookmarks/{id}/tags` after creation.
-- **List filter in Bookmarks view**: A dropdown in the search bar lets you filter bookmarks by list. Selecting a list switches to paginated list-scoped results; selecting "Default" returns to all bookmarks.
+- **List management** — Create, edit, and delete lists from the Lists command. Supports manual and smart lists; smart lists include a query builder with one-click insertion of valid filter qualifiers.
+- **Tag management** — Create, rename, and delete tags from the Tags command.
+- **Tag picker on bookmark and note creation** — Select existing tags or type new ones when saving a bookmark or note.
+- **List filter in Bookmarks** — Filter the Bookmarks view by list using the search bar dropdown.
+- **Browser extension links** — Install the Karakeep extension for Chrome, Firefox, or Safari directly from the Actions panel on any bookmark.
+
+### New Commands
+
+- **Notes** — Dedicated view for text notes, separate from link bookmarks.
+- **Highlights** — View, edit, and delete highlights saved from web pages, with a direct action to open the source bookmark.
+- **My Stats** — Library overview with bookmark counts by type, top domains, top tags, activity this week/month/year, and storage usage. Includes charts for bookmark sources and activity patterns.
+- **Backups** — Create, download, and delete account backups. The list polls automatically while a backup is in progress and updates when it completes. Download is only available once a backup succeeds; failed backups are shown in red.
 
 ### Improvements
 
-- **Human-readable API errors**: Error toasts now show the human-readable message extracted from Karakeep's JSON error responses (e.g. "Smart lists cannot have unqualified terms") instead of the raw HTTP body.
-- **Copy Error action on all failure toasts**: Every failure toast now includes a "Copy Error" primary action for easy bug reporting.
-- **Smart list query validation**: The Search Query field validates that all terms use valid qualifiers (`#tag`, `is:*`, `url:*`, `after:*`, `before:*`, `list:*`, `type:*`) and blocks bare keywords before submission, with a descriptive inline error and tooltip.
-- **Form error handling**: All forms (lists, tags, highlights) now stay open on API failure so the error toast remains visible, rather than dismissing immediately after submit.
-- **HUD feedback for standalone commands**: The Create List command shows a HUD confirmation after closing the window so the result is visible even after the form disappears.
-- **Destructive action styling**: Delete actions use `Action.Style.Destructive` throughout.
-- **Verbose logging preference**: New opt-in preference to enable debug-level logging.
-- **Notes-aware UI copy**: The Notes command now shows "Notes (N)" as the section title and navigation title, and all actions are labelled accordingly (Edit Note, Delete Note, View Note Detail, Copy Note).
-- **Lists sorted alphabetically**: Lists are now sorted by name before the hierarchy is built.
-- **Notes view stale cache fix**: A client-side filter ensures only `type: "text"` bookmarks are shown in the Notes view, preventing link bookmarks from appearing while the type-filtered fetch is in flight.
-
-### Removed
-
-- Removed the "Regenerate Thumbnail" action from the Bookmark Item context menu.
-- Removed "Create Highlight" — creating highlights requires DOM character offsets only available via the browser extension. The Highlights command remains for viewing, editing, and deleting highlights.
+- Stats sidebar links navigate directly to the related command (Bookmarks, Tags, Lists, etc.)
+- Backup status tags are color-coded: green for success, red for failure, gray for pending
+- Error toasts show human-readable messages from the API rather than raw error bodies
+- All delete actions use destructive styling
+- Smart list queries are validated before submission with inline error messages
 
 ### Chores
 
-- Reorganized `package.json`, added keywords and Windows platform support
-- Updated dependencies
+- Updated dependencies and regenerated TypeScript definitions
 
 ## [2.1.1] - 2026-02-23
 

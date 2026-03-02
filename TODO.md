@@ -99,8 +99,8 @@
 
 ### Browser Extensions
 
-- [ ] Add Action to install [Chrome Extension](https://chromewebstore.google.com/detail/karakeep/kgcjekpmcjjogibpjebkhaanilehneje), [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/karakeep/) and [Safari extension](https://apps.apple.com/us/app/karakeeper-bookmarker/id6746722790) to Bookmarks command
-- [ ] Add link to [Chrome Extension](https://chromewebstore.google.com/detail/karakeep/kgcjekpmcjjogibpjebkhaanilehneje), [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/karakeep/) and [Safari extension](https://apps.apple.com/us/app/karakeeper-bookmarker/id6746722790) to README
+- [x] Add Action to install [Chrome Extension](https://chromewebstore.google.com/detail/karakeep/kgcjekpmcjjogibpjebkhaanilehneje), [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/karakeep/) and [Safari extension](https://apps.apple.com/us/app/karakeeper-bookmarker/id6746722790) to Bookmarks command — added as "Get Browser Extension" section in BookmarkItem actions panel
+- [x] Add link to [Chrome Extension](https://chromewebstore.google.com/detail/karakeep/kgcjekpmcjjogibpjebkhaanilehneje), [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/karakeep/) and [Safari extension](https://apps.apple.com/us/app/karakeeper-bookmarker/id6746722790) to README
 
 ### Logging
 
@@ -115,4 +115,4 @@
 - [ ] Add support for Raycast AI Tools
 - [ ] Add cross-extension integration with Reader Mode or [Send to Kindle](https://www.raycast.com/lemikeone/send-to-kindle) extension (e.g. "Open Link in Reader Mode" and "Send to Kindle" actions)
 - [ ] Implement optimistic updates for better UX
-- [ ] Update README and CHANGELOG with proper documentation
+- [x] Update README and CHANGELOG with proper documentation
