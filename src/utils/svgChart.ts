@@ -11,18 +11,14 @@ interface ChartTheme {
 
 const THEMES: Record<"light" | "dark", ChartTheme> = {
   light: { label: "#444444", value: "#666666", bar: "#0066CC" },
-  dark:  { label: "#CCCCCC", value: "#999999", bar: "#4A9EFF" },
+  dark: { label: "#CCCCCC", value: "#999999", bar: "#4A9EFF" },
 };
 
 /**
  * Generates a horizontal bar chart as a base64-encoded SVG data URI.
  * Pass `appearance` from `environment.appearance` so colors match the active theme.
  */
-export function horizontalBarChart(
-  rows: BarChartRow[],
-  appearance: "light" | "dark" = "light",
-  width = 560,
-): string {
+export function horizontalBarChart(rows: BarChartRow[], appearance: "light" | "dark" = "light", width = 560): string {
   const { label: labelColor, value: valueColor, bar: barColor } = THEMES[appearance];
 
   const BAR_HEIGHT = 16;

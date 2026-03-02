@@ -1,11 +1,8 @@
 import { Action, ActionPanel, Icon, List } from "@raycast/api";
-import { logger } from "@chrismessina/raycast-logger";
 import { BookmarkList } from "./components/BookmarkList";
 import { useGetAllBookmarks } from "./hooks/useGetAllBookmarks";
 import { useTranslation } from "./hooks/useTranslation";
 import CreateNoteView from "./createNote";
-
-const log = logger.child("[Notes]");
 
 export default function Notes() {
   const { t } = useTranslation();
@@ -14,17 +11,6 @@ export default function Notes() {
   // Client-side guard: useCachedPromise may serve a stale all-bookmarks cache
   // while the type=text fetch is in flight. Always filter to notes only.
   const bookmarks = allBookmarks.filter((b) => b.content.type === "text");
-
-  log.log("Notes view loaded", { count: bookmarks.length });
-
-  const createNoteAction = (
-    <Action.Push
-      title={t("note.create")}
-      icon={Icon.Plus}
-      target={<CreateNoteView />}
-      shortcut={{ modifiers: ["cmd"], key: "n" }}
-    />
-  );
 
   if (isLoading && bookmarks.length === 0) {
     return (
@@ -41,7 +27,16 @@ export default function Notes() {
           title={t("notes.empty.title")}
           description={t("notes.empty.description")}
           icon={Icon.Document}
-          actions={<ActionPanel>{createNoteAction}</ActionPanel>}
+          actions={
+            <ActionPanel>
+              <Action.Push
+                title={t("note.create")}
+                icon={Icon.Plus}
+                target={<CreateNoteView />}
+                shortcut={{ modifiers: ["cmd"], key: "n" }}
+              />
+            </ActionPanel>
+          }
         />
       </List>
     );

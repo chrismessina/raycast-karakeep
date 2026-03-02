@@ -463,6 +463,9 @@ export const translations = {
         title: "No backups yet",
         description: "Create a backup to protect your data",
       },
+      statusPending: "Pending",
+      statusSuccess: "Success",
+      statusFailure: "Failed",
       toast: {
         create: {
           loading: "Creating backup...",
@@ -474,6 +477,7 @@ export const translations = {
           success: "Backup deleted",
           error: "Backup deletion failed",
         },
+        failure: "Backup failed",
       },
     },
 
@@ -954,6 +958,9 @@ export const translations = {
         title: "暂无备份",
         description: "创建备份以保护您的数据",
       },
+      statusPending: "等待中",
+      statusSuccess: "成功",
+      statusFailure: "失败",
       toast: {
         create: {
           loading: "创建备份中...",
@@ -965,6 +972,7 @@ export const translations = {
           success: "备份已删除",
           error: "备份删除失败",
         },
+        failure: "备份失败",
       },
     },
 

@@ -1,4 +1,5 @@
 import { Action, ActionPanel, Detail, Icon, environment } from "@raycast/api";
+import { useMemo } from "react";
 import { useCachedPromise } from "@raycast/utils";
 import { logger } from "@chrismessina/raycast-logger";
 import { fetchGetUserStats } from "./apis";
@@ -33,6 +34,58 @@ export default function Stats() {
     return result;
   });
 
+  const appearance = environment.appearance;
+
+  const bySource = stats?.bookmarksBySource || [];
+  const byHour = stats?.bookmarkingActivity?.byHour || [];
+  const byDay = stats?.bookmarkingActivity?.byDayOfWeek || [];
+
+  const dayNames = useMemo(
+    () => [
+      t("stats.days.sun"),
+      t("stats.days.mon"),
+      t("stats.days.tue"),
+      t("stats.days.wed"),
+      t("stats.days.thu"),
+      t("stats.days.fri"),
+      t("stats.days.sat"),
+    ],
+    [t],
+  );
+
+  const sourcesChart = useMemo(
+    () =>
+      bySource.length > 0
+        ? horizontalBarChart(
+            bySource.map((s) => ({ label: s.source ?? t("stats.unknown"), value: s.count })),
+            appearance,
+          )
+        : null,
+    [bySource, appearance, t],
+  );
+
+  const hourChart = useMemo(
+    () =>
+      byHour.length > 0
+        ? horizontalBarChart(
+            byHour.map((h) => ({ label: formatHour(h.hour), value: h.count })),
+            appearance,
+          )
+        : null,
+    [byHour, appearance],
+  );
+
+  const dayChart = useMemo(
+    () =>
+      byDay.length > 0
+        ? horizontalBarChart(
+            byDay.map((d) => ({ label: dayNames[d.day] ?? String(d.day), value: d.count })),
+            appearance,
+          )
+        : null,
+    [byDay, dayNames, appearance],
+  );
+
   const actions = (
     <ActionPanel>
       <Action
@@ -60,36 +113,6 @@ export default function Stats() {
 
   const topDomains = (stats.topDomains || []).slice(0, 10);
   const topTags = (stats.tagUsage || []).slice(0, 10);
-  const byHour = stats.bookmarkingActivity?.byHour || [];
-  const byDay = stats.bookmarkingActivity?.byDayOfWeek || [];
-  const bySource = stats.bookmarksBySource || [];
-
-  const dayNames = [
-    t("stats.days.sun"),
-    t("stats.days.mon"),
-    t("stats.days.tue"),
-    t("stats.days.wed"),
-    t("stats.days.thu"),
-    t("stats.days.fri"),
-    t("stats.days.sat"),
-  ];
-
-  const appearance = environment.appearance;
-
-  const sourcesChart =
-    bySource.length > 0
-      ? horizontalBarChart(bySource.map((s) => ({ label: s.source ?? t("stats.unknown"), value: s.count })), appearance)
-      : null;
-
-  const hourChart =
-    byHour.length > 0
-      ? horizontalBarChart(byHour.map((h) => ({ label: formatHour(h.hour), value: h.count })), appearance)
-      : null;
-
-  const dayChart =
-    byDay.length > 0
-      ? horizontalBarChart(byDay.map((d) => ({ label: dayNames[d.day] ?? String(d.day), value: d.count })), appearance)
-      : null;
 
   const markdown = [
     `## ${t("stats.overview")}`,
@@ -135,15 +158,9 @@ export default function Stats() {
           ...topTags.map((tag) => `| ${tag.name} | ${tag.count} |`),
         ]
       : []),
-    ...(sourcesChart
-      ? ["", `## ${t("stats.bookmarkSources")}`, "", `<img src="${sourcesChart}" />`]
-      : []),
-    ...(hourChart
-      ? ["", `## ${t("stats.activityByHour")}`, "", `<img src="${hourChart}" />`]
-      : []),
-    ...(dayChart
-      ? ["", `## ${t("stats.activityByDay")}`, "", `<img src="${dayChart}" />`]
-      : []),
+    ...(sourcesChart ? ["", `## ${t("stats.bookmarkSources")}`, "", `<img src="${sourcesChart}" />`] : []),
+    ...(hourChart ? ["", `## ${t("stats.activityByHour")}`, "", `<img src="${hourChart}" />`] : []),
+    ...(dayChart ? ["", `## ${t("stats.activityByDay")}`, "", `<img src="${dayChart}" />`] : []),
     ...(stats.totalAssetSize > 0
       ? [
           "",

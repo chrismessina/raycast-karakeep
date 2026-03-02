@@ -247,6 +247,10 @@ export async function fetchGetAllBackups(): Promise<{ backups: Backup[] }> {
   return fetchWithAuth<{ backups: Backup[] }>("/api/v1/backups");
 }
 
+export async function fetchGetSingleBackup(id: string): Promise<Backup> {
+  return fetchWithAuth<Backup>(`/api/v1/backups/${id}`);
+}
+
 export async function fetchCreateBackup(): Promise<Backup> {
   return fetchWithAuth<Backup>("/api/v1/backups", { method: "POST" });
 }

@@ -9,6 +9,22 @@ import { runWithToast } from "./utils/toast";
 
 const log = logger.child("[Highlights]");
 
+function OpenBookmarkAction({ bookmarkId, t }: { bookmarkId: string; t: (key: string) => string }) {
+  const { push } = useNavigation();
+  return (
+    <Action
+      title={t("highlights.actions.openBookmark")}
+      icon={Icon.Bookmark}
+      onAction={async () => {
+        log.log("Fetching bookmark for highlight", { bookmarkId });
+        const bookmark = await fetchGetSingleBookmark(bookmarkId);
+        log.info("Opening bookmark from highlight", { bookmarkId });
+        push(<BookmarkDetail bookmark={bookmark} />);
+      }}
+    />
+  );
+}
+
 async function deleteHighlight(id: string, t: (key: string) => string, onSuccess: () => void) {
   if (
     await confirmAlert({
@@ -32,7 +48,9 @@ async function deleteHighlight(id: string, t: (key: string) => string, onSuccess
 
 function useGetAllHighlights() {
   const { isLoading, data, error, revalidate } = useCachedPromise(async () => {
+    log.log("Fetching highlights");
     const result = await fetchGetAllHighlights();
+    log.info("Highlights fetched", { count: result.highlights?.length ?? 0 });
     return result.highlights || [];
   });
 
@@ -95,13 +113,7 @@ function EditHighlightForm({ highlight, onUpdated }: { highlight: Highlight; onU
   );
 }
 
-function HighlightDetail({
-  highlight,
-  onRefresh,
-}: {
-  highlight: Highlight;
-  onRefresh: () => void;
-}) {
+function HighlightDetail({ highlight, onRefresh }: { highlight: Highlight; onRefresh: () => void }) {
   const { pop, push } = useNavigation();
   const { t } = useTranslation();
 
@@ -150,14 +162,7 @@ function HighlightDetail({
       actions={
         <ActionPanel>
           <ActionPanel.Section>
-            <Action
-              title={t("highlights.actions.openBookmark")}
-              icon={Icon.Bookmark}
-              onAction={async () => {
-                const bookmark = await fetchGetSingleBookmark(highlight.bookmarkId);
-                push(<BookmarkDetail bookmark={bookmark} />);
-              }}
-            />
+            <OpenBookmarkAction bookmarkId={highlight.bookmarkId} t={t} />
             <Action.CopyToClipboard
               content={highlight.text}
               title={t("highlights.actions.copyText")}
@@ -222,14 +227,7 @@ export default function Highlights() {
                   onAction={() => push(<HighlightDetail highlight={highlight} onRefresh={revalidate} />)}
                   shortcut={{ modifiers: ["cmd"], key: "return" }}
                 />
-                <Action
-                  title={t("highlights.actions.openBookmark")}
-                  icon={Icon.Bookmark}
-                  onAction={async () => {
-                    const bookmark = await fetchGetSingleBookmark(highlight.bookmarkId);
-                    push(<BookmarkDetail bookmark={bookmark} />);
-                  }}
-                />
+                <OpenBookmarkAction bookmarkId={highlight.bookmarkId} t={t} />
                 <Action
                   title={t("highlights.actions.edit")}
                   icon={Icon.Pencil}

@@ -15,12 +15,14 @@ export function useGetAllBookmarks({ favourited, archived, type }: GetBookmarksP
 
   const { isLoading, data, error, revalidate, pagination } = useCachedPromise(
     (favourited, archived, type) => async (options) => {
+      log.log("Fetching bookmarks", { favourited, archived, type, cursor: options.cursor });
       const result = await fetchGetAllBookmarks({
         cursor: options.cursor,
         favourited,
         archived,
         type,
       });
+      log.info("Bookmarks fetched", { count: result.bookmarks?.length ?? 0, hasMore: result.nextCursor != null });
 
       return {
         data: result.bookmarks || [],
