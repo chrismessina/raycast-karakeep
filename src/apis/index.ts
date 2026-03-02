@@ -1,5 +1,5 @@
 import { logger } from "@chrismessina/raycast-logger";
-import { ApiResponse, Bookmark, GetBookmarksParams, Highlight, List, Tag } from "../types";
+import { ApiResponse, Backup, Bookmark, GetBookmarksParams, Highlight, List, Tag, UserStats } from "../types";
 import { getApiConfig } from "../utils/config";
 
 const log = logger.child("[API]");
@@ -237,6 +237,30 @@ export async function fetchDeleteHighlight(id: string): Promise<unknown> {
   return fetchWithAuth(`/api/v1/highlights/${id}`, {
     method: "DELETE",
   });
+}
+
+export async function fetchGetUserStats(): Promise<UserStats> {
+  return fetchWithAuth<UserStats>("/api/v1/users/me/stats");
+}
+
+export async function fetchGetAllBackups(): Promise<{ backups: Backup[] }> {
+  return fetchWithAuth<{ backups: Backup[] }>("/api/v1/backups");
+}
+
+export async function fetchCreateBackup(): Promise<Backup> {
+  return fetchWithAuth<Backup>("/api/v1/backups", { method: "POST" });
+}
+
+export async function fetchDeleteBackup(id: string): Promise<unknown> {
+  return fetchWithAuth(`/api/v1/backups/${id}`, { method: "DELETE" });
+}
+
+export async function fetchGetBackupDownloadUrl(id: string): Promise<string> {
+  const { apiUrl, apiKey } = await (await import("../utils/config")).getApiConfig();
+  const url = new URL(`/api/v1/backups/${id}/download`, apiUrl);
+  // Append auth as query param since we're opening in browser
+  url.searchParams.set("Authorization", `Bearer ${apiKey}`);
+  return url.toString();
 }
 
 export async function fetchAttachTagsToBookmark(

@@ -131,3 +131,36 @@ export interface Highlight {
   color?: string;
   createdAt?: string;
 }
+
+export interface Backup {
+  id: string;
+  createdAt: string;
+  size?: number;
+  status?: string;
+}
+
+export interface UserStats {
+  numBookmarks: number;
+  numFavorites: number;
+  numArchived: number;
+  numTags: number;
+  numLists: number;
+  numHighlights: number;
+  bookmarksByType: {
+    link: number;
+    text: number;
+    asset: number;
+  };
+  topDomains: Array<{ domain: string; count: number }>;
+  totalAssetSize: number;
+  assetsByType: Array<{ type: string; count: number; totalSize: number }>;
+  bookmarkingActivity: {
+    thisWeek: number;
+    thisMonth: number;
+    thisYear: number;
+    byHour: Array<{ hour: number; count: number }>;
+    byDayOfWeek: Array<{ day: number; count: number }>;
+  };
+  tagUsage: Array<{ name: string; count: number }>;
+  bookmarksBySource: Array<{ source: string | null; count: number }>;
+}

@@ -10,7 +10,7 @@
   - [x] Delete List
   - [x] Delete Tag
   - [x] Delete Highlight
-  - [ ] Delete Backup
+  - [x] Delete Backup
 
 ## P1 - Core Features (High Priority)
 
@@ -71,16 +71,17 @@
 
 ### Backups
 
-- [ ] Add ability to manage backups
-  - [ ] Add backup view — API: [`GET /api/v1/backups`](https://docs.karakeep.app/api/karakeep-api/list-backups)
-  - [ ] Trigger backup — API: [`POST /api/v1/backups`](https://docs.karakeep.app/api/karakeep-api/create-backup)
-  - [ ] Download backup — API: `GET /api/v1/backups/{id}/download`
-  - [ ] Delete backup from list — API: [`DELETE /api/v1/backups/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-backup)
+- [x] Add ability to manage backups
+  - [x] Add backup view — API: [`GET /api/v1/backups`](https://docs.karakeep.app/api/karakeep-api/list-backups)
+  - [x] Trigger backup — API: [`POST /api/v1/backups`](https://docs.karakeep.app/api/karakeep-api/create-backup)
+  - [x] Download backup — API: `GET /api/v1/backups/{id}/download`
+  - [x] Delete backup from list — API: [`DELETE /api/v1/backups/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-backup)
+  - [x] Delete Backup destructive action styling
 
 ### Analytics
 
-- [ ] Add user stats Command:
-  - [ ] Add stats view — API: [`GET /api/v1/users/me/stats`](https://docs.karakeep.app/api/karakeep-api/get-current-user-stats) (includes bookmark counts by type, top domains, tag usage, bookmarking activity patterns, and storage usage)
+- [x] Add user stats Command:
+  - [x] Add stats view — API: [`GET /api/v1/users/me/stats`](https://docs.karakeep.app/api/karakeep-api/get-current-user-stats) (includes bookmark counts by type, top domains, tag usage, bookmarking activity patterns, and storage usage)
 
 ### Browser Extensions
 

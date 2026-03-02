@@ -404,6 +404,64 @@ export const translations = {
       },
     },
 
+    // Stats Related
+    stats: {
+      title: "My Stats",
+      searchPlaceholder: "Search stats...",
+      overview: "Overview",
+      bookmarks: "Bookmarks",
+      favorites: "Favorites",
+      archived: "Archived",
+      tags: "Tags",
+      lists: "Lists",
+      highlights: "Highlights",
+      byType: "By Type",
+      links: "Links",
+      notes: "Notes",
+      assets: "Assets",
+      activity: "Activity",
+      thisWeek: "This Week",
+      thisMonth: "This Month",
+      thisYear: "This Year",
+      topDomains: "Top Domains",
+      topTags: "Top Tags",
+      storage: "Storage",
+      totalAssetSize: "Total Asset Size",
+      empty: {
+        title: "No stats available",
+        description: "Connect to your Karakeep instance to view stats",
+      },
+    },
+
+    // Backups Related
+    backups: {
+      title: "Backups",
+      searchPlaceholder: "Search backups...",
+      createBackup: "Create Backup",
+      deleteBackup: "Delete Backup",
+      downloadBackup: "Download Backup",
+      deleteConfirm: "Are you sure you want to delete this backup?",
+      createdAt: "Created",
+      size: "Size",
+      status: "Status",
+      empty: {
+        title: "No backups yet",
+        description: "Create a backup to protect your data",
+      },
+      toast: {
+        create: {
+          loading: "Creating backup...",
+          success: "Backup created",
+          error: "Backup creation failed",
+        },
+        delete: {
+          loading: "Deleting backup...",
+          success: "Backup deleted",
+          error: "Backup deletion failed",
+        },
+      },
+    },
+
     quickBookmark: {
       gettingBrowserUrl: "Getting browser URL...",
       failedToGetBrowserUrl: {
@@ -818,6 +876,64 @@ export const translations = {
           loading: "清除缓存中...",
           success: "缓存已清除",
           error: "清除缓存失败",
+        },
+      },
+    },
+
+    // 统计相关
+    stats: {
+      title: "我的统计",
+      searchPlaceholder: "搜索统计...",
+      overview: "概览",
+      bookmarks: "书签",
+      favorites: "收藏",
+      archived: "已归档",
+      tags: "标签",
+      lists: "列表",
+      highlights: "高亮",
+      byType: "按类型",
+      links: "链接",
+      notes: "笔记",
+      assets: "资源",
+      activity: "活动",
+      thisWeek: "本周",
+      thisMonth: "本月",
+      thisYear: "今年",
+      topDomains: "热门域名",
+      topTags: "热门标签",
+      storage: "存储",
+      totalAssetSize: "资源总大小",
+      empty: {
+        title: "暂无统计数据",
+        description: "连接到 Karakeep 实例后查看统计",
+      },
+    },
+
+    // 备份相关
+    backups: {
+      title: "备份",
+      searchPlaceholder: "搜索备份...",
+      createBackup: "创建备份",
+      deleteBackup: "删除备份",
+      downloadBackup: "下载备份",
+      deleteConfirm: "确定要删除此备份吗？",
+      createdAt: "创建时间",
+      size: "大小",
+      status: "状态",
+      empty: {
+        title: "暂无备份",
+        description: "创建备份以保护您的数据",
+      },
+      toast: {
+        create: {
+          loading: "创建备份中...",
+          success: "备份已创建",
+          error: "备份创建失败",
+        },
+        delete: {
+          loading: "删除备份中...",
+          success: "备份已删除",
+          error: "备份删除失败",
         },
       },
     },
