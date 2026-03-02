@@ -3,16 +3,10 @@ import { useCachedPromise } from "@raycast/utils";
 import { logger } from "@chrismessina/raycast-logger";
 import { fetchCreateBackup, fetchDeleteBackup, fetchGetAllBackups, fetchGetBackupDownloadUrl } from "./apis";
 import { useTranslation } from "./hooks/useTranslation";
+import { formatBytes } from "./utils/formatting";
 import { runWithToast } from "./utils/toast";
 
 const log = logger.child("[Backups]");
-
-function formatBytes(bytes: number): string {
-  if (bytes === 0) return "0 B";
-  const units = ["B", "KB", "MB", "GB", "TB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${units[i]}`;
-}
 
 export default function Backups() {
   const { t } = useTranslation();
@@ -33,9 +27,9 @@ export default function Backups() {
       action: async () => {
         await fetchCreateBackup();
         log.info("Backup created");
-        await revalidate();
       },
     });
+    await revalidate();
   }
 
   async function handleDelete(id: string) {
@@ -52,9 +46,9 @@ export default function Backups() {
         action: async () => {
           await fetchDeleteBackup(id);
           log.info("Backup deleted", { backupId: id });
-          await revalidate();
         },
       });
+      await revalidate();
     }
   }
 
@@ -63,34 +57,42 @@ export default function Backups() {
     await open(url);
   }
 
-  const createAction = (
-    <Action
-      title={t("backups.createBackup")}
-      icon={Icon.Plus}
-      onAction={handleCreate}
-      shortcut={{ modifiers: ["cmd"], key: "n" }}
-    />
-  );
-
   return (
     <List
       isLoading={isLoading}
       searchBarPlaceholder={t("backups.searchPlaceholder")}
-      actions={<ActionPanel>{createAction}</ActionPanel>}
+      actions={
+        <ActionPanel>
+          <Action
+            title={t("backups.createBackup")}
+            icon={Icon.Plus}
+            onAction={handleCreate}
+            shortcut={{ modifiers: ["cmd"], key: "n" }}
+          />
+        </ActionPanel>
+      }
     >
       {!isLoading && backups.length === 0 && (
         <List.EmptyView
           title={t("backups.empty.title")}
           description={t("backups.empty.description")}
           icon={Icon.HardDrive}
-          actions={<ActionPanel>{createAction}</ActionPanel>}
+          actions={
+            <ActionPanel>
+              <Action
+                title={t("backups.createBackup")}
+                icon={Icon.Plus}
+                onAction={handleCreate}
+                shortcut={{ modifiers: ["cmd"], key: "n" }}
+              />
+            </ActionPanel>
+          }
         />
       )}
       {backups.map((backup) => {
         const date = new Date(backup.createdAt).toLocaleString();
-        const accessories: List.Item.Accessory[] = [{ text: date, icon: Icon.Clock }];
-        if (backup.size) accessories.unshift({ text: formatBytes(backup.size) });
-        if (backup.status) accessories.unshift({ tag: backup.status });
+        const accessories: List.Item.Accessory[] = [];
+        if (backup.status) accessories.push({ tag: backup.status });
 
         return (
           <List.Item
@@ -107,7 +109,12 @@ export default function Backups() {
                     icon={Icon.Download}
                     onAction={() => handleDownload(backup.id)}
                   />
-                  {createAction}
+                  <Action
+                    title={t("backups.createBackup")}
+                    icon={Icon.Plus}
+                    onAction={handleCreate}
+                    shortcut={{ modifiers: ["cmd"], key: "n" }}
+                  />
                 </ActionPanel.Section>
                 <ActionPanel.Section>
                   <Action

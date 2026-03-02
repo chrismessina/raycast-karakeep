@@ -3,15 +3,9 @@ import { useCachedPromise } from "@raycast/utils";
 import { logger } from "@chrismessina/raycast-logger";
 import { fetchGetUserStats } from "./apis";
 import { useTranslation } from "./hooks/useTranslation";
+import { formatBytes } from "./utils/formatting";
 
 const log = logger.child("[Stats]");
-
-function formatBytes(bytes: number): string {
-  if (bytes === 0) return "0 B";
-  const units = ["B", "KB", "MB", "GB", "TB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${units[i]}`;
-}
 
 export default function Stats() {
   const { t } = useTranslation();
@@ -106,7 +100,6 @@ export default function Stats() {
 
   return (
     <Detail
-      isLoading={isLoading}
       navigationTitle={t("stats.title")}
       markdown={markdown}
       metadata={

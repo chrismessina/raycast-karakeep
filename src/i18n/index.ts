@@ -407,7 +407,6 @@ export const translations = {
     // Stats Related
     stats: {
       title: "My Stats",
-      searchPlaceholder: "Search stats...",
       overview: "Overview",
       bookmarks: "Bookmarks",
       favorites: "Favorites",
@@ -883,7 +882,6 @@ export const translations = {
     // 统计相关
     stats: {
       title: "我的统计",
-      searchPlaceholder: "搜索统计...",
       overview: "概览",
       bookmarks: "书签",
       favorites: "收藏",

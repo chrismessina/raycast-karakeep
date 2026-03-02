@@ -256,7 +256,7 @@ export async function fetchDeleteBackup(id: string): Promise<unknown> {
 }
 
 export async function fetchGetBackupDownloadUrl(id: string): Promise<string> {
-  const { apiUrl } = await (await import("../utils/config")).getApiConfig();
+  const { apiUrl } = await getApiConfig();
   const url = new URL(`/api/v1/backups/${id}/download`, apiUrl);
   return url.toString();
 }

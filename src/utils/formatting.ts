@@ -1,4 +1,14 @@
 /**
+ * Formats a byte count into a human-readable string (e.g. 1.4 MB).
+ */
+export function formatBytes(bytes: number): string {
+  if (bytes === 0) return "0 B";
+  const units = ["B", "KB", "MB", "GB", "TB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${units[i]}`;
+}
+
+/**
  * Validates that a smart list search query contains only qualified terms.
  * Karakeep disallows bare full-text search terms in smart list queries.
  * Valid qualifiers: #tag, is:*, url:*, after:*, before:*, list:*, type:*
