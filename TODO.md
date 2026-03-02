@@ -24,6 +24,7 @@
   - [x] Add List Type field (manual/smart) to create/edit list forms
   - [x] Add Search Query field to create/edit list forms (smart lists only)
   - [x] Switch list icon field from dropdown to text field (allows any emoji via system picker)
+- [x] Sort Lists by name alphabetically
 
 ### Tag Management
 
@@ -83,8 +84,8 @@
 
 ### Browser Extensions
 
-- [ ] Add Action to install [Chrome Extension](https://chromewebstore.google.com/detail/karakeep/kgcjekpmcjjogibpjebkhaanilehneje) and [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/karakeep/)
-- [ ] Add link to Chrome Extension to README
+- [ ] Add Action to install [Chrome Extension](https://chromewebstore.google.com/detail/karakeep/kgcjekpmcjjogibpjebkhaanilehneje) and [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/karakeep/) to Bookmarks command
+- [ ] Add link to [Chrome Extension](https://chromewebstore.google.com/detail/karakeep/kgcjekpmcjjogibpjebkhaanilehneje) and [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/karakeep/) to README
 
 ### Logging
 
@@ -97,6 +98,6 @@
 ## P3 - Polish & Advanced Features (Lower Priority)
 
 - [ ] Add support for Raycast AI Tools
-- [ ] Add cross-extension integration with Reader Mode or [Send to Kindle](https://www.raycast.com/lemikeone/send-to-kindle) extension
+- [ ] Add cross-extension integration with Reader Mode or [Send to Kindle](https://www.raycast.com/lemikeone/send-to-kindle) extension (e.g. "Open Link in Reader Mode" and "Send to Kindle" actions)
 - [ ] Implement optimistic updates for better UX
 - [ ] Update README and CHANGELOG with proper documentation

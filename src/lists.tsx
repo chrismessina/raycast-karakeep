@@ -151,7 +151,7 @@ function CreateListForm({ lists, onCreated }: { lists: ListWithCount[]; onCreate
             description: values.description.trim() || undefined,
             parentId: values.parentId || undefined,
             type: values.type as "manual" | "smart",
-            query: values.type === "smart" ? values.query.trim() : undefined,
+            query: values.type === "smart" ? values.query?.trim() : undefined,
           };
           log.debug("Sending create list request", payload);
           await fetchCreateList(payload);
@@ -248,7 +248,7 @@ function EditListForm({
             description: values.description.trim() || undefined,
             parentId: values.parentId || null,
             type: values.type as "manual" | "smart",
-            query: values.type === "smart" ? values.query.trim() : undefined,
+            query: values.type === "smart" ? values.query?.trim() : undefined,
           };
           log.debug("Sending update list request", { listId: list.id, ...payload });
           await fetchUpdateList(list.id, payload);
@@ -430,7 +430,11 @@ export default function Lists() {
     push(<CreateListForm lists={(lists as ListWithCount[]) || []} onCreated={revalidate} />);
   }, [push, revalidate, lists]);
 
-  const hierarchicalLists = useMemo(() => (lists ? buildHierarchy(lists as ListWithCount[]) : []), [lists]);
+  const hierarchicalLists = useMemo(() => {
+    if (!lists) return [];
+    const sorted = [...lists].sort((a, b) => a.name.localeCompare(b.name)) as ListWithCount[];
+    return buildHierarchy(sorted);
+  }, [lists]);
 
   const renderListItems = useCallback(
     (items: ListWithCount[], level = 0) => {

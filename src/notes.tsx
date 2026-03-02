@@ -29,6 +29,7 @@ export default function Notes() {
       searchBarPlaceholder={t("notes.searchPlaceholder")}
       emptyViewTitle={t("notes.empty.title")}
       emptyViewDescription={t("notes.empty.description")}
+      itemLabel={t("notes.title")}
     />
   );
 }

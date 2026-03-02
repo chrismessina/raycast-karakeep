@@ -311,19 +311,25 @@ function BookmarkActions({
   t: (key: string) => string;
   onVisit?: (bookmark: Bookmark) => void;
 }) {
+  const isNote = bookmark.content.type === "text";
+  const editTitle = isNote ? t("notes.actions.edit") : t("bookmark.actions.edit");
+  const deleteTitle = isNote ? t("notes.actions.delete") : t("bookmarkItem.actions.delete");
+  const viewDetailTitle = isNote ? t("notes.actions.viewDetail") : t("bookmarkItem.actions.viewDetail");
+  const copyNoteTitle = t("notes.actions.copy");
+
   const getMainAction = () => {
     const pushDetailAction = (
       <Action.Push
         icon={Icon.Sidebar}
         target={<BookmarkDetail bookmark={bookmark} onRefresh={onRefresh} />}
-        title={t("bookmarkItem.actions.viewDetail")}
+        title={viewDetailTitle}
       />
     );
 
     const editAction = (
       <Action
         icon={Icon.Pencil}
-        title={t("bookmark.actions.edit")}
+        title={editTitle}
         onAction={handlers.handleEdit}
         shortcut={{ modifiers: ["ctrl"], key: "e" }}
       />
@@ -358,7 +364,7 @@ function BookmarkActions({
           const copyAction = (
             <Action.CopyToClipboard
               content={bookmark.content.text}
-              title={t("bookmark.actions.copyContent")}
+              title={copyNoteTitle}
               shortcut={{ modifiers: ["cmd"], key: "c" }}
               onCopy={() => onVisit?.(bookmark)}
             />
@@ -402,17 +408,17 @@ function BookmarkActions({
     <ActionPanel>
       <ActionPanel.Section>
         {mainAction}
-        {mainAction.props.title !== t("bookmarkItem.actions.viewDetail") && (
+        {mainAction.props.title !== viewDetailTitle && (
           <Action.Push
             icon={Icon.Sidebar}
             target={<BookmarkDetail bookmark={bookmark} onRefresh={onRefresh} />}
-            title={t("bookmarkItem.actions.viewDetail")}
+            title={viewDetailTitle}
           />
         )}
-        {mainAction.props.title !== t("bookmark.actions.edit") && (
+        {mainAction.props.title !== editTitle && (
           <Action
             icon={Icon.Pencil}
-            title={t("bookmark.actions.edit")}
+            title={editTitle}
             onAction={handlers.handleEdit}
             shortcut={{ modifiers: ["ctrl"], key: "e" }}
           />
@@ -435,16 +441,14 @@ function BookmarkActions({
               />
             </>
           )}
-        {bookmark.content.type === "text" &&
-          bookmark.content.text &&
-          mainAction.props.title !== t("bookmark.actions.copyContent") && (
-            <Action.CopyToClipboard
-              content={bookmark.content.text}
-              title={t("bookmark.actions.copyContent")}
-              shortcut={{ modifiers: ["cmd"], key: "c" }}
-              onCopy={() => onVisit?.(bookmark)}
-            />
-          )}
+        {bookmark.content.type === "text" && bookmark.content.text && mainAction.props.title !== copyNoteTitle && (
+          <Action.CopyToClipboard
+            content={bookmark.content.text}
+            title={copyNoteTitle}
+            shortcut={{ modifiers: ["cmd"], key: "c" }}
+            onCopy={() => onVisit?.(bookmark)}
+          />
+        )}
         {bookmark.content.type === "asset" &&
           bookmark.content.assetType === "image" &&
           images.asset !== DEFAULT_SCREENSHOT_FILENAME &&
@@ -499,7 +503,7 @@ function BookmarkActions({
       <ActionPanel.Section>
         <Action
           icon={Icon.Trash}
-          title={t("bookmarkItem.actions.delete")}
+          title={deleteTitle}
           style={Action.Style.Destructive}
           onAction={handlers.handleDeleteBookmark}
           shortcut={{ modifiers: ["ctrl"], key: "x" }}

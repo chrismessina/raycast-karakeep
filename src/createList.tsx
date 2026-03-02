@@ -40,7 +40,7 @@ export default function CreateListView() {
         description: values.description.trim() || undefined,
         parentId: values.parentId || undefined,
         type: values.type as "manual" | "smart",
-        query: values.type === "smart" ? values.query.trim() : undefined,
+        query: values.type === "smart" ? values.query?.trim() : undefined,
       };
       log.debug("Sending create list request", payload);
 

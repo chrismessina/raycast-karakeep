@@ -278,10 +278,17 @@ export const translations = {
     // Notes Related
     notes: {
       title: "Notes",
+      titleWithCount: "Notes ({{count}})",
       searchPlaceholder: "Search notes...",
       empty: {
         title: "No notes yet",
         description: "Create your first note with the Create Note command",
+      },
+      actions: {
+        edit: "Edit Note",
+        delete: "Delete Note",
+        viewDetail: "View Note Detail",
+        copy: "Copy Note",
       },
     },
 
@@ -372,6 +379,7 @@ export const translations = {
     // Bookmark List
     bookmarkList: {
       title: "Bookmarks ({{count}})",
+      filterResultsLabel: '{{label}} matching "{{searchText}}" ({{count}})',
       searchPlaceholder: "Search bookmarks...",
       searchResults: (searchText: string, count: number) => `Search results: ${searchText} (${count})`,
       filterResults: (filterText: string, count: number) => `Filter results: ${filterText} (${count})`,
@@ -688,10 +696,17 @@ export const translations = {
     // 笔记列表相关
     notes: {
       title: "笔记",
+      titleWithCount: "笔记 ({{count}})",
       searchPlaceholder: "搜索笔记...",
       empty: {
         title: "暂无笔记",
         description: "使用「创建笔记」命令创建第一条笔记",
+      },
+      actions: {
+        edit: "编辑笔记",
+        delete: "删除笔记",
+        viewDetail: "查看笔记详情",
+        copy: "复制笔记",
       },
     },
 
@@ -782,6 +797,7 @@ export const translations = {
     // 书签列表
     bookmarkList: {
       title: "书签列表（{{count}}）",
+      filterResultsLabel: '{{label}} 匹配 "{{searchText}}"（{{count}}）',
       searchPlaceholder: "搜索书签...",
       searchResults: (searchText: string, count: number) => `搜索结果：${searchText}（共 ${count} 个）`,
       filterResults: (filterText: string, count: number) => `筛选结果：${filterText}（共 ${count} 个）`,
