@@ -1,7 +1,8 @@
 import { Action, ActionPanel, confirmAlert, Detail, Form, Icon, List, useNavigation } from "@raycast/api";
 import { useCachedPromise, useForm } from "@raycast/utils";
 import { logger } from "@chrismessina/raycast-logger";
-import { fetchDeleteHighlight, fetchGetAllHighlights, fetchUpdateHighlight } from "./apis";
+import { fetchDeleteHighlight, fetchGetAllHighlights, fetchGetSingleBookmark, fetchUpdateHighlight } from "./apis";
+import { BookmarkDetail } from "./components/BookmarkDetail";
 import { useTranslation } from "./hooks/useTranslation";
 import { Highlight } from "./types";
 import { runWithToast } from "./utils/toast";
@@ -94,7 +95,13 @@ function EditHighlightForm({ highlight, onUpdated }: { highlight: Highlight; onU
   );
 }
 
-function HighlightDetail({ highlight, onRefresh }: { highlight: Highlight; onRefresh: () => void }) {
+function HighlightDetail({
+  highlight,
+  onRefresh,
+}: {
+  highlight: Highlight;
+  onRefresh: () => void;
+}) {
   const { pop, push } = useNavigation();
   const { t } = useTranslation();
 
@@ -143,6 +150,14 @@ function HighlightDetail({ highlight, onRefresh }: { highlight: Highlight; onRef
       actions={
         <ActionPanel>
           <ActionPanel.Section>
+            <Action
+              title={t("highlights.actions.openBookmark")}
+              icon={Icon.Bookmark}
+              onAction={async () => {
+                const bookmark = await fetchGetSingleBookmark(highlight.bookmarkId);
+                push(<BookmarkDetail bookmark={bookmark} />);
+              }}
+            />
             <Action.CopyToClipboard
               content={highlight.text}
               title={t("highlights.actions.copyText")}
@@ -206,6 +221,14 @@ export default function Highlights() {
                   icon={Icon.Sidebar}
                   onAction={() => push(<HighlightDetail highlight={highlight} onRefresh={revalidate} />)}
                   shortcut={{ modifiers: ["cmd"], key: "return" }}
+                />
+                <Action
+                  title={t("highlights.actions.openBookmark")}
+                  icon={Icon.Bookmark}
+                  onAction={async () => {
+                    const bookmark = await fetchGetSingleBookmark(highlight.bookmarkId);
+                    push(<BookmarkDetail bookmark={bookmark} />);
+                  }}
                 />
                 <Action
                   title={t("highlights.actions.edit")}

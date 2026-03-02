@@ -1,11 +1,23 @@
-import { Detail, Icon } from "@raycast/api";
+import { Action, ActionPanel, Detail, Icon, environment } from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
 import { logger } from "@chrismessina/raycast-logger";
 import { fetchGetUserStats } from "./apis";
 import { useTranslation } from "./hooks/useTranslation";
 import { formatBytes } from "./utils/formatting";
+import { horizontalBarChart } from "./utils/svgChart";
 
 const log = logger.child("[Stats]");
+
+const EXTENSION_AUTHOR = "luolei";
+const EXTENSION_NAME = "karakeep";
+const deepLink = (command: string) => `raycast://extensions/${EXTENSION_AUTHOR}/${EXTENSION_NAME}/${command}`;
+
+const formatHour = (hour: number) => {
+  if (hour === 0) return "12 AM";
+  if (hour < 12) return `${hour} AM`;
+  if (hour === 12) return "12 PM";
+  return `${hour - 12} PM`;
+};
 
 export default function Stats() {
   const { t } = useTranslation();
@@ -13,6 +25,7 @@ export default function Stats() {
     isLoading,
     data: stats,
     error,
+    revalidate,
   } = useCachedPromise(async () => {
     log.log("Fetching user stats");
     const result = await fetchGetUserStats();
@@ -20,8 +33,19 @@ export default function Stats() {
     return result;
   });
 
+  const actions = (
+    <ActionPanel>
+      <Action
+        title={t("stats.refresh")}
+        icon={Icon.ArrowClockwise}
+        onAction={revalidate}
+        shortcut={{ modifiers: ["cmd"], key: "r" }}
+      />
+    </ActionPanel>
+  );
+
   if (isLoading) {
-    return <Detail isLoading navigationTitle={t("stats.title")} markdown="" />;
+    return <Detail isLoading navigationTitle={t("stats.title")} markdown="" actions={actions} />;
   }
 
   if (error || !stats) {
@@ -29,21 +53,49 @@ export default function Stats() {
       <Detail
         navigationTitle={t("stats.title")}
         markdown={`# ${t("stats.empty.title")}\n\n${t("stats.empty.description")}`}
+        actions={actions}
       />
     );
   }
 
   const topDomains = (stats.topDomains || []).slice(0, 10);
   const topTags = (stats.tagUsage || []).slice(0, 10);
+  const byHour = stats.bookmarkingActivity?.byHour || [];
+  const byDay = stats.bookmarkingActivity?.byDayOfWeek || [];
+  const bySource = stats.bookmarksBySource || [];
+
+  const dayNames = [
+    t("stats.days.sun"),
+    t("stats.days.mon"),
+    t("stats.days.tue"),
+    t("stats.days.wed"),
+    t("stats.days.thu"),
+    t("stats.days.fri"),
+    t("stats.days.sat"),
+  ];
+
+  const appearance = environment.appearance;
+
+  const sourcesChart =
+    bySource.length > 0
+      ? horizontalBarChart(bySource.map((s) => ({ label: s.source ?? t("stats.unknown"), value: s.count })), appearance)
+      : null;
+
+  const hourChart =
+    byHour.length > 0
+      ? horizontalBarChart(byHour.map((h) => ({ label: formatHour(h.hour), value: h.count })), appearance)
+      : null;
+
+  const dayChart =
+    byDay.length > 0
+      ? horizontalBarChart(byDay.map((d) => ({ label: dayNames[d.day] ?? String(d.day), value: d.count })), appearance)
+      : null;
 
   const markdown = [
-    `# ${t("stats.title")}`,
-    "",
     `## ${t("stats.overview")}`,
     "",
-    `| | |`,
-    `|---|---|`,
     `| ${t("stats.bookmarks")} | **${stats.numBookmarks}** |`,
+    `|---|---|`,
     `| ${t("stats.favorites")} | **${stats.numFavorites}** |`,
     `| ${t("stats.archived")} | **${stats.numArchived}** |`,
     `| ${t("stats.tags")} | **${stats.numTags}** |`,
@@ -52,17 +104,15 @@ export default function Stats() {
     "",
     `## ${t("stats.byType")}`,
     "",
-    `| | |`,
-    `|---|---|`,
     `| ${t("stats.links")} | **${stats.bookmarksByType?.link ?? 0}** |`,
+    `|---|---|`,
     `| ${t("stats.notes")} | **${stats.bookmarksByType?.text ?? 0}** |`,
     `| ${t("stats.assets")} | **${stats.bookmarksByType?.asset ?? 0}** |`,
     "",
-    `## ${t("stats.activity")}`,
+    `## ${t("stats.bookmarksSaved")}`,
     "",
-    `| | |`,
-    `|---|---|`,
     `| ${t("stats.thisWeek")} | **${stats.bookmarkingActivity?.thisWeek ?? 0}** |`,
+    `|---|---|`,
     `| ${t("stats.thisMonth")} | **${stats.bookmarkingActivity?.thisMonth ?? 0}** |`,
     `| ${t("stats.thisYear")} | **${stats.bookmarkingActivity?.thisYear ?? 0}** |`,
     ...(topDomains.length > 0
@@ -85,14 +135,22 @@ export default function Stats() {
           ...topTags.map((tag) => `| ${tag.name} | ${tag.count} |`),
         ]
       : []),
+    ...(sourcesChart
+      ? ["", `## ${t("stats.bookmarkSources")}`, "", `<img src="${sourcesChart}" />`]
+      : []),
+    ...(hourChart
+      ? ["", `## ${t("stats.activityByHour")}`, "", `<img src="${hourChart}" />`]
+      : []),
+    ...(dayChart
+      ? ["", `## ${t("stats.activityByDay")}`, "", `<img src="${dayChart}" />`]
+      : []),
     ...(stats.totalAssetSize > 0
       ? [
           "",
           `## ${t("stats.storage")}`,
           "",
-          `| | |`,
-          `|---|---|`,
           `| ${t("stats.totalAssetSize")} | **${formatBytes(stats.totalAssetSize)}** |`,
+          `|---|---|`,
           ...(stats.assetsByType || []).map((a) => `| ${a.type} | ${a.count} files · ${formatBytes(a.totalSize)} |`),
         ]
       : []),
@@ -102,21 +160,26 @@ export default function Stats() {
     <Detail
       navigationTitle={t("stats.title")}
       markdown={markdown}
+      actions={actions}
       metadata={
         <Detail.Metadata>
-          <Detail.Metadata.Label title={t("stats.bookmarks")} text={String(stats.numBookmarks)} icon={Icon.Bookmark} />
+          <Detail.Metadata.Link
+            title={t("stats.bookmarks")}
+            text={String(stats.numBookmarks)}
+            target={deepLink("bookmarks")}
+          />
           <Detail.Metadata.Label title={t("stats.favorites")} text={String(stats.numFavorites)} icon={Icon.Star} />
           <Detail.Metadata.Label title={t("stats.archived")} text={String(stats.numArchived)} icon={Icon.Tray} />
           <Detail.Metadata.Separator />
-          <Detail.Metadata.Label
+          <Detail.Metadata.Link
             title={t("stats.links")}
             text={String(stats.bookmarksByType?.link ?? 0)}
-            icon={Icon.Link}
+            target={deepLink("bookmarks")}
           />
-          <Detail.Metadata.Label
+          <Detail.Metadata.Link
             title={t("stats.notes")}
             text={String(stats.bookmarksByType?.text ?? 0)}
-            icon={Icon.Document}
+            target={deepLink("notes")}
           />
           <Detail.Metadata.Label
             title={t("stats.assets")}
@@ -124,12 +187,12 @@ export default function Stats() {
             icon={Icon.Image}
           />
           <Detail.Metadata.Separator />
-          <Detail.Metadata.Label title={t("stats.tags")} text={String(stats.numTags)} icon={Icon.Tag} />
-          <Detail.Metadata.Label title={t("stats.lists")} text={String(stats.numLists)} icon={Icon.List} />
-          <Detail.Metadata.Label
+          <Detail.Metadata.Link title={t("stats.tags")} text={String(stats.numTags)} target={deepLink("tags")} />
+          <Detail.Metadata.Link title={t("stats.lists")} text={String(stats.numLists)} target={deepLink("lists")} />
+          <Detail.Metadata.Link
             title={t("stats.highlights")}
             text={String(stats.numHighlights)}
-            icon={Icon.Highlight}
+            target={deepLink("highlights")}
           />
           {stats.totalAssetSize > 0 && (
             <>

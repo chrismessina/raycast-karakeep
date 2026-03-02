@@ -14,10 +14,12 @@ function ListFilterDropdown({ onChange }: { onChange: (listId: string) => void }
   const { t } = useTranslation();
   const { lists } = useGetAllLists();
 
+  const sortedLists = [...lists].sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <List.Dropdown tooltip="Filter by List" onChange={onChange}>
-      <List.Dropdown.Item title={t("bookmark.defaultListPlaceholder")} value="" />
-      {lists.map((list) => (
+      <List.Dropdown.Item title={t("bookmark.defaultListFilter")} value="" />
+      {sortedLists.map((list) => (
         <List.Dropdown.Item key={list.id} title={list.name} value={list.id} />
       ))}
     </List.Dropdown>

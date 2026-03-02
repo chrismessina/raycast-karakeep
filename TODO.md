@@ -40,6 +40,7 @@
   - [x] Add note deletion — API: [`DELETE /api/v1/bookmarks/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-bookmark)
   - [x] Add note updating — API: [`PATCH /api/v1/bookmarks/{id}`](https://docs.karakeep.app/api/karakeep-api/update-bookmark)
   - [x] Clarify: Notes are bookmarks with `type: "text"`, not a separate entity
+- [x] Add action to Create Note from Notes listing (should be default action when no notes exist)
 
 ### Highlights
 
@@ -47,14 +48,18 @@
   - [~] Add highlight creation — **Removed**: Requires DOM character offsets; not feasible without the browser extension
   - [x] Add highlight deletion — API: [`DELETE /api/v1/highlights/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-highlight)
   - [x] Add highlight updating — API: [`PATCH /api/v1/highlights/{id}`](https://docs.karakeep.app/api/karakeep-api/update-highlight)
+- [x] Add an "Open Bookmark" action to each highlight to open related bookmark
 
 ### Bookmarks View Enhancements
 
 - [x] To Bookmarks view, add Lists SearchBar accessory filter
 - [x] To Bookmarks detail view, add icon to AI-generated tags
-- [~] Add action to bookmark to regenerate thumbnail — **Removed**: Karakeep API does not expose screenshot regeneration endpoint
 - [x] When adding a bookmark, allow adding tags; support retreiving Karakeep's AI-suggested tags (`attachedBy: ai`)
 - [x] When adding a note, allow adding tags; support retreiving Karakeep's AI-suggested tags (`attachedBy: ai`)
+- [x] Sort Bookmark List dropdown filter alphabetically
+- [ ] Add tag picker to BookmarkEdit form
+- [ ] Add "Copy Link" action to bookmark list items
+- [ ] To Create Bookmark view, add action to "Generate AI tags" and add them to the list of tags
 
 ### Technical Foundation
 
@@ -77,16 +82,21 @@
   - [x] Download backup — API: `GET /api/v1/backups/{id}/download`
   - [x] Delete backup from list — API: [`DELETE /api/v1/backups/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-backup)
   - [x] Delete Backup destructive action styling
+- [ ] Backup list shows "No backups yet" even while loading — the empty view flashes before data arrives because `!isLoading && backups.length === 0` fires during the first render
 
 ### Analytics
 
 - [x] Add user stats Command:
   - [x] Add stats view — API: [`GET /api/v1/users/me/stats`](https://docs.karakeep.app/api/karakeep-api/get-current-user-stats) (includes bookmark counts by type, top domains, tag usage, bookmarking activity patterns, and storage usage)
+- [x] Remove empty heading rows in Markdown
+- [x] Add Refresh action to refresh stats
+- [x] To the Detail view rows, add links that open the related content type views (e.g. Tags → Tags list, Bookmarks → Bookmarks list, etc.)
+- [x] Add metric label to "Activity" section (what do the counts represent?)
 
 ### Browser Extensions
 
-- [ ] Add Action to install [Chrome Extension](https://chromewebstore.google.com/detail/karakeep/kgcjekpmcjjogibpjebkhaanilehneje) and [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/karakeep/) to Bookmarks command
-- [ ] Add link to [Chrome Extension](https://chromewebstore.google.com/detail/karakeep/kgcjekpmcjjogibpjebkhaanilehneje) and [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/karakeep/) to README
+- [ ] Add Action to install [Chrome Extension](https://chromewebstore.google.com/detail/karakeep/kgcjekpmcjjogibpjebkhaanilehneje), [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/karakeep/) and [Safari extension](https://apps.apple.com/us/app/karakeeper-bookmarker/id6746722790) to Bookmarks command
+- [ ] Add link to [Chrome Extension](https://chromewebstore.google.com/detail/karakeep/kgcjekpmcjjogibpjebkhaanilehneje), [Firefox Add-on](https://addons.mozilla.org/en-US/firefox/addon/karakeep/) and [Safari extension](https://apps.apple.com/us/app/karakeeper-bookmarker/id6746722790) to README
 
 ### Logging
 

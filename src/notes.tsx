@@ -1,8 +1,9 @@
-import { Icon, List } from "@raycast/api";
+import { Action, ActionPanel, Icon, List } from "@raycast/api";
 import { logger } from "@chrismessina/raycast-logger";
 import { BookmarkList } from "./components/BookmarkList";
 import { useGetAllBookmarks } from "./hooks/useGetAllBookmarks";
 import { useTranslation } from "./hooks/useTranslation";
+import CreateNoteView from "./createNote";
 
 const log = logger.child("[Notes]");
 
@@ -16,10 +17,32 @@ export default function Notes() {
 
   log.log("Notes view loaded", { count: bookmarks.length });
 
+  const createNoteAction = (
+    <Action.Push
+      title={t("note.create")}
+      icon={Icon.Plus}
+      target={<CreateNoteView />}
+      shortcut={{ modifiers: ["cmd"], key: "n" }}
+    />
+  );
+
   if (isLoading && bookmarks.length === 0) {
     return (
       <List>
         <List.EmptyView title={t("loading")} icon={Icon.Document} description={t("pleaseWait")} />
+      </List>
+    );
+  }
+
+  if (!isLoading && bookmarks.length === 0) {
+    return (
+      <List>
+        <List.EmptyView
+          title={t("notes.empty.title")}
+          description={t("notes.empty.description")}
+          icon={Icon.Document}
+          actions={<ActionPanel>{createNoteAction}</ActionPanel>}
+        />
       </List>
     );
   }
