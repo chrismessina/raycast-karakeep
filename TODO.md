@@ -82,7 +82,10 @@
   - [x] Download backup — API: `GET /api/v1/backups/{id}/download`
   - [x] Delete backup from list — API: [`DELETE /api/v1/backups/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-backup)
   - [x] Delete Backup destructive action styling
-- [ ] Backup list shows "No backups yet" even while loading — the empty view flashes before data arrives because `!isLoading && backups.length === 0` fires during the first render
+- [x] Backup list shows "No backups yet" even while loading — `!isLoading && backups.length === 0` guard already prevents the flash
+- [x] Poll for backup status after creation; auto-stop polling when no backups are pending
+- [x] Restrict Download Backup action to `status === "success"` only; show failure toast on `pending → failure` transition
+- [x] Color-code backup status tags (green = success, red = failure, gray = pending)
 
 ### Analytics
 
@@ -92,6 +95,7 @@
 - [x] Add Refresh action to refresh stats
 - [x] To the Detail view rows, add links that open the related content type views (e.g. Tags → Tags list, Bookmarks → Bookmarks list, etc.)
 - [x] Add metric label to "Activity" section (what do the counts represent?)
+- [x] Add SVG charts for Bookmark Sources, Activity by Hour, Activity by Day (theme-aware via `environment.appearance`)
 
 ### Browser Extensions
 
