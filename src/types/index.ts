@@ -86,6 +86,7 @@ export interface Bookmark {
   createdAt: string;
   assets?: Asset[];
   tags: Tag[];
+  taggingStatus?: "pending" | "success" | "failure" | null;
 }
 
 export type ListType = "manual" | "smart";

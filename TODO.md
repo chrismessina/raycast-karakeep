@@ -53,8 +53,8 @@
 - [ ] To Bookmarks view, add Lists SearchBar accessory filter
 - [x] To Bookmarks detail view, add icon to AI-generated tags
 - [~] Add action to bookmark to regenerate thumbnail — **Removed**: Karakeep API does not expose screenshot regeneration endpoint
-- [ ] When adding a bookmark, allow adding tags; support retreiving Karakeep's AI-suggested tags (`attachedBy: ai`)
-- [ ] When adding a note, allow adding tags; support retreiving Karakeep's AI-suggested tags (`attachedBy: ai`)
+- [x] When adding a bookmark, allow adding tags; support retreiving Karakeep's AI-suggested tags (`attachedBy: ai`)
+- [x] When adding a note, allow adding tags; support retreiving Karakeep's AI-suggested tags (`attachedBy: ai`)
 
 ### Technical Foundation
 

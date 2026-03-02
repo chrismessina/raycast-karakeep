@@ -252,3 +252,13 @@ export async function fetchDeleteHighlight(id: string): Promise<unknown> {
     method: "DELETE",
   });
 }
+
+export async function fetchAttachTagsToBookmark(
+  bookmarkId: string,
+  tags: Array<{ tagId?: string; tagName?: string; attachedBy?: "ai" | "human" }>,
+): Promise<unknown> {
+  return fetchWithAuth(`/api/v1/bookmarks/${bookmarkId}/tags`, {
+    method: "POST",
+    body: { tags },
+  });
+}

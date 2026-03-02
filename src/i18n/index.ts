@@ -68,6 +68,12 @@ export const translations = {
       titlePlaceholder: "Enter title",
       list: "List",
       defaultListPlaceholder: "Default",
+      tags: "Tags",
+      tagsPlaceholder: "Select existing tags",
+      newTags: "Add Tag",
+      newTagsPlaceholder: "Type a name, then press ↵ or comma to add",
+      tagsAttached: "Tags attached",
+      tagsAttachFailed: "Failed to attach tags",
       // Sections
       sections: {
         summary: "📝 Summary",
@@ -479,6 +485,12 @@ export const translations = {
 
       list: "列表",
       defaultListPlaceholder: "默认",
+      tags: "标签",
+      tagsPlaceholder: "选择已有标签",
+      newTags: "添加标签",
+      newTagsPlaceholder: "输入名称，按 ↵ 或逗号添加",
+      tagsAttached: "标签已添加",
+      tagsAttachFailed: "标签添加失败",
 
       // 分区
       sections: {
