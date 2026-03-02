@@ -8,7 +8,11 @@ const log = logger.child("[Notes]");
 
 export default function Notes() {
   const { t } = useTranslation();
-  const { isLoading, bookmarks, revalidate, pagination } = useGetAllBookmarks({ type: "text" });
+  const { isLoading, bookmarks: allBookmarks, revalidate, pagination } = useGetAllBookmarks({ type: "text" });
+
+  // Client-side guard: useCachedPromise may serve a stale all-bookmarks cache
+  // while the type=text fetch is in flight. Always filter to notes only.
+  const bookmarks = allBookmarks.filter((b) => b.content.type === "text");
 
   log.log("Notes view loaded", { count: bookmarks.length });
 
