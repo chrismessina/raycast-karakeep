@@ -71,8 +71,8 @@ export const translations = {
       defaultListFilter: "Show All Bookmarks",
       tags: "Tags",
       tagsPlaceholder: "Select existing tags",
-      newTags: "Add Tag",
-      newTagsPlaceholder: "Type a name, then press ↵ or comma to add",
+      newTags: "Add New Tag",
+      newTagsPlaceholder: "Type a tag followed by a comma to add",
       tagsAttached: "Tags attached",
       tagsAttachFailed: "Failed to attach tags",
       // Sections
@@ -569,8 +569,8 @@ export const translations = {
       defaultListFilter: "显示所有书签",
       tags: "标签",
       tagsPlaceholder: "选择已有标签",
-      newTags: "添加标签",
-      newTagsPlaceholder: "输入名称，按 ↵ 或逗号添加",
+      newTags: "添加新标签",
+      newTagsPlaceholder: "输入标签，后跟逗号即可添加",
       tagsAttached: "标签已添加",
       tagsAttachFailed: "标签添加失败",
 

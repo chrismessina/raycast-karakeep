@@ -111,8 +111,8 @@ export default function CreateBookmarkView() {
   }
 
   function onPendingInputChange(text: string) {
-    if (text.includes(",") || text.includes("\n")) {
-      const parts = text.split(/[,\n]/);
+    if (text.includes(",")) {
+      const parts = text.split(",");
       parts.slice(0, -1).forEach((p) => commitNewTag(p));
       setPendingInput(parts[parts.length - 1]);
     } else {
@@ -181,7 +181,7 @@ export default function CreateBookmarkView() {
         ))}
       </Form.TagPicker>
 
-      <Form.TextArea
+      <Form.TextField
         id="pendingNewTag"
         title={t("bookmark.newTags")}
         placeholder={t("bookmark.newTagsPlaceholder")}
