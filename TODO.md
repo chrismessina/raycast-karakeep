@@ -41,6 +41,7 @@
   - [x] Add note updating — API: [`PATCH /api/v1/bookmarks/{id}`](https://docs.karakeep.app/api/karakeep-api/update-bookmark)
   - [x] Clarify: Notes are bookmarks with `type: "text"`, not a separate entity
 - [x] Add action to Create Note from Notes listing (should be default action when no notes exist)
+- [ ] Add ability to move between Notes with a hotkey (Go to Previous/Next Note)
 
 ### Highlights
 
@@ -49,6 +50,7 @@
   - [x] Add highlight deletion — API: [`DELETE /api/v1/highlights/{id}`](https://docs.karakeep.app/api/karakeep-api/delete-highlight)
   - [x] Add highlight updating — API: [`PATCH /api/v1/highlights/{id}`](https://docs.karakeep.app/api/karakeep-api/update-highlight)
 - [x] Add an "Open Bookmark" action to each highlight to open related bookmark
+- [ ] Add ability to move between Highlights with a hotkey (Go to Previous/Next Highlight)
 
 ### Bookmarks View Enhancements
 
@@ -60,6 +62,7 @@
 - [ ] Add tag picker to BookmarkEdit form
 - [ ] Add "Copy Link" action to bookmark list items
 - [ ] To Create Bookmark view, add action to "Generate AI tags" and add them to the list of tags
+- [ ] Add ability to move between Bookmarks with a hotkey (Go to Previous/Next Bookmark)
 
 ### Technical Foundation
 
