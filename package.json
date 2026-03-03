@@ -29,15 +29,6 @@
   ],
   "preferences": [
     {
-      "name": "verboseLogging",
-      "type": "checkbox",
-      "required": false,
-      "title": "Verbose Logging",
-      "label": "Enable detailed logging",
-      "description": "Show detailed logs in the Raycast console for debugging",
-      "default": false
-    },
-    {
       "name": "language",
       "title": "Language",
       "description": "Select your preferred language",
@@ -191,6 +182,15 @@
       "description": "Display summary in the list",
       "default": false,
       "required": false
+    },
+    {
+      "name": "verboseLogging",
+      "type": "checkbox",
+      "required": false,
+      "title": "Verbose Logging",
+      "label": "Enable detailed logging",
+      "description": "Show detailed logs in the Raycast console for debugging",
+      "default": false
     }
   ],
   "commands": [
