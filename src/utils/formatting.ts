@@ -43,9 +43,13 @@ export function makeSmartQueryValidator(t: (key: string) => string) {
  */
 export function isEmoji(str: string): boolean {
   if (!str) return true;
+  // Strip variation selectors (\uFE0E, \uFE0F), ZWJ (\u200D), and combining
+  // enclosing keycap (\u20E3) before testing — these are invisible modifiers
+  // that appear in common emoji like ⭐️ (\u2B50\uFE0F) and 1️⃣.
+  const normalized = str.trim().replace(/[\uFE0E\uFE0F\u200D\u20E3]/g, "");
   const emojiRegex =
     /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/;
-  return emojiRegex.test(str.trim());
+  return emojiRegex.test(normalized);
 }
 
 export interface EmojiOption {
