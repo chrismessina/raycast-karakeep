@@ -1,13 +1,13 @@
 import { Action, ActionPanel, Form, showToast, Toast, useNavigation } from "@raycast/api";
 import { useForm } from "@raycast/utils";
 import { logger } from "@chrismessina/raycast-logger";
-
-const log = logger.child("[BookmarkEdit]");
 import { fetchAttachTagsToBookmark, fetchDetachTagsFromBookmark, fetchUpdateBookmark } from "../apis";
 import { useGetAllTags } from "../hooks/useGetAllTags";
 import { TAG_PICKER_NOOP_VALUE, useTagPicker } from "../hooks/useTagPicker";
 import { useTranslation } from "../hooks/useTranslation";
 import { Bookmark } from "../types";
+
+const log = logger.child("[BookmarkEdit]");
 
 interface FormValues {
   title: string;
@@ -77,9 +77,8 @@ export function BookmarkEdit({ bookmark, onRefresh }: BookmarkDetailProps) {
 
         await fetchUpdateBookmark(bookmark.id, payload);
 
-        const tagsToAttach = buildTagsToAttach();
         if (addedTagIds.length > 0) {
-          await fetchAttachTagsToBookmark(bookmark.id, tagsToAttach);
+          await fetchAttachTagsToBookmark(bookmark.id, buildTagsToAttach());
         }
         if (removedTagIds.length > 0) {
           await fetchDetachTagsFromBookmark(bookmark.id, buildTagsToDetach());
