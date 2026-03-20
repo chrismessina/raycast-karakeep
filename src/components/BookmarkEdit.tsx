@@ -3,7 +3,9 @@ import { useForm } from "@raycast/utils";
 import { logger } from "@chrismessina/raycast-logger";
 
 const log = logger.child("[BookmarkEdit]");
-import { fetchUpdateBookmark } from "../apis";
+import { fetchAttachTagsToBookmark, fetchDetachTagsFromBookmark, fetchUpdateBookmark } from "../apis";
+import { useGetAllTags } from "../hooks/useGetAllTags";
+import { TAG_PICKER_NOOP_VALUE, useTagPicker } from "../hooks/useTagPicker";
 import { useTranslation } from "../hooks/useTranslation";
 import { Bookmark } from "../types";
 
@@ -20,6 +22,19 @@ interface BookmarkDetailProps {
 export function BookmarkEdit({ bookmark, onRefresh }: BookmarkDetailProps) {
   const { pop } = useNavigation();
   const { t } = useTranslation();
+  const { tags } = useGetAllTags();
+  const {
+    selectedTagIds,
+    newTagItems,
+    pendingInput,
+    onTagIdsChange,
+    onPendingInputChange,
+    commitPendingTag,
+    addedTagIds,
+    removedTagIds,
+    buildTagsToAttach,
+    buildTagsToDetach,
+  } = useTagPicker({ tags, initialTagIds: bookmark.tags.map((t) => t.id) });
 
   const getDefaultTitle = (bookmark: Bookmark): string => {
     if (bookmark.title) {
@@ -62,6 +77,14 @@ export function BookmarkEdit({ bookmark, onRefresh }: BookmarkDetailProps) {
 
         await fetchUpdateBookmark(bookmark.id, payload);
 
+        const tagsToAttach = buildTagsToAttach();
+        if (addedTagIds.length > 0) {
+          await fetchAttachTagsToBookmark(bookmark.id, tagsToAttach);
+        }
+        if (removedTagIds.length > 0) {
+          await fetchDetachTagsFromBookmark(bookmark.id, buildTagsToDetach());
+        }
+
         log.info("Bookmark updated", { bookmarkId: bookmark.id });
         toast.style = Toast.Style.Success;
         toast.title = t("bookmark.updateSuccess");
@@ -98,6 +121,31 @@ export function BookmarkEdit({ bookmark, onRefresh }: BookmarkDetailProps) {
         title={t("bookmark.note")}
         placeholder={t("bookmark.notePlaceholder")}
         enableMarkdown
+      />
+
+      <Form.TagPicker
+        id="tagIds"
+        title={t("bookmark.tags")}
+        placeholder={t("bookmark.tagsPlaceholder")}
+        value={selectedTagIds}
+        onChange={onTagIdsChange}
+      >
+        <Form.TagPicker.Item value={TAG_PICKER_NOOP_VALUE} title=" " />
+        {tags.map((tag) => (
+          <Form.TagPicker.Item key={tag.id} value={tag.id} title={tag.name} />
+        ))}
+        {newTagItems.map((item) => (
+          <Form.TagPicker.Item key={item.id} value={item.id} title={item.name} />
+        ))}
+      </Form.TagPicker>
+
+      <Form.TextField
+        id="pendingNewTag"
+        title={t("bookmark.newTags")}
+        placeholder={t("bookmark.newTagsPlaceholder")}
+        value={pendingInput}
+        onChange={onPendingInputChange}
+        onBlur={commitPendingTag}
       />
     </Form>
   );
