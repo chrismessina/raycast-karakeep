@@ -59,8 +59,8 @@
 - [x] When adding a bookmark, allow adding tags; support retreiving Karakeep's AI-suggested tags (`attachedBy: ai`)
 - [x] When adding a note, allow adding tags; support retreiving Karakeep's AI-suggested tags (`attachedBy: ai`)
 - [x] Sort Bookmark List dropdown filter alphabetically
-- [ ] Add tag picker to BookmarkEdit form
-- [ ] Add "Copy Link" action to bookmark list items
+- [x] Add tag picker to BookmarkEdit form
+- [X] Add "Copy Link" action to bookmark list items
 - [ ] To Create Bookmark view, add action to "Generate AI tags" and add them to the list of tags
 - [ ] Add ability to move between Bookmarks with a hotkey (Go to Previous/Next Bookmark)
 
