@@ -80,7 +80,7 @@ Note: `setPendingInput` is not exposed — `onPendingInputChange` is the correct
 - `buildTagsToDetach` — maps `removedTagIds` to `Array<{ tagId: string }>` (only existing tag IDs can be removed; `new:`-prefixed IDs are never in `initialTagIds`)
 - `reset` — resets `selectedTagIds` to `[]`, `newTagItems` to `[]`, `pendingInput` to `""`, ref to `[]`. **Only call from create forms.**
 
-Constants `NEW_TAG_PREFIX` and `TAG_PICKER_NOOP_VALUE` live in this file; `NEW_TAG_PREFIX` is also exported for use by `src/utils/tags.ts`.
+Constant `TAG_PICKER_NOOP_VALUE` lives in this file and is exported. `NEW_TAG_PREFIX` is defined in and imported from `src/utils/tags.ts` (its canonical location, avoiding a circular import).
 
 **`initialTagIds` behavior:** Seeds `selectedTagIds` on mount. `addedTagIds` and `removedTagIds` are derived from the diff against `initialTagIds`. Only existing tag IDs (non-`new:`-prefixed) can appear in `removedTagIds`.
 
@@ -91,7 +91,7 @@ Constants `NEW_TAG_PREFIX` and `TAG_PICKER_NOOP_VALUE` live in this file; `NEW_T
 Exports a pure utility function used internally by the hook:
 
 ```ts
-import { NEW_TAG_PREFIX } from "../hooks/useTagPicker";
+export const NEW_TAG_PREFIX = "new:";
 
 export function buildTagsToAttach(
   selectedTagIds: string[],
