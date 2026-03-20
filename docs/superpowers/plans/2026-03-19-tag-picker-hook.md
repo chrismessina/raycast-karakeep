@@ -12,23 +12,24 @@
 
 ## File Map
 
-| File | Action | Responsibility |
-|---|---|---|
-| `src/hooks/useTagPicker.ts` | **Create** | All tag-picking state, derived values, payload builders |
-| `src/utils/tags.ts` | **Create** | Pure `buildTagsToAttach` utility |
-| `src/components/NoteEdit.tsx` | **Create** | Edit form for `type: "text"` bookmarks |
-| `src/apis/index.ts` | **Modify** | Add `fetchDetachTagsFromBookmark` |
-| `src/createBookmark.tsx` | **Modify** | Swap inline tag logic for `useTagPicker` |
-| `src/createNote.tsx` | **Modify** | Swap inline tag logic for `useTagPicker` |
-| `src/components/BookmarkEdit.tsx` | **Modify** | Add tag fields using `useTagPicker` |
-| `src/components/BookmarkDetail.tsx` | **Modify** | Branch `handleEdit` by bookmark type |
-| `src/components/BookmarkItem.tsx` | **Modify** | Branch `handleEdit` by bookmark type |
+| File                                | Action     | Responsibility                                          |
+| ----------------------------------- | ---------- | ------------------------------------------------------- |
+| `src/hooks/useTagPicker.ts`         | **Create** | All tag-picking state, derived values, payload builders |
+| `src/utils/tags.ts`                 | **Create** | Pure `buildTagsToAttach` utility                        |
+| `src/components/NoteEdit.tsx`       | **Create** | Edit form for `type: "text"` bookmarks                  |
+| `src/apis/index.ts`                 | **Modify** | Add `fetchDetachTagsFromBookmark`                       |
+| `src/createBookmark.tsx`            | **Modify** | Swap inline tag logic for `useTagPicker`                |
+| `src/createNote.tsx`                | **Modify** | Swap inline tag logic for `useTagPicker`                |
+| `src/components/BookmarkEdit.tsx`   | **Modify** | Add tag fields using `useTagPicker`                     |
+| `src/components/BookmarkDetail.tsx` | **Modify** | Branch `handleEdit` by bookmark type                    |
+| `src/components/BookmarkItem.tsx`   | **Modify** | Branch `handleEdit` by bookmark type                    |
 
 ---
 
 ## Task 1: Add `fetchDetachTagsFromBookmark` to the API layer
 
 **Files:**
+
 - Modify: `src/apis/index.ts`
 
 The Karakeep API supports `DELETE /api/v1/bookmarks/{bookmarkId}/tags` with a body of `{ tags: [{ tagId, tagName }] }`. This task adds the corresponding fetch function alongside the existing `fetchAttachTagsToBookmark`.
@@ -69,6 +70,7 @@ git commit -m "feat: add fetchDetachTagsFromBookmark API function"
 ## Task 2: Create `src/utils/tags.ts`
 
 **Files:**
+
 - Create: `src/utils/tags.ts`
 
 This is a pure function with no side effects. It takes `selectedTagIds` and `newTagItems`, and maps each ID to the correct API payload shape. IDs starting with `"new:"` are new tags (look up name from `newTagItems`); all others are existing tags (use ID directly).
@@ -114,9 +116,11 @@ git commit -m "feat: add buildTagsToAttach utility"
 ## Task 3: Create `src/hooks/useTagPicker.ts`
 
 **Files:**
+
 - Create: `src/hooks/useTagPicker.ts`
 
 This hook centralises all tag-picker state. Key design points:
+
 - `selectedTagIdsRef` mirrors `selectedTagIds` state to prevent stale closures in `onTagIdsChange`
 - `newTagItemsRef` mirrors `newTagItems` state to prevent stale dedup in `commitNewTag` when called multiple times in one render cycle (comma-split path). This is an addition beyond the spec's internals list, added to fix a real stale-closure bug.
 - `addedTagIds` / `removedTagIds` are derived (not stored) from the diff against `initialTagIds`
@@ -259,6 +263,7 @@ git commit -m "feat: add useTagPicker hook"
 ## Task 4: Refactor `createBookmark.tsx` to use `useTagPicker`
 
 **Files:**
+
 - Modify: `src/createBookmark.tsx`
 
 Replace the inline tag state/logic with the hook. The JSX structure stays identical — only the source of the values changes.
@@ -266,15 +271,19 @@ Replace the inline tag state/logic with the hook. The JSX structure stays identi
 - [ ] **Step 1: Update imports**
 
 Replace:
+
 ```ts
 import { useEffect, useRef, useState } from "react";
 ```
+
 with:
+
 ```ts
 import { useEffect, useState } from "react";
 ```
 
 Add to imports:
+
 ```ts
 import { useTagPicker, TAG_PICKER_NOOP_VALUE } from "./hooks/useTagPicker";
 ```
@@ -286,6 +295,7 @@ Remove from imports: `fetchAttachTagsToBookmark` is still needed; no import chan
 Do these removals in one pass to avoid intermediate reference errors:
 
 Remove these module-level constants:
+
 ```ts
 const NEW_TAG_PREFIX = "new:";
 const TAG_PICKER_NOOP_VALUE = "__tagpicker-noop__";
@@ -294,6 +304,7 @@ const TAG_PICKER_NOOP_VALUE = "__tagpicker-noop__";
 Remove `const initialSelectedTagIds = draftValues?.tagIds ?? [];` (line ~40, declared before hooks — it will be re-declared inside the hook call in Step 3).
 
 Remove the state declarations:
+
 ```ts
 const [selectedTagIds, setSelectedTagIds] = useState<string[]>(initialSelectedTagIds);
 const [newTagItems, setNewTagItems] = useState<Array<{ id: string; name: string }>>(...)
@@ -323,6 +334,7 @@ const {
 - [ ] **Step 4: Update `onSubmit`**
 
 Replace the inline `tagsToAttach` loop:
+
 ```ts
 const tagsToAttach: Array<{ tagId?: string; tagName?: string; attachedBy: "human" }> = [];
 for (const v of selectedTagIds) {
@@ -338,6 +350,7 @@ if (tagsToAttach.length > 0) {
 ```
 
 With:
+
 ```ts
 const tagsToAttach = buildTagsToAttach();
 if (tagsToAttach.length > 0) {
@@ -348,6 +361,7 @@ if (tagsToAttach.length > 0) {
 - [ ] **Step 5: Update JSX `onBlur` on the pending tag field**
 
 Replace:
+
 ```ts
 onBlur={() => {
   if (pendingInput.trim()) {
@@ -356,9 +370,11 @@ onBlur={() => {
   }
 }}
 ```
+
 With:
+
 ```ts
-onBlur={commitPendingTag}
+onBlur = { commitPendingTag };
 ```
 
 - [ ] **Step 6: Verify it builds and lints**
@@ -381,6 +397,7 @@ git commit -m "refactor: use useTagPicker in createBookmark"
 ## Task 5: Refactor `createNote.tsx` to use `useTagPicker`
 
 **Files:**
+
 - Modify: `src/createNote.tsx`
 
 Same pattern as Task 4. `createNote` also calls `reset()` after a successful submit (it uses `useCachedState` for the content draft and calls `setContent("")` on success).
@@ -388,15 +405,19 @@ Same pattern as Task 4. `createNote` also calls `reset()` after a successful sub
 - [ ] **Step 1: Update imports**
 
 Replace:
+
 ```ts
 import { useRef, useState } from "react";
 ```
+
 With:
+
 ```ts
 import { useState } from "react";
 ```
 
 Add:
+
 ```ts
 import { useTagPicker, TAG_PICKER_NOOP_VALUE } from "./hooks/useTagPicker";
 ```
@@ -404,12 +425,14 @@ import { useTagPicker, TAG_PICKER_NOOP_VALUE } from "./hooks/useTagPicker";
 - [ ] **Step 2: Remove inline constants, state, and functions**
 
 Remove:
+
 ```ts
 const NEW_TAG_PREFIX = "new:";
 const TAG_PICKER_NOOP_VALUE = "__tagpicker-noop__";
 ```
 
 Remove state:
+
 ```ts
 const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
 const [newTagItems, setNewTagItems] = useState<Array<{ id: string; name: string }>>([]);
@@ -439,6 +462,7 @@ const {
 - [ ] **Step 4: Update `onSubmit`**
 
 Replace the inline loop with:
+
 ```ts
 const tagsToAttach = buildTagsToAttach();
 if (tagsToAttach.length > 0) {
@@ -460,8 +484,9 @@ await closeMainWindow({ clearRootSearch: true });
 - [ ] **Step 5: Update JSX `onBlur`**
 
 Replace the `onBlur` on the pending tag field with:
+
 ```ts
-onBlur={commitPendingTag}
+onBlur = { commitPendingTag };
 ```
 
 - [ ] **Step 6: Verify it builds and lints**
@@ -484,6 +509,7 @@ git commit -m "refactor: use useTagPicker in createNote"
 ## Task 6: Update `BookmarkEdit.tsx` to add tag fields
 
 **Files:**
+
 - Modify: `src/components/BookmarkEdit.tsx`
 
 Add `useGetAllTags` and `useTagPicker` to the edit form. On submit, attach added tags and detach removed tags. The existing title + note fields are unchanged.
@@ -491,6 +517,7 @@ Add `useGetAllTags` and `useTagPicker` to the edit form. On submit, attach added
 - [ ] **Step 1: Update imports**
 
 Add to existing imports:
+
 ```ts
 import { fetchAttachTagsToBookmark, fetchDetachTagsFromBookmark, fetchUpdateBookmark } from "../apis";
 import { useGetAllTags } from "../hooks/useGetAllTags";
@@ -584,6 +611,7 @@ git commit -m "feat: add tag picker to BookmarkEdit"
 ## Task 7: Create `NoteEdit.tsx`
 
 **Files:**
+
 - Create: `src/components/NoteEdit.tsx`
 
 Edit form for `type: "text"` bookmarks. Fields: Content (TextArea, required, max 2500 chars), Custom Title (TextField, optional), Tags (TagPicker), Add New Tag (TextField). No List field.
@@ -600,11 +628,7 @@ Note: `bookmark.content.text` is the note body on read; `text` is the field name
 import { Action, ActionPanel, Form, useNavigation } from "@raycast/api";
 import { useForm } from "@raycast/utils";
 import { logger } from "@chrismessina/raycast-logger";
-import {
-  fetchAttachTagsToBookmark,
-  fetchDetachTagsFromBookmark,
-  fetchUpdateBookmark,
-} from "../apis";
+import { fetchAttachTagsToBookmark, fetchDetachTagsFromBookmark, fetchUpdateBookmark } from "../apis";
 import { useGetAllTags } from "../hooks/useGetAllTags";
 import { useTagPicker, TAG_PICKER_NOOP_VALUE } from "../hooks/useTagPicker";
 import { useTranslation } from "../hooks/useTranslation";
@@ -759,6 +783,7 @@ git commit -m "feat: add NoteEdit component for text bookmark editing"
 ## Task 8: Update routing in `BookmarkDetail` and `BookmarkItem`
 
 **Files:**
+
 - Modify: `src/components/BookmarkDetail.tsx`
 - Modify: `src/components/BookmarkItem.tsx`
 
@@ -767,11 +792,13 @@ Both files currently push `<BookmarkEdit>` unconditionally. Update both to branc
 - [ ] **Step 1: Update `BookmarkDetail.tsx`**
 
 Add import after the existing `BookmarkEdit` import:
+
 ```ts
 import { NoteEdit } from "./NoteEdit";
 ```
 
 Replace `handleEdit` (keeping `async` to match existing code style):
+
 ```ts
 const handleEdit = async () => {
   if (bookmark.content.type === "text") {
@@ -785,11 +812,13 @@ const handleEdit = async () => {
 - [ ] **Step 2: Update `BookmarkItem.tsx`**
 
 Add import after the existing `BookmarkEdit` import:
+
 ```ts
 import { NoteEdit } from "./NoteEdit";
 ```
 
 Replace `handleEdit` inside `useBookmarkHandlers`:
+
 ```ts
 const handleEdit = useCallback(() => {
   if (bookmark.content.type === "text") {
@@ -850,6 +879,7 @@ git status
 ```
 
 If clean: no action needed. If lint auto-fixes were applied:
+
 ```bash
 git add -p
 git commit -m "chore: lint fixes after tag picker refactor"
