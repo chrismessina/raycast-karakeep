@@ -1,10 +1,11 @@
-import { Action, ActionPanel, Form, showToast, Toast, useNavigation } from "@raycast/api";
+import { Action, ActionPanel, Form, useNavigation } from "@raycast/api";
 import { useForm } from "@raycast/utils";
 import { logger } from "@chrismessina/raycast-logger";
 import { fetchAttachTagsToBookmark, fetchDetachTagsFromBookmark, fetchUpdateBookmark } from "../apis";
 import { useGetAllTags } from "../hooks/useGetAllTags";
 import { TAG_PICKER_NOOP_VALUE, useTagPicker } from "../hooks/useTagPicker";
 import { useTranslation } from "../hooks/useTranslation";
+import { runWithToast } from "../utils/toast";
 import { Bookmark } from "../types";
 
 const log = logger.child("[BookmarkEdit]");
@@ -64,38 +65,26 @@ export function BookmarkEdit({ bookmark, onRefresh }: BookmarkDetailProps) {
     },
     async onSubmit(values) {
       log.info("Submitting bookmark update", { bookmarkId: bookmark.id });
-      const toast = await showToast({
-        title: t("bookmark.updating"),
-        style: Toast.Style.Animated,
+      await runWithToast({
+        loading: { title: t("bookmark.updating") },
+        success: { title: t("bookmark.updateSuccess") },
+        failure: { title: t("bookmark.updateFailed") },
+        action: async () => {
+          await fetchUpdateBookmark(bookmark.id, {
+            title: values.title.trim(),
+            note: values.note.trim(),
+          });
+
+          await Promise.all([
+            addedTagIds.length > 0 ? fetchAttachTagsToBookmark(bookmark.id, buildTagsToAttach()) : undefined,
+            removedTagIds.length > 0 ? fetchDetachTagsFromBookmark(bookmark.id, buildTagsToDetach()) : undefined,
+          ]);
+        },
       });
 
-      try {
-        const payload = {
-          title: values.title.trim(),
-          note: values.note.trim(),
-        };
-
-        await fetchUpdateBookmark(bookmark.id, payload);
-
-        await Promise.all([
-          addedTagIds.length > 0 ? fetchAttachTagsToBookmark(bookmark.id, buildTagsToAttach()) : undefined,
-          removedTagIds.length > 0 ? fetchDetachTagsFromBookmark(bookmark.id, buildTagsToDetach()) : undefined,
-        ]);
-
-        log.info("Bookmark updated", { bookmarkId: bookmark.id });
-        toast.style = Toast.Style.Success;
-        toast.title = t("bookmark.updateSuccess");
-
-        if (onRefresh) {
-          await onRefresh();
-        }
-        pop();
-      } catch (error) {
-        log.error("Failed to update bookmark", { bookmarkId: bookmark.id, error });
-        toast.style = Toast.Style.Failure;
-        toast.title = t("bookmark.updateFailed");
-        toast.message = String(error);
-      }
+      log.info("Bookmark updated", { bookmarkId: bookmark.id });
+      await onRefresh?.();
+      pop();
     },
   });
 
