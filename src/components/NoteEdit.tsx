@@ -67,12 +67,10 @@ export function NoteEdit({ bookmark, onRefresh }: NoteEditProps) {
             text: values.content.trim(),
           });
 
-          if (addedTagIds.length > 0) {
-            await fetchAttachTagsToBookmark(bookmark.id, buildTagsToAttach());
-          }
-          if (removedTagIds.length > 0) {
-            await fetchDetachTagsFromBookmark(bookmark.id, buildTagsToDetach());
-          }
+          await Promise.all([
+            addedTagIds.length > 0 ? fetchAttachTagsToBookmark(bookmark.id, buildTagsToAttach()) : undefined,
+            removedTagIds.length > 0 ? fetchDetachTagsFromBookmark(bookmark.id, buildTagsToDetach()) : undefined,
+          ]);
         },
       });
 

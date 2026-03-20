@@ -26,22 +26,18 @@ interface UseTagPickerReturn {
 }
 
 export function useTagPicker({ tags, initialTagIds = [] }: UseTagPickerOptions): UseTagPickerReturn {
+  const initialNewTagItems = initialTagIds
+    .filter((id) => id.startsWith(NEW_TAG_PREFIX))
+    .map((id) => ({ id, name: id.slice(NEW_TAG_PREFIX.length) }));
+
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>(initialTagIds);
-  const [newTagItems, setNewTagItems] = useState<Array<{ id: string; name: string }>>(
-    initialTagIds
-      .filter((id) => id.startsWith(NEW_TAG_PREFIX))
-      .map((id) => ({ id, name: id.slice(NEW_TAG_PREFIX.length) })),
-  );
+  const [newTagItems, setNewTagItems] = useState<Array<{ id: string; name: string }>>(initialNewTagItems);
   const [pendingInput, setPendingInput] = useState("");
   const selectedTagIdsRef = useRef<string[]>(initialTagIds);
 
   // newTagItemsRef mirrors newTagItems state to prevent stale dedup when
   // commitNewTag is called multiple times in one render cycle (comma-split path).
-  const newTagItemsRef = useRef<Array<{ id: string; name: string }>>(
-    initialTagIds
-      .filter((id) => id.startsWith(NEW_TAG_PREFIX))
-      .map((id) => ({ id, name: id.slice(NEW_TAG_PREFIX.length) })),
-  );
+  const newTagItemsRef = useRef<Array<{ id: string; name: string }>>(initialNewTagItems);
 
   // Capture initialTagIds on mount so addedTagIds/removedTagIds remain stable
   // even when the caller passes an inline array that creates a new reference each render.
