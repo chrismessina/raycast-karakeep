@@ -43,6 +43,10 @@ export function useTagPicker({ tags, initialTagIds = [] }: UseTagPickerOptions):
       .map((id) => ({ id, name: id.slice(NEW_TAG_PREFIX.length) })),
   );
 
+  // Capture initialTagIds on mount so addedTagIds/removedTagIds remain stable
+  // even when the caller passes an inline array that creates a new reference each render.
+  const initialTagIdsRef = useRef<string[]>(initialTagIds);
+
   function commitNewTag(name: string) {
     const trimmed = name.trim();
     if (!trimmed) return;
@@ -84,8 +88,8 @@ export function useTagPicker({ tags, initialTagIds = [] }: UseTagPickerOptions):
     setNewTagItems(nextItems);
   }
 
-  const addedTagIds = selectedTagIds.filter((id) => !initialTagIds.includes(id));
-  const removedTagIds = initialTagIds.filter((id) => !selectedTagIds.includes(id));
+  const addedTagIds = selectedTagIds.filter((id) => !initialTagIdsRef.current.includes(id));
+  const removedTagIds = initialTagIdsRef.current.filter((id) => !selectedTagIds.includes(id));
 
   return {
     selectedTagIds,
