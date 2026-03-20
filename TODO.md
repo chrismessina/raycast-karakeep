@@ -64,6 +64,8 @@
 - [ ] To Create Bookmark view, add action to "Generate AI tags" and add them to the list of tags
 - [ ] Add ability to move between Bookmarks with a hotkey (Go to Previous/Next Bookmark)
 
+- [ ] In `BookmarkEdit` and `NoteEdit`, guard `pop()` so it only runs on success — switch from `runWithToast` back to manual try/catch so the form stays open on API failure and the user can retry
+
 ### Technical Foundation
 
 - [x] Confirm pagination is using native Raycast pagination
