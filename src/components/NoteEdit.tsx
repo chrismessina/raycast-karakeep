@@ -78,9 +78,8 @@ export function NoteEdit({ bookmark, onRefresh }: NoteEditProps) {
 
       // onRefresh and pop run after runWithToast resolves. runWithToast catches
       // API errors and shows a failure toast without re-throwing, so these lines
-      // run whether the update succeeded or failed. This matches BookmarkEdit's
-      // existing pattern. If strictly on-success-only behaviour is needed in
-      // future, runWithToast should be replaced with a manual try/catch.
+      // run whether the update succeeded or failed. If strictly on-success-only
+      // behaviour is needed, replace runWithToast with a manual try/catch.
       log.info("Note updated", { bookmarkId: bookmark.id });
       await onRefresh?.();
       pop();
