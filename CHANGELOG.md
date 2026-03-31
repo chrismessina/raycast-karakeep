@@ -1,6 +1,6 @@
 # Karakeep Changelog
 
-## [2.3.0] - {PR_MERGE_DATE}
+## [2.3.0] - 2026-03-22
 
 ### New Features
 
@@ -28,7 +28,7 @@
 
 ---
 
-## [2.2.0] - {PR_MERGE_DATE}
+## [2.2.0] - 2026-03-09
 
 ### New Features
 
