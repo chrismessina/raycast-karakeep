@@ -45,6 +45,28 @@ Raycast extension written in TypeScript + React (TSX). Core areas:
   - `src/createList.tsx` — create a list ([`POST /api/v1/lists`](https://docs.karakeep.app/api/karakeep-api/create-list)). Supports manual and smart list types; smart lists include query validation.
   - `src/quickBookmark.tsx` — quick bookmark the current browser tab (no-view mode). Uses [`POST /api/v1/bookmarks`](https://docs.karakeep.app/api). [API Documentation: Quick Bookmark](https://docs.karakeep.app/api/#quick-bookmark)
 
+- Offline / Docker recovery
+
+  Cross-cutting layer that turns "the server is unreachable" into a recoverable state. Read `src/utils/connection.ts` first — everything else builds on it.
+
+  - `src/utils/connection.ts` — the primitives. `isConnectionError()` distinguishes a transport failure from an HTTP error; an HTTP 401/500 proves the server IS up, so it must NOT be treated as a connection failure. `describeConnectionError()` produces a human message. `isApiReachable()` is the single liveness probe (any HTTP response counts). `isLocalHost()` / `getPortFromUrl()` classify the configured `apiUrl`.
+  - `src/utils/docker.ts` — Docker CLI wrapper. Resolves the binary by absolute path (Raycast does not inherit the user's shell `PATH`). `startContainer()` starts the whole Compose project, not one container — Karakeep's stock deployment is `web` + `meilisearch` + `chrome`, and starting only `web` yields an instance that answers HTTP but cannot search or crawl.
+  - `src/utils/submitGuard.ts` — `ensureReachable()`, the shared start → wait → toast flow used before any write, and `canRecoverLocally()`, which answers "would offering a Start action accomplish anything".
+  - `src/utils/guard.ts` — `shouldGuard(error, hasLiveData)`: whether a view should render the recovery screen.
+  - `src/utils/fetchError.ts` — `handleFetchError(scope)`, passed as `onError` to every data hook.
+  - `src/hooks/useApiReachable.ts` — pre-flight reachability for create FORMS; also owns `start()` and `canStart`.
+  - `src/hooks/useConnectionRecovery.ts` — Docker probe for VIEW commands; delegates the actual recovery to `ensureReachable`.
+  - `src/hooks/useLiveData.ts` / `src/hooks/useCanRecoverLocally.ts` — see the invariants below.
+  - `src/components/ConnectionErrorView.tsx` — recovery screen for `List` views. `src/components/OfflineFormNotice.tsx` — inline notice + Start action for forms.
+
+  **Invariants that are easy to break:**
+
+  1. **Never gate the recovery screen on `data.length`.** `useCachedPromise` persists its last value to disk between command runs, so on a cold start against a dead server the rows come straight off the cache and a non-empty list proves nothing. Use `hasLiveData` from `useLiveData`, which latches only when a request actually SUCCEEDS this session.
+  2. **`useLiveData` needs a `resetKey` wherever one component instance serves multiple requests** (list/tag drill-downs). React does not remount on a prop change, so without it the latch earned by list A would claim list B's stale cache is live.
+  3. **Passing `onError` suppresses Raycast's built-in toast.** `@raycast/utils` runs `if (onError) onError(e) else showFailureToast(…, "Failed to fetch latest data")`. That is deliberate — the recovery screen owns the message — but it means **any view that consumes a guarded hook MUST render the recovery screen**, or a connection failure becomes completely silent.
+  4. **Gate the Start action on `canStart`, not merely on being offline.** A hosted instance has no local container to start, so the action would do nothing visible.
+  5. **Log the syscall code as `errorCode`, never `code`.** `@chrismessina/raycast-logger` redacts any key named `code` as a 2FA code, masking it to `******`.
+
 - UI components
   - `src/components/BookmarkList.tsx` — reusable list surface. Accepts bookmarks, Raycast `pagination`, and callbacks. Handles local search (client‑side ranking) via `useBookmarkFilter`, and can push a network “online search” view using `useSearchBookmarks`.
   - `src/components/BookmarkItem.tsx` — one bookmark row with actions (open/copy/summarize/favorite/archive/edit/delete). Loads preview imagery via `getScreenshot` and renders structured metadata (status, tags, dates, etc.). Includes a “Get Browser Extension” action section with links to the Chrome, Firefox, and Safari extensions.
@@ -66,8 +88,9 @@ Raycast extension written in TypeScript + React (TSX). Core areas:
 
 - Utilities and constants
   - `src/utils/config.ts` — minimal `getApiConfig()` for API calls that only need `apiUrl`/`apiKey`.
-  - `src/utils/screenshot.ts` — builds an authenticated preview URL via Next.js image route and pre‑primes auth with a background fetch (to let Raycast display the image).
-  - `src/utils/toast.ts` — `runWithToast()` helper for showing loading/success/failure toast notifications around async operations.
+  - `src/utils/screenshot.ts` — fetches the preview through the Next.js image route and caches it on disk under `environment.supportPath/preview-images` (14-day sweep, atomic temp-file rename), returning a local path. Raycast cannot load an authenticated remote URL directly.
+  - `src/utils/markdown.ts` — `markdownImage()` escapes local image paths (whitespace breaks bare Markdown links) and appends Raycast's `raycast-width`/`raycast-height` sizing params.
+  - `src/utils/toast.ts` — `runWithToast()` helper for showing loading/success/failure toast notifications around async operations. `toErrorMessage()` unwraps a transport failure's `cause` — `error.message` alone is the useless string "fetch failed".
   - `src/utils/url.ts` — URL validation.
   - `src/utils/formatting.ts` — `formatBytes()` for human-readable file sizes.
   - `src/utils/svgChart.ts` — `horizontalBarChart()` generates a base64-encoded SVG data URI for horizontal bar charts. Accepts `appearance: "light" | "dark"` from `environment.appearance` to bake theme-aware colors at render time (CSS `prefers-color-scheme` does not work in sandboxed `<img>`-embedded SVGs).
