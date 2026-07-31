@@ -113,7 +113,12 @@ export function ConnectionErrorView({ error, onRetry }: ConnectionErrorViewProps
               title={t("connection.openDocker")}
               icon={Icon.Box}
               target="raycast://extensions/priithaamer/docker/projects_list"
-              shortcut={{ modifiers: ["cmd"], key: "d" }}
+              // Declared per-platform: this extension ships for Windows too, and
+              // a single-form cmd-only shortcut is ambiguous there.
+              shortcut={{
+                macOS: { modifiers: ["cmd"], key: "d" },
+                Windows: { modifiers: ["ctrl"], key: "d" },
+              }}
             />
           )}
           <Action
