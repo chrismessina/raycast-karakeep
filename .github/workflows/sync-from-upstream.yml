@@ -1,6 +1,13 @@
 name: Sync from upstream
 
 on:
+  # Without a schedule this only ever fires if something dispatches it — and
+  # when that something is missing, the mirror drifts silently. Verified
+  # 2026-07-31: zero runs since the workflow was added, which is why the tree
+  # was behind by three upstream commits at the start of the 2.4.0 work.
+  # A daily run is a no-op when there is nothing new.
+  schedule:
+    - cron: "23 9 * * *"
   repository_dispatch:
     types: [upstream-sync]
   workflow_dispatch:
