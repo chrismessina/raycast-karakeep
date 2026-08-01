@@ -46,52 +46,64 @@ jobs:
           echo "name=$NAME" >> "$GITHUB_OUTPUT"
 
       - name: Download extension files from upstream monorepo
+        # Explicit bash: uses pipefail and process substitution.
+        shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           EXT_NAME="${{ steps.meta.outputs.name }}"
-          API_BASE="https://api.github.com/repos/raycast/extensions/contents/extensions/${EXT_NAME}"
+          REPO="raycast/extensions"
+          MANIFEST="$RUNNER_TEMP/synced-files.txt"
+          : > "$MANIFEST"
 
-          # Recursively download all files in the extension directory
-          download_dir() {
-            local api_path="$1"
-            local local_path="$2"
+          # Resolve the extension's OWN subtree, then list it in one recursive
+          # call. The previous version walked the contents API directory by
+          # directory and issued a request per file — ~85 requests for this
+          # extension — which trips secondary rate limits against a repo the
+          # default GITHUB_TOKEN doesn't own. Verified 2026-07-31: run
+          # 30660911758 failed partway through exactly this walk.
+          COMMIT=$(gh api "repos/${REPO}/commits?path=extensions/${EXT_NAME}&per_page=1" --jq '.[0].sha')
+          [ -n "$COMMIT" ] || { echo "Could not resolve upstream commit"; exit 1; }
+          ROOT_TREE=$(gh api "repos/${REPO}/commits/${COMMIT}" --jq '.commit.tree.sha')
+          EXTS_TREE=$(gh api "repos/${REPO}/git/trees/${ROOT_TREE}" --jq '.tree[] | select(.path=="extensions") | .sha')
+          EXT_TREE=$(gh api "repos/${REPO}/git/trees/${EXTS_TREE}" --jq ".tree[] | select(.path==\"${EXT_NAME}\") | .sha")
+          [ -n "$EXT_TREE" ] || { echo "Extension ${EXT_NAME} not found upstream"; exit 1; }
 
-            items=$(gh api "$api_path" 2>/dev/null) || {
-              echo "Failed to fetch $api_path"
-              exit 1
-            }
+          TREE_JSON=$(gh api "repos/${REPO}/git/trees/${EXT_TREE}?recursive=1")
 
-            echo "$items" | jq -c '.[]' | while read -r item; do
-              type=$(echo "$item" | jq -r '.type')
-              name=$(echo "$item" | jq -r '.name')
-              download_url=$(echo "$item" | jq -r '.download_url // empty')
-              subpath=$(echo "$item" | jq -r '.path' | sed "s|extensions/${EXT_NAME}/||")
-
-              if [ "$type" = "file" ] && [ -n "$download_url" ]; then
-                mkdir -p "$(dirname "$local_path/$name")"
-                curl -fsSL -H "Authorization: Bearer $GH_TOKEN" "$download_url" -o "$local_path/$name"
-                # Record what we wrote so the commit step can stage exactly these
-                # paths. Staging the whole tree would sweep in local-only work.
-                #
-                # Use the API's own `.path` (already relative to the extension
-                # root). Building it from "$local_path/$name" produced "./x.json"
-                # for a ROOT-level file — `${local_path#./}` strips the prefix
-                # "./" but local_path is bare "." — and the later
-                # `grep -Fxq "x.json"` then failed to match, so EVERY root file
-                # was judged "no longer served upstream" and deleted. Verified
-                # 2026-07-31: run 30651601868 removed package.json, tsconfig.json,
-                # README.md, AGENTS.md and the workflow itself.
-                printf '%s\n' "$subpath" >> "$RUNNER_TEMP/synced-files.txt"
-                echo "  downloaded: $subpath"
-              elif [ "$type" = "dir" ]; then
-                mkdir -p "$local_path/$name"
-                download_dir "$api_path/$name" "$local_path/$name"
-              fi
-            done
+          # A truncated tree silently OMITS entries. Those omissions would then
+          # read as "upstream no longer serves this file" and be deleted. Scoping
+          # to the extension subtree keeps us far under the limit, but assert it
+          # rather than assume — fail closed.
+          [ "$(jq -r '.truncated' <<<"$TREE_JSON")" = "false" ] || {
+            echo "ABORT: upstream tree response was truncated; refusing to sync a partial file list."
+            exit 1
           }
 
-          download_dir "$API_BASE" "."
+          jq -r '.tree[] | select(.type=="blob") | .path' <<<"$TREE_JSON" > "$RUNNER_TEMP/upstream-paths.txt"
+          EXPECTED=$(wc -l < "$RUNNER_TEMP/upstream-paths.txt" | tr -d ' ')
+          echo "upstream serves $EXPECTED files"
+
+          # Fetch contents from raw.githubusercontent (no API quota) pinned to the
+          # resolved commit, so every file comes from ONE consistent snapshot.
+          while read -r path; do
+            mkdir -p "$(dirname "$path")"
+            curl -fsSL --retry 3 --retry-delay 2 \
+              "https://raw.githubusercontent.com/${REPO}/${COMMIT}/extensions/${EXT_NAME}/${path}" \
+              -o "$path" || { echo "ABORT: failed to download $path"; exit 1; }
+            printf '%s\n' "$path" >> "$MANIFEST"
+            echo "  downloaded: $path"
+          done < "$RUNNER_TEMP/upstream-paths.txt"
+
+          # Every advertised file must have landed. A short manifest is what the
+          # deletion pass would misread as upstream removals.
+          ACTUAL=$(wc -l < "$MANIFEST" | tr -d ' ')
+          [ "$ACTUAL" -eq "$EXPECTED" ] || {
+            echo "ABORT: downloaded $ACTUAL of $EXPECTED files."
+            exit 1
+          }
+          echo "downloaded $ACTUAL/$EXPECTED files"
 
       - name: Commit and push if changed
         # Explicit bash: the deletion loop uses process substitution.
