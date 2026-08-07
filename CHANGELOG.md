@@ -1,5 +1,9 @@
 # Karakeep Changelog
 
+## [2.4.1] - {PR_MERGE_DATE}
+
+- Fixed every bookmark appearing twice after going offline and reconnecting. The pagination prefetch ran even when the server was unreachable, which advanced the page counter while the request failed; the next successful fetch was then appended to the cached rows instead of replacing them. The prefetch now waits for a request that has actually succeeded.
+
 ## [2.4.0] - 2026-07-31
 
 ### Offline and Docker recovery
