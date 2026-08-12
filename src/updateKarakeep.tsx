@@ -45,6 +45,14 @@ export default function UpdateKarakeep() {
 
   const detect = useCallback(async () => {
     setPhase("checking");
+    // Clear everything derived from the PREVIOUS detection before starting.
+    // Only the success path assigns these, so without this an early return
+    // leaves the last run's container and identity verdict in place. Nothing
+    // can reach them today — the destructive action is gated on `phase` — but
+    // that invariant lives thirty lines away, and the Copy Command action was
+    // already rendering a stale project's invocation on a failed re-check.
+    setContainer(undefined);
+    setIdentityProven(false);
     // Every bail below is logged: "the command says it can't update" is the
     // most likely thing to need diagnosing, and until now all five reasons
     // reached the screen but none reached the log.
@@ -339,7 +347,7 @@ export default function UpdateKarakeep() {
           {phase === "unavailable" && (
             <Action title={t("update.actions.recheck")} icon={Icon.ArrowClockwise} onAction={detect} />
           )}
-          {container?.configFiles?.[0] && (
+          {phase !== "unavailable" && container?.configFiles?.[0] && (
             <Action.CopyToClipboard title={t("update.actions.copyCommand")} content={composeCommandLine(container)} />
           )}
         </ActionPanel>
