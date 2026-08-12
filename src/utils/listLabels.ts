@@ -19,7 +19,7 @@ export function labelLists<T extends Pick<List, "id" | "name" | "parentId">>(lis
   const nameCounts = new Map<string, number>();
   for (const list of lists) nameCounts.set(list.name, (nameCounts.get(list.name) ?? 0) + 1);
 
-  const labelled = lists.map((list) => {
+  const labeled = lists.map((list) => {
     if ((nameCounts.get(list.name) ?? 0) < 2) return { list, label: list.name };
 
     const ancestors: string[] = [];
@@ -37,9 +37,9 @@ export function labelLists<T extends Pick<List, "id" | "name" | "parentId">>(lis
   });
 
   const labelCounts = new Map<string, number>();
-  for (const { label } of labelled) labelCounts.set(label, (labelCounts.get(label) ?? 0) + 1);
+  for (const { label } of labeled) labelCounts.set(label, (labelCounts.get(label) ?? 0) + 1);
 
-  return labelled.map((entry) =>
+  return labeled.map((entry) =>
     (labelCounts.get(entry.label) ?? 0) < 2 ? entry : { ...entry, label: `${entry.label} (${entry.list.id})` },
   );
 }

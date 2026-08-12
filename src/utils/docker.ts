@@ -319,7 +319,7 @@ export function composePullAndUp(
       if (code === 0) resolve();
       // Reject with the WHOLE output. Slicing the last few lines here threw
       // away the one line that named the cause and kept "Interrupted" noise;
-      // the caller summarises for the toast and keeps the rest copyable.
+      // the caller summarizes for the toast and keeps the rest copyable.
       else reject(new Error(transcript.trim() || `docker compose exited with ${code}`));
     });
   });

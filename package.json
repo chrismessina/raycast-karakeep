@@ -274,7 +274,6 @@
     {
       "name": "updateKarakeep",
       "title": "Update Karakeep",
-      "subtitle": "Karakeep",
       "description": "Pull the latest Docker images and restart a local Karakeep instance",
       "mode": "view",
       "platforms": [

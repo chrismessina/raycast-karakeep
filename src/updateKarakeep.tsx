@@ -11,7 +11,7 @@ import {
   readProjectImageIds,
   waitForApi,
 } from "./utils/docker";
-import { classifyComposeFailure, summariseComposeFailure } from "./utils/composeErrors";
+import { classifyComposeFailure, summarizeComposeFailure } from "./utils/composeErrors";
 import { isApiReachable, isLocalHost } from "./utils/connection";
 import { useConfig } from "./hooks/useConfig";
 import { useTranslation } from "./hooks/useTranslation";
@@ -204,7 +204,7 @@ export default function UpdateKarakeep() {
     } catch (error) {
       const raw = toErrorMessage(error);
       const kind = classifyComposeFailure(raw);
-      const summary = summariseComposeFailure(raw);
+      const summary = summarizeComposeFailure(raw);
 
       // The question the user actually has after a failed update is "is my
       // Karakeep still up?" — a wall of daemon output does not answer it, and

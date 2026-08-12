@@ -52,7 +52,7 @@ export function classifyComposeFailure(output: string): ComposeFailure {
  * it as the daemon's final response, so the last substantive line is reliably
  * the cause — while "Interrupted" lines for the sibling images are not.
  */
-export function summariseComposeFailure(output: string): string {
+export function summarizeComposeFailure(output: string): string {
   const lines = output
     .split("\n")
     .map((line) => line.trim())
