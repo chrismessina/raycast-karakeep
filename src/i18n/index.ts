@@ -466,6 +466,7 @@ export const translations = {
         title: "No bookmarks found",
         description: "No bookmarks in this search",
       },
+      searchResponseInvalid: "The server returned an unexpected search response.",
       onlineSearch: {
         title: (searchText: string) => `Online search: ${searchText}`,
         action: (searchText: string) => `Online search: ${searchText}`,
@@ -1029,6 +1030,7 @@ export const translations = {
         title: "未找到书签",
         description: "请尝试其他关键词",
       },
+      searchResponseInvalid: "服务器返回了意外的搜索响应。",
       onlineSearch: {
         title: (searchText: string) => `在线搜索：${searchText}`,
         action: (searchText: string) => `在线搜索：${searchText}`,
