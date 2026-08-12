@@ -59,6 +59,10 @@ export const translations = {
 
     // Common Actions & Messages
     common: {
+      /** Interpolated so the whole sentence is translatable — concatenating an
+       * English " is required" onto a translated field name produced
+       * "名称 is required". */
+      fieldRequired: "{{field}} is required",
       delete: "Delete",
       deleting: "Deleting...",
       deleteSuccess: "Deleted successfully",
@@ -603,6 +607,7 @@ export const translations = {
 
     // 通用操作和消息
     common: {
+      fieldRequired: "{{field}}不能为空",
       delete: "删除",
       deleting: "删除中...",
       deleteSuccess: "删除成功",
