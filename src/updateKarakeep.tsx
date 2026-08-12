@@ -121,9 +121,15 @@ export default function UpdateKarakeep() {
       log.info("Starting update", { container: container.name, project: container.project, image: container.image });
       log.debug("Images before update", { images: before && Object.fromEntries(before) });
 
+      // Collected locally, not read back from `output`: this callback closes over
+      // the state value from when it was memoized, so `output` here is whatever
+      // it was BEFORE the run — always stale, usually empty.
+      const collected: string[] = [];
+
       const composeDone = log.time("docker compose up --pull always");
       try {
         await composePullAndUp(container, (lines) => {
+          collected.push(...lines);
           // Mirrored to the log at debug level: the on-screen view keeps only
           // the last 40 lines, but a bug report needs the whole transcript.
           for (const line of lines) log.debug(line);
@@ -160,6 +166,21 @@ export default function UpdateKarakeep() {
             ? t("update.toast.alreadyCurrent")
             : t("update.toast.finished")
         : t("update.toast.startedButUnreachable");
+
+      if (!up) {
+        // House style: a Failure toast always leaves something to copy. There is
+        // no exception here — compose succeeded and the API simply never
+        // answered — so the copyable payload is the state needed to file the bug.
+        const detail = [
+          `Karakeep did not answer at ${apiUrl} within 120s of a successful compose run.`,
+          `container: ${container.name}`,
+          `project: ${container.project ?? "—"}`,
+          `image: ${container.image ?? "—"}`,
+          "",
+          ...collected.slice(-MAX_LOG_LINES),
+        ].join("\n");
+        toast.primaryAction = { title: t("connection.copyError"), onAction: () => Clipboard.copy(detail) };
+      }
 
       setResult(
         [
