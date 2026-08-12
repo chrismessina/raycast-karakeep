@@ -1,5 +1,22 @@
 # TODO
 
+## Unshipped — on `main`, not in the Store
+
+Committed after 2.4.2 merged, so it missed the release. Ship with whatever
+comes next rather than spending a review cycle on it alone.
+
+- [ ] `f033b94` — reset detection state at the start of `detect()` in
+      `/Users/messina/Developer/GitHub/chrismessina/raycast-karakeep/src/updateKarakeep.tsx`.
+      Two parts, from a Greptile finding:
+  - `identityProven` / `container` were only assigned on the success path, so
+    an early return kept the previous run's values. Not exploitable — the
+    destructive action is gated on `phase`, which only reaches `ready` via the
+    path that assigns them — but the invariant lived far from the state.
+  - **Live and user-visible:** `Copy Docker Command` had no phase gate, so a
+    failed re-check rendered "Docker daemon isn't responding" while still
+    offering to copy the previously-found project's compose invocation.
+  - Needs a `## [2.4.3] - {PR_MERGE_DATE}` CHANGELOG entry when shipped.
+
 ## P0 - Critical Fixes (Must Have)
 
 - [x] When creating a Note, action should be "Create Note" not "Create Bookmark"
