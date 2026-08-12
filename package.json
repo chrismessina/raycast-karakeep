@@ -271,6 +271,16 @@
       "subtitle": "Karakeep",
       "description": "Quickly bookmark the current browser tab",
       "mode": "no-view"
+    },
+    {
+      "name": "updateKarakeep",
+      "title": "Update Karakeep",
+      "subtitle": "Karakeep",
+      "description": "Pull the latest Docker images and restart a local Karakeep instance",
+      "mode": "view",
+      "platforms": [
+        "macOS"
+      ]
     }
   ],
   "dependencies": {

@@ -200,6 +200,82 @@ export const translations = {
     },
 
     // List Related
+    changelog: {
+      title: "Karakeep Release Notes",
+      loading: "Fetching the release notes from GitHub...",
+      empty: "This release has no notes.",
+      error: "Couldn't fetch the release notes: {{message}}",
+      version: "Version",
+      released: "Released",
+      onGitHub: "GitHub",
+      viewOnline: "Open release",
+      actions: {
+        openRelease: "Open Release on GitHub",
+        allReleases: "View All Releases",
+        copy: "Copy Release Notes",
+      },
+    },
+    update: {
+      title: "Update Karakeep",
+      checking: "Looking for a local Karakeep container...",
+      ready:
+        "Pulls the latest images and recreates the containers. Existing bookmarks and settings are stored in volumes and are not affected.",
+      progress: "Progress",
+      field: {
+        container: "Container",
+        project: "Compose Project",
+        image: "Image",
+        server: "Server",
+      },
+      actions: {
+        update: "Update Karakeep",
+        recheck: "Check Again",
+        viewChangelog: "View Changelog",
+        copyCommand: "Copy Docker Command",
+      },
+      unavailable: {
+        hint: "This command only manages a Karakeep running in Docker on this machine.",
+        notLocal:
+          "Your server is at {{host}}, which isn't on this machine — updating it has to happen wherever it runs.",
+        noDocker: "The Docker CLI wasn't found in any of the standard install locations.",
+        daemonDown: "Docker is installed but the daemon isn't responding. Start Docker Desktop and try again.",
+        noContainer: "No Docker container publishes port {{port}}, so there's nothing here to update.",
+        notCompose:
+          "The container `{{name}}` wasn't created by Docker Compose, so there's no compose file to pull against.",
+      },
+      toast: {
+        updating: "Pulling latest images...",
+        waiting: "Images pulled — waiting for Karakeep to start...",
+        updated: "Karakeep updated",
+        alreadyCurrent: "Already on the latest images",
+        finished: "Update finished",
+        startedButUnreachable: "Updated, but Karakeep isn't answering yet",
+        failed: "Update failed",
+      },
+      failure: {
+        network: "Docker couldn't reach the image registry",
+        auth: "Docker isn't authorized to pull these images",
+        disk: "Not enough disk space to pull the images",
+        conflict: "A port Karakeep needs is already in use",
+        unknown: "Update failed",
+        stillRunning: "Your instance is still running",
+        notRunning: "Your instance isn't responding",
+        stillRunningDetail:
+          "Karakeep is still answering at `{{apiUrl}}`, so you have a working instance. A multi-service update can stop partway, so some services may have been recreated and others not — retrying once the problem clears will bring them all to the same version.",
+        notRunningDetail:
+          "Karakeep isn't answering at `{{apiUrl}}`. Check `docker compose ps` and `docker compose logs` for the project.",
+      },
+      result: {
+        updated: "**Updated.** New images were pulled and the containers recreated.",
+        alreadyCurrent: "**Already current.** No newer images were available.",
+        unknownChange:
+          "**Update finished.** Couldn't read the image IDs before and after, so whether anything actually changed is unknown.",
+        reachable: "Karakeep is answering at `{{apiUrl}}`.",
+        unreachable:
+          "Karakeep still isn't answering at `{{apiUrl}}`. It may need longer, or `docker compose logs` may explain why.",
+        failed: "**Update failed.**",
+      },
+    },
     list: {
       favorites: "Favorites",
       openFavorites: "Open Favorites",
@@ -764,6 +840,77 @@ export const translations = {
     },
 
     // 列表相关
+    changelog: {
+      title: "Karakeep 版本说明",
+      loading: "正在从 GitHub 获取版本说明...",
+      empty: "此版本没有说明。",
+      error: "无法获取版本说明：{{message}}",
+      version: "版本",
+      released: "发布时间",
+      onGitHub: "GitHub",
+      viewOnline: "打开版本页面",
+      actions: {
+        openRelease: "在 GitHub 上打开版本",
+        allReleases: "查看所有版本",
+        copy: "复制版本说明",
+      },
+    },
+    update: {
+      title: "更新 Karakeep",
+      checking: "正在查找本地 Karakeep 容器...",
+      ready: "拉取最新镜像并重新创建容器。现有书签和设置存储在数据卷中，不会受到影响。",
+      progress: "进度",
+      field: {
+        container: "容器",
+        project: "Compose 项目",
+        image: "镜像",
+        server: "服务器",
+      },
+      actions: {
+        update: "更新 Karakeep",
+        recheck: "重新检查",
+        viewChangelog: "查看更新日志",
+        copyCommand: "复制 Docker 命令",
+      },
+      unavailable: {
+        hint: "此命令仅管理运行在本机 Docker 中的 Karakeep。",
+        notLocal: "您的服务器位于 {{host}}，不在本机上——需要在其运行的位置进行更新。",
+        noDocker: "在任何标准安装位置均未找到 Docker CLI。",
+        daemonDown: "已安装 Docker，但守护进程无响应。请启动 Docker Desktop 后重试。",
+        noContainer: "没有 Docker 容器发布端口 {{port}}，因此没有可更新的内容。",
+        notCompose: "容器 `{{name}}` 并非由 Docker Compose 创建，因此没有可用的 compose 文件。",
+      },
+      toast: {
+        updating: "正在拉取最新镜像...",
+        waiting: "镜像已拉取——正在等待 Karakeep 启动...",
+        updated: "Karakeep 已更新",
+        alreadyCurrent: "已是最新镜像",
+        finished: "更新完成",
+        startedButUnreachable: "已更新，但 Karakeep 尚未响应",
+        failed: "更新失败",
+      },
+      failure: {
+        network: "Docker 无法连接到镜像仓库",
+        auth: "Docker 无权拉取这些镜像",
+        disk: "磁盘空间不足，无法拉取镜像",
+        conflict: "Karakeep 所需的端口已被占用",
+        unknown: "更新失败",
+        stillRunning: "您的实例仍在运行",
+        notRunning: "您的实例无响应",
+        stillRunningDetail:
+          "Karakeep 仍在 `{{apiUrl}}` 响应，因此您有一个可用的实例。多服务更新可能中途停止，部分服务可能已重建而其他未重建——问题解决后重试可使它们版本一致。",
+        notRunningDetail:
+          "Karakeep 未在 `{{apiUrl}}` 响应。请检查该项目的 `docker compose ps` 和 `docker compose logs`。",
+      },
+      result: {
+        updated: "**已更新。** 已拉取新镜像并重新创建容器。",
+        alreadyCurrent: "**已是最新。** 没有可用的新镜像。",
+        unknownChange: "**更新完成。** 无法读取更新前后的镜像 ID，因此无法确定是否有实际变更。",
+        reachable: "Karakeep 正在 `{{apiUrl}}` 响应。",
+        unreachable: "Karakeep 仍未在 `{{apiUrl}}` 响应。可能需要更长时间，或可通过 `docker compose logs` 查看原因。",
+        failed: "**更新失败。**",
+      },
+    },
     list: {
       favorites: "收藏夹",
       openFavorites: "打开收藏夹",
