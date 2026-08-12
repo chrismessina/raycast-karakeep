@@ -325,7 +325,7 @@ const getDashboardListsPage = (apiUrl: string, listId: string) => `${apiUrl}/das
 
 interface ListItemProps {
   list: ListNode;
-  /** Disambiguated name — see buildListLabels. Falls back to list.name. */
+  /** Disambiguated name — see labelLists. Falls back to list.name. */
   label: string;
   level: number;
   apiUrl: string;

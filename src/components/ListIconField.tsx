@@ -10,9 +10,9 @@ export const DEFAULT_LIST_ICON = "🔖";
  * optional — so an empty field is an HTTP 400, which is why the form
  * substitutes DEFAULT_LIST_ICON rather than sending nothing.
  *
- * This used to promise an emoji picker on ":", which Raycast has no equivalent
- * for. Any emoji can be typed or pasted here (⌃⌘Space opens the system
- * picker); ChooseIconAction offers a browsable grid for the rest of the time.
+ * Free text rather than a dropdown so any emoji can be typed or pasted
+ * (⌃⌘Space opens the system picker); ChooseIconAction offers a browsable grid
+ * for when you would rather look than remember.
  */
 export function ListIconField(itemProps: Form.ItemProps<string>) {
   const { t } = useTranslation();
