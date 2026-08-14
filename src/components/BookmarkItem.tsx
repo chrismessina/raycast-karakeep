@@ -516,7 +516,7 @@ function BookmarkActions({
           />
           <Action.OpenInBrowser
             title={t("bookmarkItem.actions.browsers.safari")}
-            url="https://apps.apple.com/us/app/karakeeper-bookmarker/id6746722790"
+            url="https://apps.apple.com/us/app/karakeep-app/id6479258022"
             icon={Icon.Globe}
           />
         </ActionPanel.Submenu>

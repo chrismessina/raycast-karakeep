@@ -6,6 +6,7 @@
 - Create Bookmark no longer reports "Creation failed" when the bookmark was saved and only a later step failed. The toast now says which part didn't apply — the list, the tags, or the title — and the form stays open so you can retry without retyping anything
 - Fixed the Update Karakeep command offering to copy a Docker command for a previously-detected instance after a re-check had failed, and carrying the earlier result's state into the next check
 - Added a "Use Page Title" action (⌘T) to Create Bookmark, which fills the Title field from the active browser tab. The field is still empty by default, because a title you set overrides the one Karakeep reads from the page and keeps it from ever updating
+- Fixed the Safari entry under "Add to Browser" opening an App Store listing that no longer exists. It now opens the Karakeep app
 - Backing out of the "Delete list" confirmation no longer shows a red "Delete cancelled" error, matching every other confirmation in the extension
 - Error toasts that report a failure with no underlying exception — a browser tab that couldn't be read, a bookmark the server returned empty, a backup that failed on its own — now let you copy the details, so every error toast can be turned into a bug report
 
