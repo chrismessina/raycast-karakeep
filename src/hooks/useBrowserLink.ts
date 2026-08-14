@@ -4,30 +4,32 @@ import { logger } from "@chrismessina/raycast-logger";
 
 const log = logger.child("[BrowserLink]");
 
+export interface BrowserTab {
+  url: string;
+  /**
+   * Only the Browser Extension can supply this. Every AppleScript fallback below
+   * reads the address bar and returns a URL alone, so callers must treat a missing
+   * title as normal rather than as a failure.
+   */
+  title?: string;
+}
+
 /**
- * Get the current URL from the active browser tab.
+ * Get the active browser tab.
  *
- * This function attempts to retrieve the URL using the following methods in order:
- * 1. Browser Extension API (if available) - preferred method
- * 2. AppleScript - fallback for supported browsers
- *
- * @returns {Promise<string | null>} The URL of the active browser tab, or null if unavailable
+ * Tries the Browser Extension API first (the only source of a page title), then
+ * falls back to AppleScript per browser.
  */
-export async function getBrowserLink(): Promise<string | null> {
-  // Check if Browser Extension API is available
+export async function getBrowserTab(): Promise<BrowserTab | null> {
   if (environment.canAccess(BrowserExtension)) {
     try {
       const tabs = await BrowserExtension.getTabs();
-      // Find the active tab
-      const activeTab = tabs.find((tab) => tab.active);
+      const tab = tabs.find((t) => t.active) ?? tabs[0];
 
-      if (activeTab?.url) {
-        return activeTab.url;
-      }
-
-      // If no active tab found, return the first tab's URL
-      if (tabs.length > 0 && tabs[0].url) {
-        return tabs[0].url;
+      if (tab?.url) {
+        // `title` is undefined while a tab is still loading, and a whitespace-only
+        // title is no more useful than none — normalise both to undefined.
+        return { url: tab.url, title: tab.title?.trim() || undefined };
       }
     } catch (error) {
       // Fallback to AppleScript if Browser Extension API fails
@@ -35,7 +37,20 @@ export async function getBrowserLink(): Promise<string | null> {
     }
   }
 
-  // Fallback: AppleScript-based processing
+  const url = await getUrlViaAppleScript();
+  return url ? { url } : null;
+}
+
+/**
+ * Get the current URL from the active browser tab.
+ *
+ * @returns {Promise<string | null>} The URL of the active browser tab, or null if unavailable
+ */
+export async function getBrowserLink(): Promise<string | null> {
+  return (await getBrowserTab())?.url ?? null;
+}
+
+async function getUrlViaAppleScript(): Promise<string | null> {
   try {
     const app = await getFrontmostApplication();
 

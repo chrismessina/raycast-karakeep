@@ -1,4 +1,4 @@
-import { Action, ActionPanel, confirmAlert, Form, Icon, List, showToast, Toast, useNavigation } from "@raycast/api";
+import { Action, ActionPanel, confirmAlert, Form, Icon, List, useNavigation } from "@raycast/api";
 import { useForm } from "@raycast/utils";
 import React, { useCallback, useMemo } from "react";
 import { logger } from "@chrismessina/raycast-logger";
@@ -400,34 +400,35 @@ export default function Lists() {
       const list = lists?.find((list) => list.id === id);
       const listName = list?.name;
 
+      // Declining the confirmation is a normal outcome, not an error. It used to
+      // raise a red Failure toast reading "Delete cancelled", which reports a
+      // successful no-op as a problem — and no other confirmAlert in this
+      // extension says anything when you back out. Stay silent to match.
       if (
-        await confirmAlert({
+        !(await confirmAlert({
           title: t("list.deleteList"),
           message: t("list.deleteConfirm", { name: listName || "" }),
-        })
+        }))
       ) {
-        await runWithToast({
-          loading: { title: t("common.deleting") },
-          success: { title: t("common.deleteSuccess") },
-          failure: { title: t("common.deleteFailed") },
-          action: async () => {
-            try {
-              log.info("Deleting list", { listId: id, listName });
-              await fetchDeleteList(id);
-              await revalidate();
-              log.info("List deleted", { listId: id });
-            } catch (error) {
-              log.error("Failed to delete list", { listId: id, listName, error });
-              throw error;
-            }
-          },
-        });
-      } else {
-        await showToast({
-          title: t("common.deleteCancel"),
-          style: Toast.Style.Failure,
-        });
+        return;
       }
+
+      await runWithToast({
+        loading: { title: t("common.deleting") },
+        success: { title: t("common.deleteSuccess") },
+        failure: { title: t("common.deleteFailed") },
+        action: async () => {
+          try {
+            log.info("Deleting list", { listId: id, listName });
+            await fetchDeleteList(id);
+            await revalidate();
+            log.info("List deleted", { listId: id });
+          } catch (error) {
+            log.error("Failed to delete list", { listId: id, listName, error });
+            throw error;
+          }
+        },
+      });
     },
     [lists, revalidate, t],
   );

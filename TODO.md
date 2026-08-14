@@ -2,8 +2,9 @@
 
 ## Unshipped — on `main`, not in the Store
 
-Committed after 2.4.2 merged, so it missed the release. Ship with whatever
-comes next rather than spending a review cycle on it alone.
+Two changes are on `main` and not in the Store. 2.4.3 was taken by a
+contributor's PR (raycast/extensions#30194, merged 2026-08-13), so these ship
+together as **2.4.4** under the existing `{PR_MERGE_DATE}` entry.
 
 - [ ] `f033b94` — reset detection state at the start of `detect()` in
       `/Users/messina/Developer/GitHub/chrismessina/raycast-karakeep/src/updateKarakeep.tsx`.
@@ -15,7 +16,17 @@ comes next rather than spending a review cycle on it alone.
   - **Live and user-visible:** `Copy Docker Command` had no phase gate, so a
     failed re-check rendered "Docker daemon isn't responding" while still
     offering to copy the previously-found project's compose invocation.
-  - Needs a `## [2.4.3] - {PR_MERGE_DATE}` CHANGELOG entry when shipped.
+
+- [ ] Ordering fix in
+      `/Users/messina/Developer/GitHub/chrismessina/raycast-karakeep/src/createBookmark.tsx`,
+      from a code-review comment on #30194. When the submitted URL already
+      exists, the title PATCH renames the user's existing bookmark; it used to
+      run *before* the list and tag requests, so a failure in either left the
+      rename committed behind a "failed" toast. The rename now runs last.
+  - Also replaced the single pass/fail toast: saving is up to four writes with
+    no transaction, so any failure after the create call used to report
+    "Creation failed" on a bookmark that had in fact been saved. The submit
+    path now tracks which step threw and names it in the toast.
 
 ## P0 - Critical Fixes (Must Have)
 
