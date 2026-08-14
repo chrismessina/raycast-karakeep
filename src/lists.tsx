@@ -350,10 +350,7 @@ function ListItem({ list, label, level, apiUrl, onOpen, onEdit, onCreate, onDele
               title={t("list.openList")}
               onAction={() => onOpen(list)}
               icon={Icon.List}
-              shortcut={{
-                macOS: { modifiers: ["cmd"], key: "return" },
-                Windows: { modifiers: ["ctrl"], key: "return" },
-              }}
+              shortcut={Keyboard.Shortcut.Common.Open}
             />
             <Action
               title={t("list.editList")}
@@ -373,7 +370,7 @@ function ListItem({ list, label, level, apiUrl, onOpen, onEdit, onCreate, onDele
             <Action.CopyToClipboard
               title={t("common.copyId")}
               content={list.id}
-              shortcut={Keyboard.Shortcut.Common.Pin}
+              shortcut={Keyboard.Shortcut.Common.Copy}
             />
           </ActionPanel.Section>
           <ActionPanel.Section>
@@ -382,7 +379,7 @@ function ListItem({ list, label, level, apiUrl, onOpen, onEdit, onCreate, onDele
               icon={Icon.Trash}
               style={Action.Style.Destructive}
               onAction={() => onDelete(list.id)}
-              shortcut={{ macOS: { modifiers: ["ctrl"], key: "x" }, Windows: { modifiers: ["ctrl"], key: "x" } }}
+              shortcut={Keyboard.Shortcut.Common.Remove}
             />
           </ActionPanel.Section>
         </ActionPanel>
@@ -531,10 +528,7 @@ export default function Lists() {
               title={t("list.openFavorites")}
               onAction={handleShowFavoritedBookmarks}
               icon={Icon.List}
-              shortcut={{
-                macOS: { modifiers: ["cmd"], key: "return" },
-                Windows: { modifiers: ["ctrl"], key: "return" },
-              }}
+              shortcut={Keyboard.Shortcut.Common.Open}
             />
             <Action.OpenInBrowser url={`${apiUrl}/dashboard/favourites`} title={t("common.viewInBrowser")} />
             <Action
@@ -555,10 +549,7 @@ export default function Lists() {
               title={t("list.openArchived")}
               onAction={handleShowArchivedBookmarks}
               icon={Icon.List}
-              shortcut={{
-                macOS: { modifiers: ["cmd"], key: "return" },
-                Windows: { modifiers: ["ctrl"], key: "return" },
-              }}
+              shortcut={Keyboard.Shortcut.Common.Open}
             />
             <Action.OpenInBrowser url={`${apiUrl}/dashboard/archive`} title={t("common.viewInBrowser")} />
             <Action

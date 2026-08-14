@@ -216,10 +216,7 @@ export default function Tags() {
                   onAction={() => push(<TagBookmarksView tagId={tag.id} tagName={tag.name} />)}
                   title={t("tags.actions.viewBookmarks")}
                   icon={Icon.Eye}
-                  shortcut={{
-                    macOS: { modifiers: ["cmd"], key: "return" },
-                    Windows: { modifiers: ["ctrl"], key: "return" },
-                  }}
+                  shortcut={Keyboard.Shortcut.Common.Open}
                 />
                 <Action
                   title={t("tags.actions.renameTag")}
@@ -240,7 +237,7 @@ export default function Tags() {
                 <Action.CopyToClipboard
                   title={t("tags.actions.copyTagId")}
                   content={tag.id}
-                  shortcut={Keyboard.Shortcut.Common.Pin}
+                  shortcut={Keyboard.Shortcut.Common.Copy}
                 />
               </ActionPanel.Section>
               <ActionPanel.Section>
@@ -249,7 +246,7 @@ export default function Tags() {
                   icon={Icon.Trash}
                   style={Action.Style.Destructive}
                   onAction={() => handleDeleteTag(tag.id)}
-                  shortcut={{ macOS: { modifiers: ["ctrl"], key: "x" }, Windows: { modifiers: ["ctrl"], key: "x" } }}
+                  shortcut={Keyboard.Shortcut.Common.Remove}
                 />
               </ActionPanel.Section>
             </ActionPanel>

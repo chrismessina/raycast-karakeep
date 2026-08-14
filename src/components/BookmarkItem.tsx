@@ -333,7 +333,7 @@ function BookmarkActions({
         icon={Icon.Pencil}
         title={editTitle}
         onAction={handlers.handleEdit}
-        shortcut={{ macOS: { modifiers: ["ctrl"], key: "e" }, Windows: { modifiers: ["ctrl"], key: "e" } }}
+        shortcut={Keyboard.Shortcut.Common.Edit}
       />
     );
 
@@ -422,7 +422,7 @@ function BookmarkActions({
             icon={Icon.Pencil}
             title={editTitle}
             onAction={handlers.handleEdit}
-            shortcut={{ macOS: { modifiers: ["ctrl"], key: "e" }, Windows: { modifiers: ["ctrl"], key: "e" } }}
+            shortcut={Keyboard.Shortcut.Common.Edit}
           />
         )}
         {bookmark.content.type === "link" &&
@@ -527,7 +527,7 @@ function BookmarkActions({
           title={deleteTitle}
           style={Action.Style.Destructive}
           onAction={handlers.handleDeleteBookmark}
-          shortcut={{ macOS: { modifiers: ["ctrl"], key: "x" }, Windows: { modifiers: ["ctrl"], key: "x" } }}
+          shortcut={Keyboard.Shortcut.Common.Remove}
         />
       </ActionPanel.Section>
     </ActionPanel>

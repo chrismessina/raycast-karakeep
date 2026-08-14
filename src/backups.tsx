@@ -197,7 +197,7 @@ export default function Backups() {
                     icon={Icon.Trash}
                     style={Action.Style.Destructive}
                     onAction={() => handleDelete(backup.id)}
-                    shortcut={{ macOS: { modifiers: ["ctrl"], key: "x" }, Windows: { modifiers: ["ctrl"], key: "x" } }}
+                    shortcut={Keyboard.Shortcut.Common.Remove}
                   />
                 </ActionPanel.Section>
               </ActionPanel>

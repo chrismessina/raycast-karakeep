@@ -198,7 +198,7 @@ function HighlightDetail({ highlight, onRefresh }: { highlight: Highlight; onRef
               icon={Icon.Trash}
               style={Action.Style.Destructive}
               onAction={handleDelete}
-              shortcut={{ macOS: { modifiers: ["ctrl"], key: "x" }, Windows: { modifiers: ["ctrl"], key: "x" } }}
+              shortcut={Keyboard.Shortcut.Common.Remove}
             />
           </ActionPanel.Section>
         </ActionPanel>
@@ -238,10 +238,7 @@ export default function Highlights() {
                   title={t("bookmarkItem.actions.viewDetail")}
                   icon={Icon.Sidebar}
                   onAction={() => push(<HighlightDetail highlight={highlight} onRefresh={revalidate} />)}
-                  shortcut={{
-                    macOS: { modifiers: ["cmd"], key: "return" },
-                    Windows: { modifiers: ["ctrl"], key: "return" },
-                  }}
+                  shortcut={Keyboard.Shortcut.Common.Open}
                 />
                 <OpenBookmarkAction bookmarkId={highlight.bookmarkId} t={t} />
                 <Action
@@ -271,7 +268,7 @@ export default function Highlights() {
                   icon={Icon.Trash}
                   style={Action.Style.Destructive}
                   onAction={() => deleteHighlight(highlight.id, t, revalidate)}
-                  shortcut={{ macOS: { modifiers: ["ctrl"], key: "x" }, Windows: { modifiers: ["ctrl"], key: "x" } }}
+                  shortcut={Keyboard.Shortcut.Common.Remove}
                 />
               </ActionPanel.Section>
             </ActionPanel>

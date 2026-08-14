@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Detail, Icon, useNavigation } from "@raycast/api";
+import { Action, ActionPanel, Detail, Icon, useNavigation, Keyboard } from "@raycast/api";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { logger } from "@chrismessina/raycast-logger";
 
@@ -305,14 +305,14 @@ export function BookmarkDetail({ bookmark: initialBookmark, onRefresh, lists: pr
             title={t("bookmark.actions.edit")}
             onAction={handleEdit}
             icon={Icon.Pencil}
-            shortcut={{ macOS: { modifiers: ["ctrl"], key: "e" }, Windows: { modifiers: ["ctrl"], key: "e" } }}
+            shortcut={Keyboard.Shortcut.Common.Edit}
           />
           <Action
             title={t("bookmark.actions.delete")}
             style={Action.Style.Destructive}
             onAction={handleDelete}
             icon={Icon.Trash}
-            shortcut={{ macOS: { modifiers: ["ctrl"], key: "x" }, Windows: { modifiers: ["ctrl"], key: "x" } }}
+            shortcut={Keyboard.Shortcut.Common.Remove}
           />
         </ActionPanel.Section>
       </ActionPanel>
