@@ -1,4 +1,15 @@
-import { Action, ActionPanel, Alert, Clipboard, confirmAlert, Detail, Icon, showToast, Toast } from "@raycast/api";
+import {
+  Action,
+  ActionPanel,
+  Alert,
+  Clipboard,
+  confirmAlert,
+  Detail,
+  Icon,
+  showToast,
+  Toast,
+  Keyboard,
+} from "@raycast/api";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { logger } from "@chrismessina/raycast-logger";
 import {
@@ -338,10 +349,7 @@ export default function UpdateKarakeep() {
               title={t("update.actions.viewChangelog")}
               icon={Icon.Document}
               target={<ChangelogView image={container?.image} />}
-              shortcut={{
-                macOS: { modifiers: ["cmd"], key: "y" },
-                Windows: { modifiers: ["ctrl"], key: "y" },
-              }}
+              shortcut={Keyboard.Shortcut.Common.ToggleQuickLook}
             />
           )}
           {phase === "unavailable" && (

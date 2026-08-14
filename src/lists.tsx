@@ -1,4 +1,4 @@
-import { Action, ActionPanel, confirmAlert, Form, Icon, List, useNavigation } from "@raycast/api";
+import { Action, ActionPanel, confirmAlert, Form, Icon, List, useNavigation, Keyboard } from "@raycast/api";
 import { useForm } from "@raycast/utils";
 import React, { useCallback, useMemo } from "react";
 import { logger } from "@chrismessina/raycast-logger";
@@ -350,19 +350,22 @@ function ListItem({ list, label, level, apiUrl, onOpen, onEdit, onCreate, onDele
               title={t("list.openList")}
               onAction={() => onOpen(list)}
               icon={Icon.List}
-              shortcut={{ modifiers: ["cmd"], key: "return" }}
+              shortcut={{
+                macOS: { modifiers: ["cmd"], key: "return" },
+                Windows: { modifiers: ["ctrl"], key: "return" },
+              }}
             />
             <Action
               title={t("list.editList")}
               onAction={() => onEdit(list)}
               icon={Icon.Pencil}
-              shortcut={{ modifiers: ["cmd"], key: "e" }}
+              shortcut={Keyboard.Shortcut.Common.Edit}
             />
             <Action
               title={t("list.createList")}
               onAction={onCreate}
               icon={Icon.Plus}
-              shortcut={{ modifiers: ["cmd"], key: "n" }}
+              shortcut={Keyboard.Shortcut.Common.New}
             />
           </ActionPanel.Section>
           <ActionPanel.Section>
@@ -370,7 +373,7 @@ function ListItem({ list, label, level, apiUrl, onOpen, onEdit, onCreate, onDele
             <Action.CopyToClipboard
               title={t("common.copyId")}
               content={list.id}
-              shortcut={{ modifiers: ["cmd"], key: "." }}
+              shortcut={Keyboard.Shortcut.Common.Pin}
             />
           </ActionPanel.Section>
           <ActionPanel.Section>
@@ -379,7 +382,7 @@ function ListItem({ list, label, level, apiUrl, onOpen, onEdit, onCreate, onDele
               icon={Icon.Trash}
               style={Action.Style.Destructive}
               onAction={() => onDelete(list.id)}
-              shortcut={{ modifiers: ["ctrl"], key: "x" }}
+              shortcut={{ macOS: { modifiers: ["ctrl"], key: "x" }, Windows: { modifiers: ["ctrl"], key: "x" } }}
             />
           </ActionPanel.Section>
         </ActionPanel>
@@ -497,7 +500,7 @@ export default function Lists() {
             title={t("list.createList")}
             onAction={handleCreateList}
             icon={Icon.Plus}
-            shortcut={{ modifiers: ["cmd"], key: "n" }}
+            shortcut={Keyboard.Shortcut.Common.New}
           />
         </ActionPanel>
       }
@@ -513,7 +516,7 @@ export default function Lists() {
                 title={t("list.createList")}
                 onAction={handleCreateList}
                 icon={Icon.Plus}
-                shortcut={{ modifiers: ["cmd"], key: "n" }}
+                shortcut={Keyboard.Shortcut.Common.New}
               />
             </ActionPanel>
           }
@@ -528,14 +531,17 @@ export default function Lists() {
               title={t("list.openFavorites")}
               onAction={handleShowFavoritedBookmarks}
               icon={Icon.List}
-              shortcut={{ modifiers: ["cmd"], key: "return" }}
+              shortcut={{
+                macOS: { modifiers: ["cmd"], key: "return" },
+                Windows: { modifiers: ["ctrl"], key: "return" },
+              }}
             />
             <Action.OpenInBrowser url={`${apiUrl}/dashboard/favourites`} title={t("common.viewInBrowser")} />
             <Action
               title={t("list.createList")}
               onAction={handleCreateList}
               icon={Icon.Plus}
-              shortcut={{ modifiers: ["cmd"], key: "n" }}
+              shortcut={Keyboard.Shortcut.Common.New}
             />
           </ActionPanel>
         }
@@ -549,14 +555,17 @@ export default function Lists() {
               title={t("list.openArchived")}
               onAction={handleShowArchivedBookmarks}
               icon={Icon.List}
-              shortcut={{ modifiers: ["cmd"], key: "return" }}
+              shortcut={{
+                macOS: { modifiers: ["cmd"], key: "return" },
+                Windows: { modifiers: ["ctrl"], key: "return" },
+              }}
             />
             <Action.OpenInBrowser url={`${apiUrl}/dashboard/archive`} title={t("common.viewInBrowser")} />
             <Action
               title={t("list.createList")}
               onAction={handleCreateList}
               icon={Icon.Plus}
-              shortcut={{ modifiers: ["cmd"], key: "n" }}
+              shortcut={Keyboard.Shortcut.Common.New}
             />
           </ActionPanel>
         }

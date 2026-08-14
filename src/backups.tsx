@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Color, confirmAlert, Icon, List, open, showToast, Toast } from "@raycast/api";
+import { Action, ActionPanel, Color, confirmAlert, Icon, List, open, showToast, Toast, Keyboard } from "@raycast/api";
 import { useEffect, useRef } from "react";
 import { useCachedPromise } from "@raycast/utils";
 import { logger } from "@chrismessina/raycast-logger";
@@ -136,7 +136,7 @@ export default function Backups() {
       title={t("backups.createBackup")}
       icon={Icon.Plus}
       onAction={handleCreate}
-      shortcut={{ modifiers: ["cmd"], key: "n" }}
+      shortcut={Keyboard.Shortcut.Common.New}
     />
   );
 
@@ -197,7 +197,7 @@ export default function Backups() {
                     icon={Icon.Trash}
                     style={Action.Style.Destructive}
                     onAction={() => handleDelete(backup.id)}
-                    shortcut={{ modifiers: ["ctrl"], key: "x" }}
+                    shortcut={{ macOS: { modifiers: ["ctrl"], key: "x" }, Windows: { modifiers: ["ctrl"], key: "x" } }}
                   />
                 </ActionPanel.Section>
               </ActionPanel>
