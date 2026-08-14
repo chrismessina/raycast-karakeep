@@ -1,13 +1,15 @@
 {
   "upstream_commit": "78cd295357ffd519e97f0db6c910051756d54498",
-  "synced_at": "2026-08-14T03:17:10Z",
+  "synced_at": "2026-08-14T06:21:12Z",
   "files": {
     ".gitignore": "cb2189a769359390b247dff212653d0261a76de8",
     ".prettierrc": "fc0f5030683fa6196d08943646300755fce2f207",
     "AGENTS.md": "907513fd17158758b024f040ee15f545ac206b76",
+    "CHANGELOG.md": "e55aa9370cad79550a3a3da6890e51139397112a",
+    "README.md": "8f45315293ed28fbe6554d80b9bdd337051c7068",
+    "TODO.md": "68d204a4199880556b98223ed86500fd26831179",
     "assets/logo-icon.png": "7e1682682da8b6bfddce4bb070b69a4987b51be5",
     "assets/screenshot-default.png": "8a61eca4588b829f913b76c9f91d068f1ff1c8fc",
-    "CHANGELOG.md": "e55aa9370cad79550a3a3da6890e51139397112a",
     "docs/images/raycast-karakeep-configuration.png": "f40cd7dc2b29c81c63a2f88cf0576946af51b307",
     "docs/images/raycast-karakeep-intro.png": "f6f8a90890a697b405775c9a554a065472e0c51b",
     "docs/superpowers/plans/2026-03-19-tag-picker-hook.md": "d1ec82adeb5acba6be7ec3ae40d47d5eee4c06d3",
@@ -22,7 +24,6 @@
     "metadata/karakeep-bookmark-6.png": "2519bc1a3eb4a30926afb26822e19bd40298bf15",
     "package-lock.json": "be02101955b7b5ecda6189d6e00ad1397fbbe2da",
     "package.json": "398191b5584443454355662ff09bb3f005c6e16d",
-    "README.md": "8f45315293ed28fbe6554d80b9bdd337051c7068",
     "src/apis/index.ts": "d55cea9ae68d52a130d799e956ae83789cff3484",
     "src/backups.tsx": "5d1a95a8c07be6bd7d543cfc16353b9fc9df83c8",
     "src/bookmarks.tsx": "0e2483fe90eb5c8289c935995993ea5712232448",
@@ -87,7 +88,6 @@
     "src/utils/tags.ts": "c76c23d70960803e94de641fff76f83fbfcd5e37",
     "src/utils/toast.ts": "88225859d80a29a5c3700dff2cdb8902f30cf869",
     "src/utils/url.ts": "65b5ce215879e5eb2cd7bfc83667a2e1b8fce413",
-    "TODO.md": "68d204a4199880556b98223ed86500fd26831179",
     "tools/build-emoji-data.mjs": "088988e19cffc6754465e1dbadb2b20089b574fb",
     "tsconfig.json": "f42d543fb9349555fd8d3e4322a92bae08cbd345"
   }
