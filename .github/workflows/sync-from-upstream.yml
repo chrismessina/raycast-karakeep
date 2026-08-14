@@ -293,8 +293,22 @@ jobs:
               files: ($tsv | rtrimstr("\n") | split("\n")
                        | map(select(length > 0) | split("\t") | {(.[0]): .[1]})
                        | add // {})
-            }' > "$STATE_FILE"
-          echo "recorded $(jq '.files | length' "$STATE_FILE") files"
+            }' > "$RUNNER_TEMP/state.new"
+
+          # `synced_at` changes on EVERY run, so writing this file unconditionally
+          # would make it always differ from the committed copy — and, now that
+          # recording is unconditional, produce a junk commit on every scheduled
+          # run forever. Compare only the parts that carry meaning; when they
+          # match, keep the committed file so the tree stays clean.
+          if git show "HEAD:$STATE_FILE" > "$RUNNER_TEMP/state.old" 2>/dev/null &&
+             [ "$(jq -S '{upstream_commit, files}' "$RUNNER_TEMP/state.old")" = \
+               "$(jq -S '{upstream_commit, files}' "$RUNNER_TEMP/state.new")" ]; then
+            cp "$RUNNER_TEMP/state.old" "$STATE_FILE"
+            echo "baseline already current ($(jq '.files | length' "$STATE_FILE") files); timestamp left untouched"
+          else
+            cp "$RUNNER_TEMP/state.new" "$STATE_FILE"
+            echo "recorded $(jq '.files | length' "$STATE_FILE") files"
+          fi
 
       # When files WERE copied, the PR step below stages the baseline alongside
       # them, so it only needs its own commit when there is no PR to ride on.
