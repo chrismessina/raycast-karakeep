@@ -114,7 +114,7 @@
       "type": "checkbox",
       "label": "Use the Current Browser Tab",
       "title": "Creating Bookmarks",
-      "description": "Fill in the URL from your frontmost tab when creating a bookmark. Requires the Raycast browser extension.",
+      "description": "Fill in the URL from your frontmost tab when creating a bookmark. Uses the Raycast browser extension when available, and falls back to AppleScript on macOS.",
       "default": true,
       "required": false
     },

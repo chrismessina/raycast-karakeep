@@ -15,6 +15,20 @@ export interface BrowserTab {
 }
 
 /**
+ * Whether a page TITLE can be read at all.
+ *
+ * Only the Browser Extension supplies titles — the AppleScript fallbacks below
+ * read the address bar and return a URL alone — and that API is unavailable
+ * both when the extension isn't installed and on Windows, where Raycast does
+ * not expose it yet. Callers should hide title-dependent UI when this is false
+ * rather than offering an action that can only fail. Synchronous, so it is safe
+ * to call during render.
+ */
+export function canReadPageTitle(): boolean {
+  return environment.canAccess(BrowserExtension);
+}
+
+/**
  * Get the active browser tab.
  *
  * Tries the Browser Extension API first (the only source of a page title), then

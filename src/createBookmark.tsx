@@ -13,7 +13,7 @@ import { useGetAllTags } from "./hooks/useGetAllTags";
 import { useTagPicker, TAG_PICKER_NOOP_VALUE } from "./hooks/useTagPicker";
 import { useTranslation } from "./hooks/useTranslation";
 import { useConfig } from "./hooks/useConfig";
-import { getBrowserLink, getBrowserTab } from "./hooks/useBrowserLink";
+import { canReadPageTitle, getBrowserLink, getBrowserTab } from "./hooks/useBrowserLink";
 import { validUrl } from "./utils/url";
 import { attachCopyDetail, markToastFailed } from "./utils/toast";
 import { ensureReachable } from "./utils/submitGuard";
@@ -183,14 +183,16 @@ export default function CreateBookmarkView(props: LaunchProps<{ draftValues: Dra
   const usePageTitle = useCallback(async () => {
     const tab = await getBrowserTab();
     if (!tab?.title) {
+      // The action only renders when the Browser Extension is reachable, so this
+      // is not "not installed" — it is no open tab, or a tab still loading, which
+      // has no title yet.
       log.warn("No page title available from the active tab", { hasTab: Boolean(tab) });
       const toast = await showToast({ style: Toast.Style.Failure, title: t("bookmark.usePageTitleFailed") });
       attachCopyDetail(
         toast,
         [
-          "Could not read a page title from the active browser tab.",
-          "Titles come from the Raycast browser extension; the AppleScript fallback",
-          "(Safari, Arc, Firefox, Vivaldi, Brave, Orion, Zen) returns a URL only.",
+          "The browser extension returned no page title for the active tab.",
+          "Most likely the tab is still loading, or no tab is open.",
           `tab: ${tab ? tab.url : "none found"}`,
         ].join("\n"),
       );
@@ -220,15 +222,20 @@ export default function CreateBookmarkView(props: LaunchProps<{ draftValues: Dra
               takes the primary slot and Submit steps down to second. */}
           <StartKarakeepAction offline={offline} canStart={canStart} isRecovering={isRecovering} onStart={start} />
           <Action.SubmitForm title={t("bookmark.create")} onSubmit={handleSubmit} />
-          <Action
-            title={t("bookmark.usePageTitle")}
-            icon={Icon.Text}
-            shortcut={{
-              macOS: { modifiers: ["cmd"], key: "t" },
-              Windows: { modifiers: ["ctrl"], key: "t" },
-            }}
-            onAction={usePageTitle}
-          />
+          {/* Titles come only from the Browser Extension, which is absent when it
+              isn't installed and on Windows, where Raycast doesn't expose the API
+              yet. Hide the action there rather than offer one that always fails. */}
+          {canReadPageTitle() && (
+            <Action
+              title={t("bookmark.usePageTitle")}
+              icon={Icon.Text}
+              shortcut={{
+                macOS: { modifiers: ["cmd"], key: "t" },
+                Windows: { modifiers: ["ctrl"], key: "t" },
+              }}
+              onAction={usePageTitle}
+            />
+          )}
           <Action
             title={t("list.createList")}
             onAction={() =>

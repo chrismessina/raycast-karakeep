@@ -3,9 +3,9 @@
 ## [2.4.4] - {PR_MERGE_DATE}
 
 - Fixed a custom title being applied to an existing bookmark even when the rest of the submission failed. Adding a bookmark whose URL is already saved renames it, and that rename now happens only after the list and tag steps have succeeded, so a failure leaves the existing bookmark untouched
-- Create Bookmark no longer reports "Creation failed" when the bookmark was saved and only a later step failed. The toast now says which part didn't apply — the list, the tags, or the title — and the form stays open so you can retry without retyping anything
+- Create Bookmark no longer reports "Creation failed" when the bookmark was saved and only a later step failed. The toast now says which part didn't apply (the list, the tags, or the title) and the form stays open so you can retry without retyping anything
 - Fixed the Update Karakeep command offering to copy a Docker command for a previously-detected instance after a re-check had failed, and carrying the earlier result's state into the next check
-- Added a "Use Page Title" action (⌘T) to Create Bookmark, which fills the Title field from the active browser tab. The field is still empty by default, because a title you set overrides the one Karakeep reads from the page and keeps it from ever updating
+- Added a "Use Page Title" action (⌘T) to Create Bookmark, which fills the Title field from the active browser tab. It appears only when the Raycast browser extension is available, since that is the only source of a page title. The field is still empty by default, because a title you set overrides the one Karakeep reads from the page and keeps it from ever updating
 - Fixed the Safari entry under "Add to Browser" opening an App Store listing that no longer exists. It now opens the Karakeep app
 - Keyboard shortcuts now follow Raycast's standard bindings, so they match what you already know from other extensions. Delete moved to ⌃D, Edit to ⌘E, Open to ⌘O, and Copy ID to ⌘⇧C; every shortcut also declares an explicit Windows binding
 - Backing out of the "Delete list" confirmation no longer shows a red "Delete cancelled" error, matching every other confirmation in the extension
