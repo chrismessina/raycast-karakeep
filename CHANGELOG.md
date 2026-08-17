@@ -7,7 +7,7 @@
 - Fixed the Update Karakeep command offering to copy a Docker command for a previously-detected instance after a re-check had failed, and carrying the earlier result's state into the next check
 - Added a "Use Page Title" action (⌘T) to Create Bookmark, which fills the Title field from the active browser tab. It appears only when the Raycast browser extension is available, since that is the only source of a page title. The field is still empty by default, because a title you set overrides the one Karakeep reads from the page and keeps it from ever updating
 - Fixed the Safari entry under "Add to Browser" opening an App Store listing that no longer exists. It now opens the Karakeep app
-- Keyboard shortcuts now follow Raycast's standard bindings, so they match what you already know from other extensions. Delete moved to ⌃D, Edit to ⌘E, Open to ⌘O, and Copy ID to ⌘⇧C; every shortcut also declares an explicit Windows binding
+- Keyboard shortcuts now follow Raycast's standard bindings, so they match what you already know from other extensions. Delete moved to ⌃D, Edit to ⌘E, Open to ⌘O, Copy ID to ⌘⇧C, and Clear Cache to ⌃⇧D; every shortcut also declares an explicit Windows binding
 - Backing out of the "Delete list" confirmation no longer shows a red "Delete cancelled" error, matching every other confirmation in the extension
 - Error toasts that report a failure with no underlying exception — a browser tab that couldn't be read, a bookmark the server returned empty, a backup that failed on its own — now let you copy the details, so every error toast can be turned into a bug report
 

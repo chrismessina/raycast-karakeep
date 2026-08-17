@@ -349,7 +349,10 @@ export default function UpdateKarakeep() {
               title={t("update.actions.viewChangelog")}
               icon={Icon.Document}
               target={<ChangelogView image={container?.image} />}
-              shortcut={Keyboard.Shortcut.Common.ToggleQuickLook}
+              // Pushes a Detail view; it does not Quick Look a file. ToggleQuickLook
+              // was `ray lint --fix` matching the old ⌘Y combo, not the meaning.
+              // Open is the right constant and is otherwise unused in this panel.
+              shortcut={Keyboard.Shortcut.Common.Open}
             />
           )}
           {phase === "unavailable" && (

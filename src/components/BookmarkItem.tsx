@@ -495,7 +495,13 @@ function BookmarkActions({
             icon={Icon.Trash}
             title={t("bookmarkItem.actions.clearCache")}
             onAction={onCleanCache}
-            shortcut={Keyboard.Shortcut.Common.Copy}
+            // Clearing every cached preview is a remove-all, not a copy. It sat on
+            // Common.Copy because `ray lint --fix` matches the COMBO (⌘⇧C) rather
+            // than the meaning — and re-applies that match, so writing the combo
+            // out longhand does not survive the next `--fix`. The constant itself
+            // has to be the right one. RemoveAll (⌃⇧D) does not clash with the
+            // Delete action's Remove (⌃D) in this panel.
+            shortcut={Keyboard.Shortcut.Common.RemoveAll}
           />
         )}
       </ActionPanel.Section>

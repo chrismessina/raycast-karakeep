@@ -1,3 +1,5 @@
+import type { Language } from "../i18n";
+
 // Action types
 // Kept in step with `package.json > preferences`. "copy" was listed here but has
 // never been an option the manifest offers, so neither switch on this type has a
@@ -20,7 +22,9 @@ interface DisplayOptions {
 interface BaseConfig {
   apiUrl: string;
   apiKey: string;
-  language: string;
+  // Narrower than `string` so an invalid locale can't type-check its way in.
+  // The manifest offers exactly these, and the generated Preferences agrees.
+  language: Language;
   showWebsitePreview: boolean;
   linkMainAction: linkMainActionType;
   textMainAction: textMainActionType;
