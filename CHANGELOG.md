@@ -8,7 +8,8 @@
 - Create Bookmark, Create Note, Create List and the edit forms now stop before writing when the key has been rejected, rather than attempting the save and failing partway through
 - Error messages now carry what the server actually said — "HTTP 401 — Unauthorized" instead of a bare status code — with any credentials in the response redacted before they reach a toast or your clipboard
 - Refreshing a view no longer reports success when the refresh actually failed
-- The Backups view no longer retries every few seconds behind an error screen when the API key is what is wrong
+- The Backups view no longer retries every few seconds behind an error screen when the API key is what is wrong, and creating or deleting a backup that was rejected no longer follows the failure with a second, duplicate error
+- Upgraded to Raycast API 2.1
 
 ## [2.4.4] - 2026-08-17
 

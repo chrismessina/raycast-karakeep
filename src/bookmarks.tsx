@@ -145,10 +145,9 @@ function ListBookmarksView({
 }
 
 export default function BookmarksList() {
-  // ONE probe for the whole command. The dropdown used to call useApiReachable()
-  // itself, which meant two /api/v1/users/me requests every time the command
-  // opened — useCachedPromise caches the VALUE, not the request, so each hook
-  // instance runs its own promise.
+  // ONE probe for the whole command, passed down rather than called again in the
+  // dropdown: useCachedPromise caches the VALUE, not the request, so a second
+  // useApiReachable() here would fire a second /api/v1/users/me on every open.
   const { state: reachability } = useApiReachable();
   // Gated for the same reason the dropdown is: this fetch is what produced
   // "Couldn't load lists HTTP 401" on a command the user opened to see
