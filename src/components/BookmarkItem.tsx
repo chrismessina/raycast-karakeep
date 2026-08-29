@@ -425,24 +425,28 @@ function BookmarkActions({
             shortcut={Keyboard.Shortcut.Common.Edit}
           />
         )}
+        {/* Open is skipped when it is ALREADY the main action, or the panel
+            would list it twice. Copy is not a duplicate of anything, so it is
+            gated separately — sharing one guard meant Copy disappeared for
+            everyone on the default "Open in Browser" setting. */}
         {bookmark.content.type === "link" &&
           bookmark.content.url &&
           mainAction.props.title !== t("bookmark.actions.openLink") && (
-            <>
-              <Action.OpenInBrowser
-                url={bookmark.content.url}
-                title={t("bookmark.actions.openLink")}
-                shortcut={Keyboard.Shortcut.Common.Open}
-                onOpen={() => onVisit?.(bookmark)}
-              />
-              <Action.CopyToClipboard
-                content={bookmark.content.url}
-                title={t("bookmark.actions.copyLink")}
-                shortcut={{ macOS: { modifiers: ["cmd"], key: "c" }, Windows: { modifiers: ["ctrl"], key: "c" } }}
-                onCopy={() => onVisit?.(bookmark)}
-              />
-            </>
+            <Action.OpenInBrowser
+              url={bookmark.content.url}
+              title={t("bookmark.actions.openLink")}
+              shortcut={Keyboard.Shortcut.Common.Open}
+              onOpen={() => onVisit?.(bookmark)}
+            />
           )}
+        {bookmark.content.type === "link" && bookmark.content.url && (
+          <Action.CopyToClipboard
+            content={bookmark.content.url}
+            title={t("bookmark.actions.copyLink")}
+            shortcut={{ macOS: { modifiers: ["cmd"], key: "c" }, Windows: { modifiers: ["ctrl"], key: "c" } }}
+            onCopy={() => onVisit?.(bookmark)}
+          />
+        )}
         {bookmark.content.type === "text" && bookmark.content.text && mainAction.props.title !== copyNoteTitle && (
           <Action.CopyToClipboard
             content={bookmark.content.text}
