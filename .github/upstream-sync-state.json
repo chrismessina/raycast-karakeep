@@ -1,6 +1,6 @@
 {
-  "upstream_commit": "6315932f75ea71f711a702487d7ff4d54af47de4",
-  "synced_at": "2026-08-29T21:05:21Z",
+  "upstream_commit": "30296ed2e3a21b3575567fc1fcfa3c1abd91397b",
+  "synced_at": "2026-09-30T15:57:57Z",
   "files": {
     ".gitignore": "cb2189a769359390b247dff212653d0261a76de8",
     ".prettierrc": "fc0f5030683fa6196d08943646300755fce2f207",
@@ -24,7 +24,7 @@
     "metadata/karakeep-bookmark-4.png": "066c6992a3c19730125e9bc3e1886f2bfd6bcfc8",
     "metadata/karakeep-bookmark-5.png": "43d21e149cc7c8276163f19a098d9402f169466d",
     "metadata/karakeep-bookmark-6.png": "2519bc1a3eb4a30926afb26822e19bd40298bf15",
-    "package-lock.json": "2fb3964bc2a29ee528d13587eaa19d19530e93ec",
+    "package-lock.json": "f6e9c1a0dfb2623147a360a5072a9e01856f315a",
     "package.json": "e06e5d08c33182c9ae9f2a7fffa199db1e25c99d",
     "src/apis/index.ts": "0f9814fb6288b1b577173f1da630129b2d0a273c",
     "src/backups.tsx": "71f0b55042745b39cf93d1677609f8270f89c617",
