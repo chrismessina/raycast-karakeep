@@ -1,11 +1,11 @@
 {
-  "upstream_commit": "30296ed2e3a21b3575567fc1fcfa3c1abd91397b",
-  "synced_at": "2026-09-30T15:57:57Z",
+  "upstream_commit": "d86051a8853d024fe6d4e9a19803a2cd91d4e31e",
+  "synced_at": "2026-10-24T13:23:24Z",
   "files": {
     ".gitignore": "cb2189a769359390b247dff212653d0261a76de8",
     ".prettierrc": "fc0f5030683fa6196d08943646300755fce2f207",
     "AGENTS.md": "4ee9e6781e6f44ec98c564405ba4e5b894285dd2",
-    "CHANGELOG.md": "4d3555ffd24225dc56297c35eeb069d2ccd8fb89",
+    "CHANGELOG.md": "af711c809edbee9d2d7f8adfe6f170dc62aea832",
     "CONCEPTS.md": "94c042dc048299ac3a6f1c76c2c47dc8f0216a0e",
     "README.md": "8f45315293ed28fbe6554d80b9bdd337051c7068",
     "TODO.md": "68d204a4199880556b98223ed86500fd26831179",
@@ -82,7 +82,7 @@
     "src/utils/listLabels.ts": "e0cce23358482c14b754a16148b26d43edc8fcd4",
     "src/utils/markdown.ts": "edae26f44e82adeddd4119bfc31ddd7159ed36bb",
     "src/utils/release.ts": "30daa1c4c5b7d9fa7f6123c98d07d5832b22df0b",
-    "src/utils/screenshot.ts": "6b9b406e4270fed5270810522f1577b2d35cc146",
+    "src/utils/screenshot.ts": "4a6d3ac5e8cb59f1a5a241208f256bd04d9fd1d4",
     "src/utils/submitGuard.ts": "62da94587f719fea3c0177d134cf0481384d6cdd",
     "src/utils/svgChart.ts": "beb59b85898ddfb296f30548bdc4c7493383bd8c",
     "src/utils/tags.ts": "c76c23d70960803e94de641fff76f83fbfcd5e37",
